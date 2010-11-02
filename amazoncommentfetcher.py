@@ -41,12 +41,16 @@ def urlopener(url):
 def getNextPageURL(data):
     #<span class="paging">&lsaquo; Previous |    <span class="on">1</span> <a href="http://www.amazon.com/Introduction-Algorithms-Third-Thomas-Cormen/product-reviews/0262033844?pageNumber=2" >2</a>
     #| <a href="http://www.amazon.com/Introduction-Algorithms-Third-Thomas-Cormen/product-reviews/0262033844?pageNumber=2" >Next &rsaquo;</a> </span>
+    r = None
     for line in reversed(data):
         if "<span class=\"paging\">" in line:
             line = line.split("|")
             line = line[::-1]
-            return parseLinkFromLine(line[0].split("Next")[0])
-    return None
+            try:
+                r = parseLinkFromLine(line[0].split("Next")[0])
+            except:
+                r = None
+    return r
 
 
 def parseReviewsStartLine(data):
@@ -134,6 +138,8 @@ def parseComments(data):
     """Collect comments from a page and return as a list"""
     comments = []
     n = 0
+    tableTagsHit = 0
+
     while n < len(data):
         line = data[n]
         # Comment starts
@@ -144,19 +150,27 @@ def parseComments(data):
                 line = data[n]
                 if "<a name=\"" in line:
                     #print "Comment\nName: %s, %d" % (type(line), len(line))
-                    comments.append(line)
-                    #comm.name = stripHtmlTags(line)
+                    comm.name = stripHtmlTags(line)
                     #print "Comment\nName: %s" % comm.name
+                    comments.append(comm)
+                # Actually there is a table and two tables inside it. Thus
+                # 3rd </table> tag
                 if "</table>" in line:
-                    break
+                    tableTagsHit += 1
+                    if tableTagsHit >= 3:
+                        tableTagsHit = 0
+                        break
                 n += 1
         n += 1
     return comments
 
 
 def estimatedTimeOfArrival(t, pagesProcessed, pageCount):
-    timeGone = time() - t
-    avg = timeGone/pagesProcessed
+    timePassed = time() - t
+
+    if pagesProcessed is 0:
+        return 0
+    avg = timePassed/pagesProcessed
     return float((pageCount - pagesProcessed) * avg)
 
 
@@ -206,7 +220,7 @@ def main():
         # PARSE COMMENTS IN HERE
         comments.extend(parseComments(data))
         cmntCount = len(comments)
-        print "\rComments: %d/%d   Page: %d/%d   [ETA: %d sec]" % (cmntCount, cmntTotal,\
+        print "\rComment: %d/%d   Page: %d/%d   [ETA: %d sec]" % (cmntCount, cmntTotal,\
                 pageCount, pagesTotal, estimatedTimeOfArrival(timePassed,\
                         pageCount, pagesTotal)),
         stdout.flush()
