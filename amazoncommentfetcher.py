@@ -3,39 +3,14 @@
 
 import re
 from sys import argv, exit, stdout
-from strip_html import strip_ml_tags as stripHtmlTags
 from time import time
 
 from Comment import Comment
+from strip_html import strip_ml_tags as stripHtmlTags
+from urlopener import urlopener
+
 
 comments = []
-
-def urlopener(url):
-    # TODO user agent randomizer
-    if "http://" in url:
-        import urllib
-
-        class MyOpener(urllib.FancyURLopener):
-            version = "Mozilla/5.0"
-        myopener = MyOpener()
-        try:
-            f = myopener.open(url)
-            contents = f.readlines()
-            f.close()
-            return contents
-        except:
-            print "Cannot fetch http data from %s" % url
-            return None
-    # Got file
-    else:
-        try:
-            O = open(url, "r")
-            contents = O.readlines()
-            O.close()
-            return contents
-        except:
-            print "Cannot open file %s" % str(url)
-            return None
 
 
 def getNextPageURL(data):
@@ -58,9 +33,6 @@ def parseReviewsStartLine(data):
     @return (linenumber, link) when succeed
     @return None in case of fail
     """
-    # XXX *remove this line* searchPat = re.compile(r"See all (\d+) customer reviews")
-    # XXX *remove this line* searchPat = re.compile(r"See all ?([0-9]{1,3},([0-9]{3},)*[0-9]{3}|[0-9]+)(.[0-9][0-9])? customer reviews")
-
     # Introduction to re.compile line. Will find lines:
     # "See all 14 customer reviews" or
     # "See all 1,114 customer reviews"
