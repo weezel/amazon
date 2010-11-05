@@ -11,21 +11,27 @@ from urlopener import urlopener
 
 
 comments = []
+cmntCount = 0
 
 
 def getNextPageURL(data):
-    #<span class="paging">&lsaquo; Previous |    <span class="on">1</span> <a href="http://www.amazon.com/Introduction-Algorithms-Third-Thomas-Cormen/product-reviews/0262033844?pageNumber=2" >2</a>
-    #| <a href="http://www.amazon.com/Introduction-Algorithms-Third-Thomas-Cormen/product-reviews/0262033844?pageNumber=2" >Next &rsaquo;</a> </span>
-    r = None
+    """
+    @return None in case of fail, str for the link if success
+
+    Page navigation looks like this:
+    ------------------------------------------------------
+    |  <Previous  |  1 ... 55 [56] 57 ... 152  |  Next>  |
+    ------------------------------------------------------
+    """
     for line in reversed(data):
         if "<span class=\"paging\">" in line:
-            line = line.split("|")
-            line = line[::-1]
-            try:
-                r = parseLinkFromLine(line[0].split("Next")[0])
-            except:
-                r = None
-    return r
+            e = line.rfind("|")
+            if e < 0:
+                return None
+            e += 1
+            #print "getNextPageURL = %s" % line[e:len(line)-1]
+            return parseLinkFromLine(line[e:len(line)-1])
+    return None
 
 
 def parseReviewsStartLine(data):
@@ -44,7 +50,7 @@ def parseReviewsStartLine(data):
         return None
 
     for n, line in enumerate(data):
-        if re.search(searchPat, line) != None:
+        if re.search(searchPat, line) is not None:
             tmp = parseLinkFromLine(line)
             #print "tmp [%s]" % tmp
             links[tmp] = (n, tmp) # (lineNro, URL)
@@ -59,33 +65,59 @@ def parseReviewsStartLine(data):
     return None
 
 
-def parseCommentCount(line):
+def parseCommentsTotal(line):
+    """
+    return -1 when failed, else comments count
+    """
     nmbrPat = re.compile(r"all (\d|,)*\d* customer")
 
     if line is None or len(line) < 1:
         return -1
 
     tmp = re.search(nmbrPat, line)
-    if tmp != None:
+    if tmp is not None:
         tmp = tmp.group(0).replace(",", "")
         return re.search(r"(\d+)", tmp).group(0)
     return -1
 
 
-def parsePageCount(data):
+def parsePagesTotal(data):
+    """
+    Page navigation looks like this:
+    ------------------------------------------------------
+    |        <Previous  |  1  2  3  |  Next>             |
+    ------------------------------------------------------
+    or                              ^ 
+             Match against this ---´
+    ------------------------------------------------------
+    |  <Previous  |  1 ... 55 [56] 57 ... 152  |  Next>  |
+    ------------------------------------------------------
+    """
+    p = re.compile(r"(\d|,)*\d*")
+
     if data is None or len(data) < 1:
         return -1
 
-    try:
-        for line in reversed(data):
-            if "<span class=\"paging\">" in line:
-                tmp = line.split("&hellip") # Split from '...'
-                tmp = tmp[1].split(">") # Page number will be in tmp[1]
-                tmp = tmp[1].split("<") # Remove "</a"
-                return tmp[0].replace(",", "")
-    except:
-        return -1
-    return -1
+    for line in reversed(data):
+        if "<span class=\"paging\">" in line:
+            i = line.rfind("|")
+            j = 0
+            tmp = 0
+            while i > 1:
+                if line[i] is '>':
+                    j += 1
+                    if j is 2:
+                        tmp = line[i+1:line.rfind("|")] # Format now: 3</a>
+                        # By using regexp we don't have to clean up the string
+                        tmp = re.search(p, tmp)
+                        if tmp is not None:
+                            tmp = tmp.group(0)
+                        else:
+                            tmp = 0
+                        break
+                i -= 1
+            return tmp
+    return 0
 
 
 def parseLinkFromLine(s):
@@ -108,7 +140,7 @@ def parseLinkFromLine(s):
 
 def parseComments(data):
     """Collect comments from a page and return as a list"""
-    comments = []
+    global cmntCount
     n = 0
     tableTagsHit = 0
 
@@ -116,25 +148,45 @@ def parseComments(data):
         line = data[n]
         # Comment starts
         if "<!-- BOUNDARY -->" in line:
+            cmntCount += 1
             comm = Comment()
             # Comment section ends with </table>
-            while "</table>" not in line or n < len(data):
-                line = data[n]
-                if "<a name=\"" in line:
-                    #print "Comment\nName: %s, %d" % (type(line), len(line))
-                    comm.name = stripHtmlTags(line)
-                    #print "Comment\nName: %s" % comm.name
+            line = data[n]
+            if "<a name=\"" in line:
+                #print "Comment\nName: %s, %d" % (type(line), len(line))
+                comm.name = line[line.find("\"")+1:line.rfind("\"")]
+                #print "line = %s" % line
+                #print "comm.name = %s" % comm.name
+                #comm.name = stripHtmlTags(line)
+                #print "Comment\nName: %s" % comm.name
+            if "helpful" in line:
+                # FIXME get rid of from this:
+                # comm.helpful = class="crVotingButtons">Was this review helpful to you?&nbsp;Yes
+                comm.helpful = stripHtmlTags(line)
+                #print "comm.helpful = %s" % comm.helpful,
+            # Header has bolding
+            if "</b> <br />" in line:
+                comm.header = stripHtmlTags(line)
+                cmntStarts = n+1
+                # And then starts the comment
+                print "data[%d] = %s" % (n, data[n])
+                while "<div class>" not in data[n] or n < len(data):
+                    n += 1
+                comm.comment = data[cmntStarts:n]
+            # Actually there is a table and two tables inside it. Thus
+            # 3rd </table> tag
+            if "</table>" in line:
+                tableTagsHit += 1
+                #if tableTagsHit is 2:
+                #    comm.comment = data[n+3]
+                if tableTagsHit >= 3:
                     comments.append(comm)
-                # Actually there is a table and two tables inside it. Thus
-                # 3rd </table> tag
-                if "</table>" in line:
-                    tableTagsHit += 1
-                    if tableTagsHit >= 3:
-                        tableTagsHit = 0
-                        break
-                n += 1
+                    #print "len(comments) = %d" % len(comments)
+                    tableTagsHit = 0
+                    #print "COMM = %s" % comm
+                    break
+            #n += 1
         n += 1
-    return comments
 
 
 def estimatedTimeOfArrival(t, pagesProcessed, pageCount):
@@ -143,7 +195,7 @@ def estimatedTimeOfArrival(t, pagesProcessed, pageCount):
     if pagesProcessed is 0:
         return 0
     avg = timePassed/pagesProcessed
-    return float((pageCount - pagesProcessed) * avg)
+    return int((pageCount - pagesProcessed) * avg)
 
 
 def main():
@@ -168,7 +220,7 @@ def main():
     # -> move to next page
     revStarts = parseReviewsStartLine(data) # Returns (lineNmbr, link)
     commentsLineNro = int(revStarts[0])
-    cmntTotal = int(parseCommentCount(data[commentsLineNro]))
+    cmntTotal = int(parseCommentsTotal(data[commentsLineNro]))
 
     if cmntTotal is -1:
         print "Cannot parse comment count -> malfunction"
@@ -178,21 +230,21 @@ def main():
         exit(3)
 
     data = urlopener(revStarts[1])
-    comments = []
-    cmntCount = 0
-    pageCount = 0
+    global cmntCount
+    pageCount = 1
     pagesTotal = 0
     timePassed = time()
     while getNextPageURL(data):
         nextPage = getNextPageURL(data)
         #print getNextPageURL(data)
         data = urlopener(nextPage)
-        if pageCount  == 0:
-            pagesTotal = int(parsePageCount(data))
+        if pageCount  == 1:
+            pagesTotal = int(parsePagesTotal(data))
         # PARSE COMMENTS IN HERE
-        comments.extend(parseComments(data))
-        cmntCount = len(comments)
-        print "\rComment: %d/%d   Page: %d/%d   [ETA: %d sec]" % (cmntCount, cmntTotal,\
+        #comments.extend(parseComments(data))
+        parseComments(data)
+        #cmntCount = len(comments)
+        print "Comment: %s/%s   Page: %s/%s   [ETA: %d sec]\n" % (cmntCount, cmntTotal,\
                 pageCount, pagesTotal, estimatedTimeOfArrival(timePassed,\
                         pageCount, pagesTotal)),
         stdout.flush()

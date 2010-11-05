@@ -5,10 +5,8 @@ class Comment:
         self.header = ""
         self.comment = ""
     def __repr__(self):
-        return "Name: %s\
-                Helpful: %s\
-                Header: %s\
-                Comment = %s"
+        return "Name: %s\nHelpful: %s\nHeader: %s\nComment: %s\n" %\
+                    (self.name, self.helpful, self.header, self.comment)
 
 """
 <!-- BOUNDARY -->
