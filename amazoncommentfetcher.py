@@ -185,49 +185,54 @@ def printComment(data, cboundaries):
     # FIXME Check NULL values and boundaries more carefully
     cbidx = 1
     i = cboundaries[0]
-
-    # FIXME Determine comment changes and clean HTML out
     comm = Comment()
+
     while i < cboundaries[cbidx]:
         # Comment boundary hit. New comment will start in the next line.
         if i >= cboundaries[cbidx]-1:
             comments.append(comm)
             comm = Comment()
-            print "\n#########################################"
+            #print "\n#########################################"
             # cbidx is used to move inside the boundary values vector
             cbidx += 1
             # No more comments remaining
             if cbidx >= len(cboundaries):
                 break
-        #print data[i]
-        # Parse comment name/ID
+            #print data[i]
+        ### Parse comment name/ID
         if "<a name=" in data[i] and len(comm.name) < 1:
             line = data[i]
             comm.name = line[line.find("\"")+1:line.rfind("\"")].rstrip("\r\n")
-        # Parse helpfulness
+        ### Parse helpfulness
         # FIXME make better tag matcher
         if "helpful" in data[i] and len(comm.helpful) < 1:
             tmp = data[i]
-            tmp = re.sub("^\s+", "", tmp)
+            tmp = re.sub("\s+", "", tmp)
             comm.helpful = stripHtmlTags(tmp).rstrip("\r\n").rstrip(":")
             #print "comm.helpful = '%s'" % comm.helpful
-        # Parse stars
+        ### Parse stars
         if "<span class=\"swSprite s_star_" in data[i] and len(comm.stars) < 1:
             tmp = stripHtmlTags(data[i]).rstrip(" \n").rstrip("\n")
-            tmp = re.sub("^\s+", "", tmp)
+            tmp = re.sub("\s+", "", tmp)
             #print "comm.stars = '%s'" % comm.stars
             comm.stars = tmp
         i += 1
-        # Header has bolding
+        ### Header has bolding
         if "<span style=\"vertical-align:middle;\"><b>"  in data[i-1]:
             tmp = stripHtmlTags(data[i-1])
-            comm.header = re.sub("^\s+", "", tmp).rstrip("\n")
+            comm.header = re.sub("\s+", "", tmp).rstrip("\n")
             #print "comm.header = %s" % comm.header
 
             # Get comments FIXME
             tmp = []
+            # XXX Comment starts after these:
+            # XXX   o  See All my reviews
+            # XXX   o  This is review from:
+            # XXX   o  <span class="cmtySprite s_BadgeRealName "><span>(REAL NAME)</span></span></a>
+            # XXX PAY ATTENTION: comment has extra new lines that does not need 
+            endingCmp = ">Help other customers find the most helpful reviews</b>"
             while i < cboundaries[cbidx]-1:
-                if ">Report abuse</a>" in data[i]:
+                if endingCmp in data[i]:
                     break
                 try:
                     k = stripHtmlTags(data[i])
@@ -235,12 +240,22 @@ def printComment(data, cboundaries):
                 except:
                     pass
                 i += 1
+            r = 0
+            # Thanks Amazon for the nice mark up
+            p = re.compile(r"\s+")
+            while r < len(tmp):
+                if re.search(p, tmp[r]) != None:
+                    tmp[r] = re.sub(p, " ", tmp[r])
+                    if re.match(r"\s", tmp[r]) != None:
+                        tmp.pop(r)
+                        continue
+                r += 1
+            print "TMP = %s" % tmp
             comm.comment = tmp
-            continue
 
     #XXX REMOVE BELOW
     for i in comments:
-        print "#*#**##*#*#*#**",
+        print "---",
         i.printAll()
     #XXX REMOVE ABOVE
 

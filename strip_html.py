@@ -4,6 +4,8 @@
 # Submitted on 26 Aug 2005
 # This routine is allowed to be put under any license Open Source (GPL, BSD, LGPL, etc.) License 
 # or any Propriety License. Effectively this routine is in public domain. Please attribute where appropriate.
+#
+# Modified by Ville Valkonen, Mon Nov 15 21:02:00 CET 2010
 
 def strip_ml_tags(in_text):
     """Description: Removes all HTML/XML-like tags from the input text.
@@ -26,15 +28,14 @@ def strip_ml_tags(in_text):
             while s_list[i] != '>':
                 # pop everything from the the left-angle bracket until the right-angle bracket
                 s_list.pop(i)
-
             # pops the right-angle bracket, too
             s_list.pop(i)
         else:
-            i=i+1
+            i = i+1
 
     # convert the list back into text
     join_char=''
-    return join_char.join(s_list)
+    return join_char.join(s_list).replace("\n", "").replace("\r\n", "").replace("&nbsp;", "").replace("\t", "")
 
 if __name__ == '__main__':
     import doctest
