@@ -207,31 +207,40 @@ def printComment(data, cboundaries):
         # FIXME make better tag matcher
         if "helpful" in data[i] and len(comm.helpful) < 1:
             tmp = data[i]
-            tmp = re.sub("\s+", "", tmp)
+            tmp = re.sub("^\s+", "", tmp)
             comm.helpful = stripHtmlTags(tmp).rstrip("\r\n").rstrip(":")
             #print "comm.helpful = '%s'" % comm.helpful
         ### Parse stars
         if "<span class=\"swSprite s_star_" in data[i] and len(comm.stars) < 1:
             tmp = stripHtmlTags(data[i]).rstrip(" \n").rstrip("\n")
-            tmp = re.sub("\s+", "", tmp)
+            tmp = re.sub("^\s+", "", tmp)
             #print "comm.stars = '%s'" % comm.stars
             comm.stars = tmp
         i += 1
         ### Header has bolding
         if "<span style=\"vertical-align:middle;\"><b>"  in data[i-1]:
             tmp = stripHtmlTags(data[i-1])
-            comm.header = re.sub("\s+", "", tmp).rstrip("\n")
+            comm.header = re.sub("^\s+", "", tmp).rstrip("\n")
             #print "comm.header = %s" % comm.header
 
-            # Get comments FIXME
+            ### Get comments FIXME
             tmp = []
             # XXX Comment starts after these:
-            # XXX   o  See All my reviews
-            # XXX   o  This is review from:
-            # XXX   o  <span class="cmtySprite s_BadgeRealName "><span>(REAL NAME)</span></span></a>
-            # XXX PAY ATTENTION: comment has extra new lines that does not need 
+            # XXX PAY ATTENTION: comment has extra new lines that does not need to be parsed
             endingCmp = ">Help other customers find the most helpful reviews</b>"
+            ii = i
+            # Rewind to the correct position
+            while ii < cboundaries[cbidx]-1:
+                if "<span class=\"cmtySprite s_BadgeRealName \">" in data[ii] or \
+                   ">What's this?</a>)</span>" in data[ii] or \
+                   ">See all my reviews</a></div>" in data[ii] or \
+                   "This is review from" in data[ii] or \
+                   "REAL NAME" in data[ii]:
+                    i = ii + 1
+                ii += 1
+            # Parse comment
             while i < cboundaries[cbidx]-1:
+                # This means that we can stop
                 if endingCmp in data[i]:
                     break
                 try:
@@ -241,16 +250,18 @@ def printComment(data, cboundaries):
                     pass
                 i += 1
             r = 0
-            # Thanks Amazon for the nice mark up
+            # Thanks Amazon for the nice mark up -> CLEAN IT UP
             p = re.compile(r"\s+")
             while r < len(tmp):
                 if re.search(p, tmp[r]) != None:
                     tmp[r] = re.sub(p, " ", tmp[r])
-                    if re.match(r"\s", tmp[r]) != None:
+                    if re.search(r"^\s", tmp[r]) != None or tmp[r] is '':
                         tmp.pop(r)
                         continue
+                if tmp[r] == "" or re.search(r"^\n", tmp[r]) != None:
+                    tmp.pop(r)
+                    continue
                 r += 1
-            print "TMP = %s" % tmp
             comm.comment = tmp
 
     #XXX REMOVE BELOW
@@ -258,62 +269,6 @@ def printComment(data, cboundaries):
         print "---",
         i.printAll()
     #XXX REMOVE ABOVE
-
-
-def parseComments(data):
-    # ------ THIS FUNCTION IS DEPRECATED AND WILL BE ABANDONED -----
-    """Collect comments from a page and return as a list"""
-    global cmntCount
-    n = 0
-    tableTagsHit = 0
-
-    while n < len(data):
-        line = data[n]
-        # Comment starts
-        if "<!-- BOUNDARY -->" in data[n]:
-            cmntCount += 1
-            comm = Comment()
-            # Comment section ends with </table>
-            # Comment ID
-            print "line[%s]" % data[n]
-            if "<a name=" in line:
-                print "WE ARE HERE1"
-            if "<a name=\"" in line and len(comm.comment) is 0:
-                print "WE ARE HERE"
-                #print "Comment\nName: %s, %d" % (type(line), len(line))
-                comm.name = line[line.find("\"")+1:line.rfind("\"")]
-                #print "line = %s" % line
-                #print "comm.name = %s" % comm.name
-                #comm.name = stripHtmlTags(line)
-                #print "Comment\nName: %s" % comm.name
-            if "helpful" in line:
-                # FIXME get rid of from this:
-                # comm.helpful = class="crVotingButtons">Was this review helpful to you?&nbsp;Yes
-                comm.helpful = stripHtmlTags(line)
-                #print "comm.helpful = %s" % comm.helpful,
-            # Header has bolding
-            if "</b> <br />" in line:
-                comm.header = stripHtmlTags(line)
-                cmntStarts = n+1
-                # And then starts the comment
-                print "data[%d] = %s" % (n, data[n])
-                while "<div class>" not in data[n] or n < len(data):
-                    n += 1
-                comm.comment = data[cmntStarts:n]
-            # Actually there is a table and two tables inside it. Thus
-            # 3rd </table> tag
-            if "</table>" in line:
-                tableTagsHit += 1
-                #if tableTagsHit is 2:
-                #    comm.comment = data[n+3]
-                if tableTagsHit >= 3:
-                    comments.append(comm)
-                    #print "len(comments) = %d" % len(comments)
-                    tableTagsHit = 0
-                    #print "COMM = %s" % comm
-                    break
-            #n += 1
-        n += 1
 
 
 def estimatedTimeOfArrival(t, pagesProcessed, pageCount):
@@ -365,12 +320,12 @@ def main():
 
     #parseComments(data)
     bzzt = commentsStartStopLineNmbr(data)
-    print "commentsStartStopLineNmbr(data) = %s" % str(bzzt)
+    #print "commentsStartStopLineNmbr(data) = %s" % str(bzzt)
     boundaries = []
     #boundaries.append(bzzt[0])
     boundaries.extend(commentStartLines(data, bzzt))
     boundaries.append(bzzt[1])
-    print "boundaries = %s" % boundaries
+    #print "boundaries = %s" % boundaries
     
     printComment(data, boundaries)
 
