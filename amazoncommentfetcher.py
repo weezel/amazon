@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 
 import re
-from sys import argv, exit, stdout
+from sys import argv, exit, stderr, stdout
 from time import time
 
 from Comment import Comment
@@ -164,7 +164,7 @@ def commentsStartStopLineNmbr(data):
     return (begin, end)
 
 
-def commentStartLines(data, beginEnd):
+def commentsStartLines(data, beginEnd):
     """
     return a vector which includes linenumbers where comments starts
     """
@@ -184,6 +184,7 @@ def printComment(data, cboundaries):
     """
     # FIXME Check NULL values and boundaries more carefully
     cbidx = 1
+    global comments
     i = cboundaries[0]
     comm = Comment()
 
@@ -224,11 +225,9 @@ def printComment(data, cboundaries):
             #print "comm.header = %s" % comm.header
 
             ### Get comments FIXME
-            tmp = []
-            # XXX Comment starts after these:
-            # XXX PAY ATTENTION: comment has extra new lines that does not need to be parsed
-            endingCmp = ">Help other customers find the most helpful reviews</b>"
             ii = i
+            endingCmp = ">Help other customers find the most helpful reviews</b>"
+            tmp = []
             # Rewind to the correct position
             while ii < cboundaries[cbidx]-1:
                 if "<span class=\"cmtySprite s_BadgeRealName \">" in data[ii] or \
@@ -240,7 +239,7 @@ def printComment(data, cboundaries):
                 ii += 1
             # Parse comment
             while i < cboundaries[cbidx]-1:
-                # This means that we can stop
+                # This means that we can stop parsing comment
                 if endingCmp in data[i]:
                     break
                 try:
@@ -249,11 +248,12 @@ def printComment(data, cboundaries):
                 except:
                     pass
                 i += 1
-            r = 0
             # Thanks Amazon for the nice mark up -> CLEAN IT UP
             p = re.compile(r"\s+")
+            r = 0
             while r < len(tmp):
                 if re.search(p, tmp[r]) != None:
+                    # Multiple spaces to single space
                     tmp[r] = re.sub(p, " ", tmp[r])
                     if re.search(r"^\s", tmp[r]) != None or tmp[r] is '':
                         tmp.pop(r)
@@ -263,12 +263,7 @@ def printComment(data, cboundaries):
                     continue
                 r += 1
             comm.comment = tmp
-
-    #XXX REMOVE BELOW
-    for i in comments:
-        print "---",
-        i.printAll()
-    #XXX REMOVE ABOVE
+    return comments
 
 
 def estimatedTimeOfArrival(t, pagesProcessed, pageCount):
@@ -280,74 +275,83 @@ def estimatedTimeOfArrival(t, pagesProcessed, pageCount):
     return int((pageCount - pagesProcessed) * avg)
 
 
+# Main function that binds everything together
 def main():
-    #amazonurl = "http://www.amazon.com/Introduction-Algorithms-Third-Thomas-Cormen/dp/0262033844/ref=sr_1_1?s=books&ie=UTF8&qid=1287355312&sr=1-1"
-    #url = "http://www.amazon.com/Introduction-Algorithms-Third-Thomas-Cormen/dp/0262033844/ref=sr_1_1?s=books&ie=UTF8&qid=1287355312&sr=1-1"
-    #url = """<span class="small"><b><b class="h3color">&rsaquo;</b>&nbsp;<a href="http://www.amazon.com/Introduction-Algorithms-Third-Thomas-Cormen/product-reviews/0262033844/ref=cm_cr_dp_all_recent?ie=UTF8&showViewpoints=1&sortBy=bySubmissionDateDescending" >See all 15 customer reviews...</a></b></span>
-    #"""
+    cboundaries = [] # Comment boundaries
+    cmntTotal = 0
+    global cmntCount
+    global comments
+    pageCount = 1
+    pagesTotal = 0
+    revStarts = 0
+
     if len(argv) < 2:
-        #amazonurl = "data2.html"     XXX remove latter when done
-        amazonurl = "comments.html"
+        amazonurl = "data2.html" # Example file
+        #amazonurl = "http://www.amazon.com/Sennheiser-CX300-B-In-Ear-Stereo-Headphone/product-reviews/B000E6G9RI/ref=cm_cr_pr_link_prev_149?ie=UTF8&showViewpoints=0&pageNumber=150"
     else:
         amazonurl = argv[1]
 
-    data = urlopener(amazonurl)
+    data = urlopener(amazonurl) # Read data
     if data is None:
         print "Zero data"
         exit(1)
 
-    # Where the comments starts
-    # -> get URL
-    # -> while getNextPageURL
-    # -> parse comments
-    # -> move to next page
-    #XXX revStarts = parseReviewsStartLine(data) # Returns (lineNmbr, link)
-    #XXX commentsLineNro = int(revStarts[0])
-    #XXX cmntTotal = int(parseCommentsTotal(data[commentsLineNro]))
+    # Determine where the reviews start
+    revStarts = parseReviewsStartLine(data) # Returns (lineNmbr, link)
+    # Line number of where the "See all %d comments" is
+    commentsLineNro = int(revStarts[0])
+    cmntTotal = int(parseCommentsTotal(data[commentsLineNro]))
 
-    #XXX if cmntTotal is -1:
-    #XXX     print "Cannot parse comment count -> malfunction"
-    #XXX     exit(2)
-    #XXX if revStarts is None:
-    #XXX     print "Cannot determine where the comments starts"
-    #XXX     exit(3)
+    if cmntTotal is -1:
+        print "Cannot parse comment count -> malfunction"
+        exit(2)
+    if revStarts is None:
+        print "Cannot determine where the comment area is"
+        exit(3)
 
-    #XXX data = urlopener(revStarts[1])
-    global cmntCount
-    pageCount = 1
-    pagesTotal = 0
+    data = urlopener(revStarts[1])
     timePassed = time()
 
-    #parseComments(data)
-    bzzt = commentsStartStopLineNmbr(data)
-    #print "commentsStartStopLineNmbr(data) = %s" % str(bzzt)
-    boundaries = []
-    #boundaries.append(bzzt[0])
-    boundaries.extend(commentStartLines(data, bzzt))
-    boundaries.append(bzzt[1])
-    #print "boundaries = %s" % boundaries
-    
-    printComment(data, boundaries)
+    # bzzt = commentsStartStopLineNmbr(data)
+    # #boundaries.append(bzzt[0])
+    # cboundaries.extend(commentStartLines(data, bzzt))
+    # cboundaries.append(bzzt[1])
+    # #print "boundaries = %s" % boundaries
 
-    #XXX while getNextPageURL(data):
-    #XXX     nextPage = getNextPageURL(data)
-    #XXX     #print getNextPageURL(data)
-    #XXX     data = urlopener(nextPage)
-    #XXX     if pageCount  == 1:
-    #XXX         pagesTotal = int(parsePagesTotal(data))
-    #XXX     # PARSE COMMENTS IN HERE
-    #XXX     #comments.extend(parseComments(data))
-    #XXX     parseComments(data)
-    #XXX     #cmntCount = len(comments)
-    #XXX     print "Comment: %s/%s   Page: %s/%s   [ETA: %d sec]\n" % (cmntCount, cmntTotal,\
-    #XXX             pageCount, pagesTotal, estimatedTimeOfArrival(timePassed,\
-    #XXX                     pageCount, pagesTotal)),
-    #XXX     stdout.flush()
-    #XXX     pageCount += 1
-    #XXX # Check whether we have gone through all pages
-    #XXX if pageCount < pagesTotal:
-    #XXX     print "Fetched data not in consistent state. Aborting"
-    #XXX     exit(5)
+    #printComment(data, boundaries)
+
+    while getNextPageURL(data):
+        nextPage = getNextPageURL(data)
+        data = urlopener(nextPage)
+        if pageCount  == 1:
+            pagesTotal = int(parsePagesTotal(data))
+        # PARSE COMMENTS IN HERE
+        cboundaries = [] # Remember to flush
+        tmpbndr = commentsStartStopLineNmbr(data)
+        # By knowing the comment boundaries, we can count the comment count
+        cboundaries.extend(commentsStartLines(data, tmpbndr))
+        cmntCount += len(cboundaries)
+        # Parse comments
+        printComment(data, cboundaries)
+        # Append end line number of a comment area to comment boundaries
+        cboundaries.append(tmpbndr[1])
+
+        printable = "Comment: %s/%s   Page: %s/%s   [ETA: %d sec]\n" % (cmntCount, cmntTotal,\
+                pageCount, pagesTotal, estimatedTimeOfArrival(timePassed,\
+                        pageCount, pagesTotal))
+        stderr.write(printable)
+        stdout.flush()
+        pageCount += 1
+
+    # Finally print all the comments
+    for comment in comments:
+        print "---",
+        comment.printAll()
+    # Check whether we have gone through all pages
+    if pageCount < pagesTotal:
+        print "PAY ATTENTION!"
+        print "Fetched data not in consistent state. Pages fetched %d/%d" % (pageCount, pagesTotal)
+        exit(5)
 
 
 if __name__ == "__main__":
