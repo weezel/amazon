@@ -179,14 +179,18 @@ def commentsStartLines(data, beginEnd):
     return linenumbers
 
 
-def printComment(data, cboundaries):
+def parseComments(data, cboundaries):
     """
+    Tries to parse comments and set them to global vector 'comments'
     """
-    # FIXME Check NULL values and boundaries more carefully
     cbidx = 1
     global comments
     i = cboundaries[0]
     comm = Comment()
+
+    if data is None or len(data) < 0 or \
+        cboundaries is None or len(cboundaries) < 0:
+            return
 
     while i < cboundaries[cbidx]:
         # Comment boundary hit. New comment will start in the next line.
@@ -263,7 +267,6 @@ def printComment(data, cboundaries):
                     continue
                 r += 1
             comm.comment = tmp
-    return comments
 
 
 def estimatedTimeOfArrival(t, pagesProcessed, pageCount):
@@ -312,14 +315,6 @@ def main():
     data = urlopener(revStarts[1])
     timePassed = time()
 
-    # bzzt = commentsStartStopLineNmbr(data)
-    # #boundaries.append(bzzt[0])
-    # cboundaries.extend(commentStartLines(data, bzzt))
-    # cboundaries.append(bzzt[1])
-    # #print "boundaries = %s" % boundaries
-
-    #printComment(data, boundaries)
-
     while getNextPageURL(data):
         nextPage = getNextPageURL(data)
         data = urlopener(nextPage)
@@ -328,14 +323,12 @@ def main():
         # PARSE COMMENTS IN HERE
         cboundaries = [] # Remember to flush
         tmpbndr = commentsStartStopLineNmbr(data)
-        # By knowing the comment boundaries, we can count the comment count
         cboundaries.extend(commentsStartLines(data, tmpbndr))
-        cmntCount += len(cboundaries)
         # Parse comments
-        printComment(data, cboundaries)
+        parseComments(data, cboundaries)
+        cmntCount = len(comments)
         # Append end line number of a comment area to comment boundaries
         cboundaries.append(tmpbndr[1])
-
         printable = "Comment: %s/%s   Page: %s/%s   [ETA: %d sec]\n" % (cmntCount, cmntTotal,\
                 pageCount, pagesTotal, estimatedTimeOfArrival(timePassed,\
                         pageCount, pagesTotal))
@@ -348,7 +341,7 @@ def main():
         print "---",
         comment.printAll()
     # Check whether we have gone through all pages
-    if pageCount < pagesTotal:
+    if pageCount != pagesTotal:
         print "PAY ATTENTION!"
         print "Fetched data not in consistent state. Pages fetched %d/%d" % (pageCount, pagesTotal)
         exit(5)
