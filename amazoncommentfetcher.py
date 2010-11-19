@@ -12,10 +12,11 @@ from urlopener import urlopener
 
 comments = []
 cmntCount = 0
+fileName = "comments.txt"
+fileOut = 0
 
 
 ### TODO
-#   o  add &nbsp; remover to strip_html
 #   o  make strip_html error less error prone
 #
 
@@ -153,6 +154,9 @@ def commentsStartStopLineNmbr(data):
     end = 0
     i = 0
 
+    if data is None or len(data) < 1:
+        return
+
     while i < len(data):
         if "<table class=\"CMheadingBar\"" in data[i]:
             if begin is 0:
@@ -170,6 +174,9 @@ def commentsStartLines(data, beginEnd):
     """
     i = 0
     linenumbers = []
+
+    if data is None or data < 1:
+        return
 
     i = beginEnd[0]
     while i < beginEnd[1]:
@@ -196,6 +203,8 @@ def parseComments(data, cboundaries):
         # Comment boundary hit. New comment will start in the next line.
         if i >= cboundaries[cbidx]-1:
             comments.append(comm)
+            # Write to a file too
+            writeToFile() # fileName is a global, so is comments[]
             comm = Comment()
             #print "\n#########################################"
             # cbidx is used to move inside the boundary values vector
@@ -228,7 +237,8 @@ def parseComments(data, cboundaries):
             comm.header = re.sub("^\s+", "", tmp).rstrip("\n")
             #print "comm.header = %s" % comm.header
 
-            ### Get comments FIXME
+            ### Get comments
+            # FIXME Comment count won't match
             ii = i
             endingCmp = ">Help other customers find the most helpful reviews</b>"
             tmp = []
@@ -262,11 +272,28 @@ def parseComments(data, cboundaries):
                     if re.search(r"^\s", tmp[r]) != None or tmp[r] is '':
                         tmp.pop(r)
                         continue
-                if tmp[r] == "" or re.search(r"^\n", tmp[r]) != None:
+                if tmp[r] is "" or re.search(r"^\n", tmp[r]) != None:
+                    tmp.pop(r)
+                    continue
+                if "---" in tmp[r]:
                     tmp.pop(r)
                     continue
                 r += 1
             comm.comment = tmp
+
+
+def writeToFile():
+    if fileName is None or len(fileName) < 0:
+        print "Bogus filename '%s'" % fileName
+        exit(100)
+    if len(comments) < 1:
+        return
+
+    c  = comments[len(comments)-1]
+    fileOut.write(c.__repr__())
+    for i in c.comment:
+        fileOut.write(i)
+    fileOut.write("\n---")
 
 
 def estimatedTimeOfArrival(t, pagesProcessed, pageCount):
@@ -281,12 +308,9 @@ def estimatedTimeOfArrival(t, pagesProcessed, pageCount):
 # Main function that binds everything together
 def main():
     cboundaries = [] # Comment boundaries
-    cmntTotal = 0
-    global cmntCount
-    global comments
+    cmntTotal = pageTotal = revStarts = 0
+    global cmntCount, comments, fileName, fileOut
     pageCount = 1
-    pagesTotal = 0
-    revStarts = 0
 
     if len(argv) < 2:
         amazonurl = "data2.html" # Example file
@@ -315,32 +339,43 @@ def main():
     data = urlopener(revStarts[1])
     timePassed = time()
 
-    while getNextPageURL(data):
-        nextPage = getNextPageURL(data)
-        data = urlopener(nextPage)
-        if pageCount  == 1:
-            pagesTotal = int(parsePagesTotal(data))
-        # PARSE COMMENTS IN HERE
-        cboundaries = [] # Remember to flush
-        tmpbndr = commentsStartStopLineNmbr(data)
-        cboundaries.extend(commentsStartLines(data, tmpbndr))
-        # Parse comments
-        parseComments(data, cboundaries)
-        cmntCount = len(comments)
-        # Append end line number of a comment area to comment boundaries
-        cboundaries.append(tmpbndr[1])
-        printable = "Comment: %s/%s   Page: %s/%s   [ETA: %d sec]\n" % (cmntCount, cmntTotal,\
-                pageCount, pagesTotal, estimatedTimeOfArrival(timePassed,\
-                        pageCount, pagesTotal))
-        stderr.write(printable)
-        stdout.flush()
-        pageCount += 1
+    # FILEOPEN
+    try:
+        fileOut = open(fileName, "a")
+    except:
+        print "Cannot write to file =  %s" % fileName
 
-    # Finally print all the comments
-    for comment in comments:
-        print "---",
-        comment.printAll()
-    # Check whether we have gone through all pages
+    try:
+        while getNextPageURL(data):
+            nextPage = getNextPageURL(data)
+            data = urlopener(nextPage)
+            if pageCount  == 1:
+                pagesTotal = int(parsePagesTotal(data))
+            # PARSE COMMENTS IN HERE
+            cboundaries = [] # Remember to flush
+            tmpbndr = commentsStartStopLineNmbr(data)
+            cboundaries.extend(commentsStartLines(data, tmpbndr))
+            # Parse comments
+            parseComments(data, cboundaries)
+            cmntCount = len(comments)
+            # Append end line number of a comment area to comment boundaries
+            cboundaries.append(tmpbndr[1])
+            printable = "Comment: %s/%s   Page: %s/%s   [ETA: %d sec]\n" % (cmntCount, cmntTotal,\
+                    pageCount, pagesTotal, estimatedTimeOfArrival(timePassed,\
+                            pageCount, pagesTotal))
+            stderr.write(printable)
+            stdout.flush()
+            #writeToFile() # fileName is a global, so is comments[]
+            pageCount += 1
+    except KeyboardInterrupt:
+        fileOut.close()
+    finally:
+        fileOut.close()
+    #for comment in comments:
+    #    print "---",
+    #    comment.printAll()
+
+#    # Check whether we have gone through all pages
     if pageCount != pagesTotal:
         print "PAY ATTENTION!"
         print "Fetched data not in consistent state. Pages fetched %d/%d" % (pageCount, pagesTotal)

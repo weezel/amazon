@@ -11,8 +11,8 @@ class Comment:
         for line in self.comment:
             print "%s" % line
     def __repr__(self):
-        return "\nName: %s\nHelpful: %s\nStars: %s\nHeader: %s\nComment: %s" %\
-            (self.name, self.helpful, self.stars, self.header, self.comment)
+        return "\nName: %s\nHelpful: %s\nStars: %s\nHeader: %s\nComment:\n" %\
+            (self.name, self.helpful, self.stars, self.header)
 
 """
 <!-- BOUNDARY -->
