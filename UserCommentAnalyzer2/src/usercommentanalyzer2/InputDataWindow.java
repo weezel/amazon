@@ -1,0 +1,441 @@
+/*
+ * To change this template, choose Tools | Templates
+ * and open the template in the editor.
+ */
+
+/*
+ * InputDataWindow.java
+ *
+ * Created on Nov 19, 2010, 11:46:57 AM
+ */
+package usercommentanalyzer2;
+
+import java.awt.BorderLayout;
+import java.awt.Dimension;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.Toolkit;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.io.BufferedReader;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JTextField;
+import javax.swing.WindowConstants;
+import javax.swing.border.TitledBorder;
+import org.jdesktop.application.Application;
+import org.jdesktop.application.ResourceMap;
+
+/**
+ * Window for the input typing of the products to compare.
+ *
+ * @author javiersalcedogomez
+ */
+public class InputDataWindow extends JFrame {
+
+    /** 
+     * Creates new form InputDataWindow.
+     */
+    public InputDataWindow() {
+        // initComponents();
+
+        GridBagConstraints gridBagConstraints;
+
+        // Set the title
+        setTitle("User comment analyzer input window");
+
+        _productNumberPanel = new JPanel();
+        _productNumberLabel = new JLabel();
+        _productNumberTextField = new JTextField();
+        _acceptButton = new JButton();
+        _cancelButton = new JButton();
+
+        setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+        setName("Form");
+        setPreferredSize(new java.awt.Dimension(300, 110));
+        getContentPane().setLayout(new BorderLayout());
+
+        ResourceMap resourceMap = Application.getInstance(usercommentanalyzer2.UserCommentAnalyzer2App.class).getContext().getResourceMap(InputDataWindow.class);
+
+        // PRODUCT NUMBER PANEL
+        _productNumberPanel.setBorder(new TitledBorder("Choose the number of products to compare"));
+        _productNumberPanel.setName("_panelProductNumber");
+        _productNumberPanel.setLayout(new GridBagLayout());
+
+        // PRODUCT NUMBER LABEL
+        _productNumberLabel.setText(resourceMap.getString("_productNumberLabel.text"));
+        _productNumberLabel.setName("_productNumberLabel");
+        gridBagConstraints = new GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 0;
+        _productNumberPanel.add(_productNumberLabel, gridBagConstraints);
+
+        // PRODUCT NUMBER TEXT FIELD
+        _productNumberTextField.setColumns(3);
+        _productNumberTextField.setText(resourceMap.getString("_productNumberTextField.text"));
+        _productNumberTextField.setName("_productNumberTextField");
+        gridBagConstraints = new GridBagConstraints();
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.insets = new java.awt.Insets(0, -20, 0, 0);
+        _productNumberPanel.add(_productNumberTextField, gridBagConstraints);
+
+        // ACCEPT BUTTON
+        _acceptButton.setText(resourceMap.getString("_acceptButton.text"));
+        _acceptButton.setName("_acceptButton");
+        _acceptButton.addActionListener(new ActionListener() {
+
+            @Override
+            public void actionPerformed(ActionEvent event) {
+                acceptButtonActionPerformed(event);
+            }
+        });
+        gridBagConstraints = new GridBagConstraints();
+        gridBagConstraints.gridy = 1;
+        _productNumberPanel.add(_acceptButton, gridBagConstraints);
+
+        // CANCEL BUTTON
+        _cancelButton.setText(resourceMap.getString("_cancelButton.text"));
+        _cancelButton.setName("_cancelButton");
+        _cancelButton.addActionListener(new java.awt.event.ActionListener() {
+
+            @Override
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cancelButtonActionPerformed(evt);
+            }
+        });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 1;
+        _productNumberPanel.add(_cancelButton, gridBagConstraints);
+
+        getContentPane().add(_productNumberPanel, java.awt.BorderLayout.NORTH);
+        pack();
+
+        // Get the size of the screen
+        Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
+
+        // Determine the new location of the window
+        int w = getSize().width;
+        int h = getSize().height;
+        int x = (dim.width - w) / 2;
+        int y = (dim.height - h) / 2;
+
+        // Move the window
+        setLocation(x, y);
+    }
+
+    /** This method is called from within the constructor to
+     * initialize the form.
+     * WARNING: Do NOT modify this code. The content of this method is
+     * always regenerated by the Form Editor.
+     */
+    @SuppressWarnings("unchecked")
+    // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
+    private void initComponents() {
+        java.awt.GridBagConstraints gridBagConstraints;
+
+        _productNumberPanel = new javax.swing.JPanel();
+        _productNumberLabel = new javax.swing.JLabel();
+        _productNumberTextField = new javax.swing.JTextField();
+        _acceptButton = new javax.swing.JButton();
+        _cancelButton = new javax.swing.JButton();
+
+        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setName("Form"); // NOI18N
+        setPreferredSize(new java.awt.Dimension(300, 130));
+
+        org.jdesktop.application.ResourceMap resourceMap = org.jdesktop.application.Application.getInstance(usercommentanalyzer2.UserCommentAnalyzer2App.class).getContext().getResourceMap(InputDataWindow.class);
+        _productNumberPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(resourceMap.getString("_productNumberPanel.border.title"))); // NOI18N
+        _productNumberPanel.setName("_productNumberPanel"); // NOI18N
+        _productNumberPanel.setPreferredSize(new java.awt.Dimension(400, 260));
+        _productNumberPanel.setLayout(new java.awt.GridBagLayout());
+
+        _productNumberLabel.setText(resourceMap.getString("_productNumberLabel.text")); // NOI18N
+        _productNumberLabel.setName("_productNumberLabel"); // NOI18N
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 0;
+        _productNumberPanel.add(_productNumberLabel, gridBagConstraints);
+
+        _productNumberTextField.setColumns(3);
+        _productNumberTextField.setText(resourceMap.getString("_productNumberTextField.text")); // NOI18N
+        _productNumberTextField.setName("_productNumberTextField"); // NOI18N
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.insets = new java.awt.Insets(0, -20, 0, 0);
+        _productNumberPanel.add(_productNumberTextField, gridBagConstraints);
+
+        _acceptButton.setText(resourceMap.getString("_acceptButton.text")); // NOI18N
+        _acceptButton.setName("_acceptButton"); // NOI18N
+        _acceptButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                acceptButtonActionPerformed(evt);
+            }
+        });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridy = 1;
+        _productNumberPanel.add(_acceptButton, gridBagConstraints);
+
+        _cancelButton.setText(resourceMap.getString("_cancelButton.text")); // NOI18N
+        _cancelButton.setName("_cancelButton"); // NOI18N
+        _cancelButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cancelButtonActionPerformed(evt);
+            }
+        });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 1;
+        _productNumberPanel.add(_cancelButton, gridBagConstraints);
+
+        getContentPane().add(_productNumberPanel, java.awt.BorderLayout.CENTER);
+
+        pack();
+    }// </editor-fold>//GEN-END:initComponents
+
+    /**
+     * Accept button action performed.
+     * 
+     * @param evt action event.
+     */
+    private void acceptButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_acceptButtonActionPerformed
+
+        _productNumber = -1;
+
+        // Sets the focus on the text field always
+        _productNumberTextField.requestFocus();
+
+        try {
+
+            _productNumber = Integer.parseInt(_productNumberTextField.getText());
+
+            // It has to be 2 as minimum
+            if (_productNumber >= 2) {
+
+                // Clear the panel
+                if (_productPanel != null) {
+                    remove(_productPanel);
+                }
+
+                // Clear the text field list
+                if (_urlList != null) {
+                    _urlList.clear();
+                }
+
+                // PRODUCT PANEL
+                _productPanel = new JPanel();
+                _productPanel.setBorder(new TitledBorder("Type the URL of the Products to compare"));
+                _productPanel.setLayout(new GridBagLayout());
+
+                // Creates the URL list
+                _urlList = new ArrayList<JTextField>();
+
+                // Creates the rest of the URL text fields
+                for (int counter = 1; counter <= _productNumber; counter++) {
+
+                    GridBagConstraints gridBagConstraints = new GridBagConstraints();
+
+                    JLabel newProductUrlLabel = new JLabel("Product " + counter);
+                    JTextField newProductUrlTextField = new JTextField();
+                    newProductUrlTextField.setColumns(40);
+                    gridBagConstraints.gridx = 0;
+                    gridBagConstraints.gridy = counter - 1;
+                    _productPanel.add(newProductUrlLabel, gridBagConstraints);
+                    gridBagConstraints.gridx = 1;
+                    _productPanel.add(newProductUrlTextField, gridBagConstraints);
+
+                    // Updates the url list
+                    _urlList.add(newProductUrlTextField);
+                }
+
+                // COMPARE BUTTON
+                _buttonPanel = new JPanel();
+                _buttonPanel.setLayout(new BorderLayout());
+                _compareButton = new JButton("Compare");
+                _compareButton.addActionListener(new java.awt.event.ActionListener() {
+
+                    @Override
+                    public void actionPerformed(ActionEvent event) {
+                        compareButtonActionPerformed(event);
+                    }
+                });
+                _buttonPanel.add(_compareButton, BorderLayout.LINE_END);
+
+                // FRAME
+                add(_productPanel, BorderLayout.CENTER);
+                add(_buttonPanel, BorderLayout.SOUTH);
+
+                pack();
+                validate();
+                repaint();
+
+                // Get the size of the screen
+                Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
+
+                // Determine the new location of the window
+                int w = getSize().width;
+                int h = getSize().height;
+                int x = (dim.width - w) / 2;
+                int y = (dim.height - h) / 2;
+
+                // Move the window
+                setLocation(x, y);
+
+            } else // Error message
+            {
+                JOptionPane.showMessageDialog(null, "The number typed has to be 2 as minimum", "Number error", JOptionPane.ERROR_MESSAGE);
+            }
+
+
+        } catch (NumberFormatException exception) {
+
+            // Error message
+            JOptionPane.showMessageDialog(null, "The number typed is not an integer", "Conversion error", JOptionPane.ERROR_MESSAGE);
+        }
+    }//GEN-LAST:event_acceptButtonActionPerformed
+
+    /**
+     * Returns the analysis result of the fetching process.
+     *
+     * @return the analysis result of the fetching process.
+     */
+    public static ArrayList<String[]> getMessage(){
+        return _analysisResult;
+    }
+
+    /**
+     * Compare button action performed.
+     * 
+     * Starts the comparison between all the selected products.
+     * 
+     * @param event acton event performed.
+     */
+    private void compareButtonActionPerformed(ActionEvent event) {
+
+        StringBuffer message = new StringBuffer();
+
+        _analysisResult = new ArrayList<String[]>();
+        
+        // Fetches all the products
+        for (int position = 0; position < _productNumber; position++) {
+
+            // Calls the python program to obtain the input data
+            try {
+
+                Process process = Runtime.getRuntime().exec(COMMAND + " " + ARGUMENTS + " " + _urlList.get(position).getText());
+
+                // Creates the progress window
+                ProgressWindow.getInstance().shows();
+
+                InputStream inputStream = process.getInputStream();
+                InputStream errorStream = process.getErrorStream();
+                BufferedReader bufferedInput = new BufferedReader(new InputStreamReader(inputStream));
+                BufferedReader bufferedError = new BufferedReader(new InputStreamReader(errorStream));
+
+                while (true) {
+
+                    if (inputStream.available() > 0) {
+
+                        String lineIn;
+
+                        while ((lineIn = bufferedInput.readLine()) != null) {
+
+                            ProgressWindow.getInstance().update(lineIn);
+
+                            message.append(lineIn);
+                            message.append(System.getProperty("line.separator"));
+                        }
+                    }
+
+                    if (errorStream.available() > 0) {
+
+                        String lineIn;
+                        while ((lineIn = bufferedError.readLine()) != null) {
+
+                            ProgressWindow.getInstance().update(lineIn);
+
+                            message.append("ERROR: ");
+                            message.append(lineIn);
+                            message.append(System.getProperty("line.separator"));
+                        }
+                    }
+
+                    try {
+                        process.exitValue();
+                        break;
+
+                    } catch (Throwable throwable) {
+                        Thread.sleep(1000);
+                    }
+                }
+
+                bufferedInput.close();
+                bufferedError.close();
+
+                // Closes the progress window
+                ProgressWindow.getInstance().close();
+
+            } catch (Throwable throwable) {
+                Logger.getLogger(UserCommentAnalyzer2App.class.getName()).log(Level.SEVERE, null, throwable);
+            }
+
+        }
+        // Shows the application
+        //show(new UserCommentAnalyzer2View(InputDataWindow.class, message.toString()));
+        UserCommentAnalyzer2App.launch(UserCommentAnalyzer2App.class, null);
+    }
+
+    /**
+     * Cancel button action performed. Closes the input window.
+     * 
+     * @param evt action event performed.
+     */
+    private void cancelButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cancelButtonActionPerformed
+
+        // Exit of the application
+        System.exit(0);
+    }//GEN-LAST:event_cancelButtonActionPerformed
+    // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton _acceptButton;
+    private javax.swing.JButton _cancelButton;
+    private javax.swing.JLabel _productNumberLabel;
+    private javax.swing.JPanel _productNumberPanel;
+    private javax.swing.JTextField _productNumberTextField;
+    // End of variables declaration//GEN-END:variables
+
+    public static final String COMMAND = "python";
+    public static final String ARGUMENTS = "./amazon/amazoncommentfetcher.py";
+
+    /**
+     * Product panel.
+     */
+    private JPanel _productPanel;
+    /**
+     * Button panel.
+     */
+    private JPanel _buttonPanel;
+    /**
+     * Compare button.
+     */
+    private JButton _compareButton;
+    /**
+     * Product number.
+     */
+    private int _productNumber;
+    /**
+     * Array list with the URLs typed by the user.
+     */
+    private ArrayList<JTextField> _urlList;
+    /**
+     * Analysis result of the fetching process.
+     */
+    private static ArrayList<String[]> _analysisResult;
+}
