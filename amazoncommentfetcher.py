@@ -2,6 +2,7 @@
 # -*- coding: utf-8 -*-
 
 import re
+import os
 from sys import argv, exit, stderr, stdout
 from time import time
 
@@ -18,7 +19,7 @@ fileOut = 0
 
 ### TODO
 #   o  make strip_html error less error prone
-#
+#   o  check whether there are comments or not
 
 
 
@@ -341,6 +342,8 @@ def main():
 
     # FILEOPEN
     try:
+        if os.path.isfile(fileName):
+            os.remove(fileName)
         fileOut = open(fileName, "a")
     except:
         print "Cannot write to file =  %s" % fileName
