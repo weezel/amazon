@@ -73,11 +73,11 @@ def parseReviewsStartLine(data):
     return None
 
 
-def parseCommentsTotal(line):
+def parseCommentsTotalCount(line):
     """
     return comment count, -1 when fail
     """
-    nmbrPat = re.compile(r"all \d+ customer")
+    nmbrPat = re.compile(r"all (\d|,)*\d* customer")
 
     if line is None or len(line) < 1:
         return -1
@@ -125,7 +125,7 @@ def parsePagesTotal(data):
                         break
                 i -= 1
             return tmp
-    return 0
+    return -1
 
 
 def parseLinkFromLine(s):
@@ -189,17 +189,21 @@ def commentsStartLines(data, beginEnd):
 
 def parseComments(data, cboundaries):
     """
-    Tries to parse comments and set them to global vector 'comments'
+    return True on success, False on failure
+    Parse comments and sets them to global vector 'comments'
     """
-    cbidx = 1
+    cbidx = 1 # cbidx will be used to move inside the boundary values vector
     global comments
-    i = cboundaries[0]
     comm = Comment()
+    pHelpfull = r"(\d|,)*\d* of (\d|,)*\d* people found the following review helpful:"
 
     if data is None or len(data) < 0 or \
         cboundaries is None or len(cboundaries) < 0:
-            return
+            return False
 
+    print "cobundaries = %s" % cboundaries
+
+    i = cboundaries[0] # FIXME
     while i < cboundaries[cbidx]:
         # Comment boundary hit. New comment will start in the next line.
         if i >= cboundaries[cbidx]-1:
@@ -207,52 +211,62 @@ def parseComments(data, cboundaries):
             # Write to a file too
             writeToFile() # fileName is a global, so is comments[]
             comm = Comment()
-            #print "\n#########################################"
-            # cbidx is used to move inside the boundary values vector
+            i = cboundaries[cbidx]
             cbidx += 1
+
             # No more comments remaining
             if cbidx >= len(cboundaries):
-                break
+                return True
             #print data[i]
+
         ### Parse comment name/ID
         if "<a name=" in data[i] and len(comm.name) < 1:
             line = data[i]
             comm.name = line[line.find("\"")+1:line.rfind("\"")].rstrip("\r\n")
+
         ### Parse helpfulness
-        # FIXME make better tag matcher
-        if "helpful" in data[i] and len(comm.helpful) < 1:
+        if re.match(pHelpfull, data[i]) != None and len(comm.helpful) < 1:
             tmp = data[i]
             tmp = re.sub("^\s+", "", tmp)
             comm.helpful = stripHtmlTags(tmp).rstrip("\r\n").rstrip(":")
             #print "comm.helpful = '%s'" % comm.helpful
+
         ### Parse stars
         if "<span class=\"swSprite s_star_" in data[i] and len(comm.stars) < 1:
             tmp = stripHtmlTags(data[i]).rstrip(" \n").rstrip("\n")
             tmp = re.sub("^\s+", "", tmp)
             #print "comm.stars = '%s'" % comm.stars
             comm.stars = tmp
+
         i += 1
+
         ### Header has bolding
-        if "<span style=\"vertical-align:middle;\"><b>"  in data[i-1]:
+        if "<span style=\"vertical-align:middle;\"><b>" in data[i-1]:
+            print "data[%d] = %s" % (i-1, data[i-1]),
             tmp = stripHtmlTags(data[i-1])
             comm.header = re.sub("^\s+", "", tmp).rstrip("\n")
             #print "comm.header = %s" % comm.header
 
             ### Get comments
-            # FIXME Comment count won't match
             ii = i
             endingCmp = ">Help other customers find the most helpful reviews</b>"
             tmp = []
-            # Rewind to the correct position
-            while ii < cboundaries[cbidx]-1:
-                if "<span class=\"cmtySprite s_BadgeRealName \">" in data[ii] or \
-                   ">What's this?</a>)</span>" in data[ii] or \
-                   ">See all my reviews</a></div>" in data[ii] or \
-                   "This is review from" in data[ii] or \
-                   "REAL NAME" in data[ii]:
-                    i = ii + 1
-                ii += 1
-            # Parse comment
+
+            ### Rewind to the correct position
+            print "before while, ii=%d, cboundaries=%d" % (ii, cboundaries[cbidx])
+            # FIXME approach from the different angle: use reverse, luke!
+            #while ii < cboundaries[cbidx]-1: # FIXME possible troublemaker
+            #    if "<span class=\"cmtySprite s_BadgeRealName \">" in data[ii] or \
+            #       ">What's this?</a>)</span>" in data[ii] or \
+            #       ">See all my reviews</a></div>" in data[ii] or \
+            #       "This is review from" in data[ii] or \
+            #       "REAL NAME" in data[ii]:
+            #        i = ii + 1
+            #    ii += 1
+
+            print "\tdata[%d] = %s" % (i, data[i]),
+
+            ### Parse comment
             while i < cboundaries[cbidx]-1:
                 # This means that we can stop parsing comment
                 if endingCmp in data[i]:
@@ -264,23 +278,34 @@ def parseComments(data, cboundaries):
                     pass
                 i += 1
             # Thanks Amazon for the nice mark up -> CLEAN IT UP
-            p = re.compile(r"\s+")
-            r = 0
-            while r < len(tmp):
-                if re.search(p, tmp[r]) != None:
-                    # Multiple spaces to single space
-                    tmp[r] = re.sub(p, " ", tmp[r])
-                    if re.search(r"^\s", tmp[r]) != None or tmp[r] is '':
-                        tmp.pop(r)
-                        continue
-                if tmp[r] is "" or re.search(r"^\n", tmp[r]) != None:
-                    tmp.pop(r)
-                    continue
-                if "---" in tmp[r]:
-                    tmp.pop(r)
-                    continue
-                r += 1
-            comm.comment = tmp
+            comm.comment = cleanUpComment(tmp)
+    return False
+
+
+def cleanUpComment(c):
+    """ return cleaned up comment, '' if fail. """
+    p = re.compile(r"\s+")
+    r = 0
+
+    if c is None or len(c) < 1:
+    	return ''
+
+    # Thanks Amazon for the nice mark up -> CLEAN IT UP!
+    while r < len(c):
+        if re.search(p, c[r]) != None:
+            # Multiple spaces to single space
+            c[r] = re.sub(p, " ", c[r])
+            if re.search(r"^\s", c[r]) != None or c[r] is '':
+                c.pop(r)
+                continue
+        if c[r] is "" or re.search(r"^\n", c[r]) != None:
+            c.pop(r)
+            continue
+        if "---" in c[r]:
+            c.pop(r)
+            continue
+        r += 1
+    return c
 
 
 def writeToFile():
@@ -303,7 +328,7 @@ def estimatedTimeOfArrival(t, pagesProcessed, pageCount):
     if pagesProcessed is 0:
         return 0
     avg = timePassed/pagesProcessed
-    return int((pageCount - pagesProcessed) * avg)
+    return (int(pageCount) - int(pagesProcessed)) * avg
 
 
 # Main function that binds everything together
@@ -314,7 +339,8 @@ def main():
     pageCount = 1
 
     if len(argv) < 2:
-        amazonurl = "data2.html" # Example file
+        amazonurl = "http://www.amazon.com/Asus-T91SA-VU1X-BK-8-9-Inch-Netbook-Computer/dp/B002GCR04Y/ref=sr_1_6?s=pc&ie=UTF8&qid=1290198472&sr=1-6"
+        #amazonurl = "data2.html" # Example file
         #amazonurl = "http://www.amazon.com/Sennheiser-CX300-B-In-Ear-Stereo-Headphone/product-reviews/B000E6G9RI/ref=cm_cr_pr_link_prev_149?ie=UTF8&showViewpoints=0&pageNumber=150"
     else:
         amazonurl = argv[1]
@@ -324,15 +350,15 @@ def main():
         print "Zero data"
         exit(1)
 
-    # Determine where the reviews start
+    ### Determine where the reviews starts
     revStarts = parseReviewsStartLine(data) # Returns (lineNmbr, link)
-    # Line number of where the "See all %d comments" is
+    ### Line number where the "See all %d comments" is
     commentsLineNro = int(revStarts[0])
-    cmntTotal = int(parseCommentsTotal(data[commentsLineNro]))
+    cmntTotal = int(parseCommentsTotalCount(data[commentsLineNro]))
 
-    if cmntTotal is -1:
-        print "Cannot parse comment count -> malfunction"
-        exit(2)
+    if cmntTotal < 1: # XXX IS THIS REALLY WORKING?
+        print "No reviews"
+        exit(0)
     if revStarts is None:
         print "Cannot determine where the comment area is"
         exit(3)
@@ -349,12 +375,13 @@ def main():
         print "Cannot write to file =  %s" % fileName
 
     try:
-        while getNextPageURL(data):
-            nextPage = getNextPageURL(data)
-            data = urlopener(nextPage)
+        # Will do the following:
+        #    o  cboundaries has linenumbers of where the comments starts
+        #    o  tmpbndr includes begin and end linenumbers of the comment area
+        nextPage = getNextPageURL(data)
+        while nextPage:
             if pageCount  == 1:
-                pagesTotal = int(parsePagesTotal(data))
-            # PARSE COMMENTS IN HERE
+                pagesTotal = parsePagesTotal(data)
             cboundaries = [] # Remember to flush
             tmpbndr = commentsStartStopLineNmbr(data)
             cboundaries.extend(commentsStartLines(data, tmpbndr))
@@ -370,7 +397,10 @@ def main():
             stdout.flush()
             #writeToFile() # fileName is a global, so is comments[]
             pageCount += 1
-    except KeyboardInterrupt:
+            # Prepare to move in the next page
+            nextPage = getNextPageURL(data)
+            data = urlopener(nextPage)
+    except:
         fileOut.close()
     finally:
         fileOut.close()
@@ -378,7 +408,7 @@ def main():
     #    print "---",
     #    comment.printAll()
 
-#    # Check whether we have gone through all pages
+    # Check whether we have gone through all pages
     if pageCount != pagesTotal:
         print "PAY ATTENTION!"
         print "Fetched data not in consistent state. Pages fetched %d/%d" % (pageCount, pagesTotal)
