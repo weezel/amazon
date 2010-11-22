@@ -197,28 +197,12 @@ def parseComments(data, cboundaries):
     comm = Comment()
     pHelpfull = r"(\d|,)*\d* of (\d|,)*\d* people found the following review helpful:"
 
-    if data is None or len(data) < 0 or \
-        cboundaries is None or len(cboundaries) < 0:
+    if data is None or len(data) < 1 or \
+        cboundaries is None or len(cboundaries) < 1:
             return False
 
-    print "cobundaries = %s" % cboundaries
-
-    i = cboundaries[0] # FIXME
-    while i < cboundaries[cbidx]:
-        # Comment boundary hit. New comment will start in the next line.
-        if i >= cboundaries[cbidx]-1:
-            comments.append(comm)
-            # Write to a file too
-            writeToFile() # fileName is a global, so is comments[]
-            comm = Comment()
-            i = cboundaries[cbidx]
-            cbidx += 1
-
-            # No more comments remaining
-            if cbidx >= len(cboundaries):
-                return True
-            #print data[i]
-
+    i = cboundaries[0]
+    while i <= cboundaries[cbidx]:
         ### Parse comment name/ID
         if "<a name=" in data[i] and len(comm.name) < 1:
             line = data[i]
@@ -229,23 +213,17 @@ def parseComments(data, cboundaries):
             tmp = data[i]
             tmp = re.sub("^\s+", "", tmp)
             comm.helpful = stripHtmlTags(tmp).rstrip("\r\n").rstrip(":")
-            #print "comm.helpful = '%s'" % comm.helpful
 
         ### Parse stars
         if "<span class=\"swSprite s_star_" in data[i] and len(comm.stars) < 1:
             tmp = stripHtmlTags(data[i]).rstrip(" \n").rstrip("\n")
             tmp = re.sub("^\s+", "", tmp)
-            #print "comm.stars = '%s'" % comm.stars
             comm.stars = tmp
 
-        i += 1
-
         ### Header has bolding
-        if "<span style=\"vertical-align:middle;\"><b>" in data[i-1]:
-            print "data[%d] = %s" % (i-1, data[i-1]),
-            tmp = stripHtmlTags(data[i-1])
+        if "<span style=\"vertical-align:middle;\"><b>" in data[i]:
+            tmp = stripHtmlTags(data[i])
             comm.header = re.sub("^\s+", "", tmp).rstrip("\n")
-            #print "comm.header = %s" % comm.header
 
             ### Get comments
             ii = i
@@ -253,9 +231,8 @@ def parseComments(data, cboundaries):
             tmp = []
 
             ### Rewind to the correct position
-            print "before while, ii=%d, cboundaries=%d" % (ii, cboundaries[cbidx])
-            # FIXME approach from the different angle: use reverse, luke!
-            #while ii < cboundaries[cbidx]-1: # FIXME possible troublemaker
+            # FIXME -*- approach from the different angle: use reverse, luke!
+            #while ii < cboundaries[cbidx]-1:
             #    if "<span class=\"cmtySprite s_BadgeRealName \">" in data[ii] or \
             #       ">What's this?</a>)</span>" in data[ii] or \
             #       ">See all my reviews</a></div>" in data[ii] or \
@@ -264,10 +241,8 @@ def parseComments(data, cboundaries):
             #        i = ii + 1
             #    ii += 1
 
-            print "\tdata[%d] = %s" % (i, data[i]),
-
             ### Parse comment
-            while i < cboundaries[cbidx]-1:
+            while i+1 <= cboundaries[cbidx]:
                 # This means that we can stop parsing comment
                 if endingCmp in data[i]:
                     break
@@ -277,8 +252,22 @@ def parseComments(data, cboundaries):
                 except:
                     pass
                 i += 1
-            # Thanks Amazon for the nice mark up -> CLEAN IT UP
             comm.comment = cleanUpComment(tmp)
+
+        # Comment boundary hit. New comment will start in the next line.
+        if i >= cboundaries[cbidx]:
+            comments.append(comm)
+            ### Append to file and flush buffers
+            writeToFile() # fileName and comments[] are global
+            comm = Comment()
+            ### end of flush
+            i = cboundaries[cbidx]
+            cbidx += 1
+            # No more comments remaining
+            if cbidx >= len(cboundaries):
+                return True
+        i += 1
+
     return False
 
 
@@ -292,8 +281,8 @@ def cleanUpComment(c):
 
     # Thanks Amazon for the nice mark up -> CLEAN IT UP!
     while r < len(c):
+        # Multiple spaces to single space
         if re.search(p, c[r]) != None:
-            # Multiple spaces to single space
             c[r] = re.sub(p, " ", c[r])
             if re.search(r"^\s", c[r]) != None or c[r] is '':
                 c.pop(r)
@@ -303,6 +292,10 @@ def cleanUpComment(c):
             continue
         if "---" in c[r]:
             c.pop(r)
+            continue
+        # FIXME -*- please use tag matcher instead of this glue
+        if re.search(r"^\(REAL NAME\)", c[r]) != None:
+            c[r] = re.sub(r"^\(REAL NAME\)", "", c[r])
             continue
         r += 1
     return c
@@ -385,8 +378,11 @@ def main():
             cboundaries = [] # Remember to flush
             tmpbndr = commentsStartStopLineNmbr(data)
             cboundaries.extend(commentsStartLines(data, tmpbndr))
+            cboundaries.append(tmpbndr[1])
             # Parse comments
-            parseComments(data, cboundaries)
+            if parseComments(data, cboundaries) is False:
+            	print "\nFAILURE! Cannot parse comments"
+            	exit(20)
             cmntCount = len(comments)
             # Append end line number of a comment area to comment boundaries
             cboundaries.append(tmpbndr[1])
@@ -394,25 +390,24 @@ def main():
                     pageCount, pagesTotal, estimatedTimeOfArrival(timePassed,\
                             pageCount, pagesTotal))
             stderr.write(printable)
-            stdout.flush()
-            #writeToFile() # fileName is a global, so is comments[]
-            pageCount += 1
             # Prepare to move in the next page
             nextPage = getNextPageURL(data)
+            if nextPage is None:
+            	break
             data = urlopener(nextPage)
+            pageCount += 1
     except:
         fileOut.close()
     finally:
         fileOut.close()
-    #for comment in comments:
-    #    print "---",
-    #    comment.printAll()
 
     # Check whether we have gone through all pages
-    if pageCount != pagesTotal:
-        print "PAY ATTENTION!"
-        print "Fetched data not in consistent state. Pages fetched %d/%d" % (pageCount, pagesTotal)
+    if int(pageCount) != int(pagesTotal):
+        print "\nPAY ATTENTION!"
+        print "Fetched data not in consistent state. Pages fetched %s/%s" % (pageCount-1, pagesTotal)
         exit(5)
+
+    return 0
 
 
 if __name__ == "__main__":
