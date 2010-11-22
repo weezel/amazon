@@ -332,9 +332,9 @@ def main():
     pageCount = 1
 
     if len(argv) < 2:
-        amazonurl = "http://www.amazon.com/Asus-T91SA-VU1X-BK-8-9-Inch-Netbook-Computer/dp/B002GCR04Y/ref=sr_1_6?s=pc&ie=UTF8&qid=1290198472&sr=1-6"
+        #WORKS amazonurl = "http://www.amazon.com/Asus-T91SA-VU1X-BK-8-9-Inch-Netbook-Computer/dp/B002GCR04Y/ref=sr_1_6?s=pc&ie=UTF8&qid=1290198472&sr=1-6"
         #amazonurl = "data2.html" # Example file
-        #amazonurl = "http://www.amazon.com/Sennheiser-CX300-B-In-Ear-Stereo-Headphone/product-reviews/B000E6G9RI/ref=cm_cr_pr_link_prev_149?ie=UTF8&showViewpoints=0&pageNumber=150"
+        amazonurl = "http://www.amazon.com/Sennheiser-CX300-B-In-Ear-Stereo-Headphone/product-reviews/B000E6G9RI/ref=cm_cr_pr_link_prev_149?ie=UTF8&showViewpoints=0&pageNumber=150"
     else:
         amazonurl = argv[1]
 
@@ -345,6 +345,9 @@ def main():
 
     ### Determine where the reviews starts
     revStarts = parseReviewsStartLine(data) # Returns (lineNmbr, link)
+    if revStarts is None:
+    	print "\nAre you sure you gave the front page of the product?"
+    	exit(10)
     ### Line number where the "See all %d comments" is
     commentsLineNro = int(revStarts[0])
     cmntTotal = int(parseCommentsTotalCount(data[commentsLineNro]))
