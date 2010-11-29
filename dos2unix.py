@@ -13,7 +13,7 @@ if len(sys.argv) < 2:
 
 
 mimetypes.init()
-# These extensions will be skipped
+# These extensions will fixed too
 mimetypes.add_type("text/properties", ".properties")
 mimetypes.add_type("text/swp", ".swp")
 mimetypes.add_type("text/mf", ".mf")
