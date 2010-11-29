@@ -44,7 +44,7 @@ def visitDir(args, dirname, filenames):
                             changed = True
                         tmp.append(i.replace("\r\n", "\n").replace("\r\t\n", "\n"))
                 if changed:
-                    print "Modified file: %s" % ff
+                    print "+  %s" % ff
                     outfile = open(ff, "w")
                     outfile.writelines(tmp)
                     outfile.close()
@@ -53,6 +53,7 @@ def visitDir(args, dirname, filenames):
 
 
 def main():
+    sys.stderr.write("Modified files:\n")
     os.path.walk(sys.argv[1], visitDir, None)
 
 
