@@ -1,0 +1,10 @@
+Please add your TODO lists here!!
+
+FIXME:
+  amazoncommentfetcher.py
+	o  do a better comment start matcher,
+	   otherwise program is completed, though
+
+  dos2unix.py
+  	o  for some reason arjen have problems
+  	   with this
