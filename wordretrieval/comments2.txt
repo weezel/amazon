@@ -1,0 +1,197 @@
+
+Name: R2CIH3Q5X2908
+Helpful: 2 of 2 people found the following review helpful
+Stars: 4.0 out of 5 stars
+Header: Almost perfect - so close, December 15, 2003
+Comment:
+I have been using various Linux distributions for years and RedHat 9 is finally what I consider to be a excellent, professional-looking product that is fairly easy to use. My only complaint is the fact that you must pay an annual maintenance fee to continue to use the &quot;up2date&quot; program. In these days of computer security awareness, installing software patches is extremely important to having a 'secure' computer. &quot;Up2date&quot; simplifies this task so you don't have to put much thought into keeping your Linux updated. People often think that Linux=Security, but if I have to continue to pay for updates - then I will be disappointed. I understand that these companies need to make money, but I don't think computer security should be the basis for profit.
+---
+Name: R9KXTHSA9PGJ0
+Helpful: 4 of 8 people found the following review helpful
+Stars: 1.0 out of 5 stars
+Header: no longer sold or supportd by Red Hat, December 2, 2003
+Comment:
+Red Hat's legacy Linux operating system, launched in 1994. Predecessor of Red Hat Enterprise Linux and the Fedora Project. Last version available was Red Hat Linux 9.Was $39.95 to $149.95. No longer available for sale - this directly from the Red Hat website.Try SuSE - better product anyway!
+---
+Name: RJ0RG485XMAWE
+Helpful: 14 of 15 people found the following review helpful
+Stars: 4.0 out of 5 stars
+Header: Good, but not outstanding, November 26, 2003
+Comment:
+Installed RH9 on HP laptop (Pentium 4, 512 MB RAM). Install is nice and painless, especially compare to Debian I ran before. Bluecurve is beautiful. Worlds ahead over Debian 2.11, Caldera and even Suse 7, ran all of the before.However following is still an issue: 1. Display drivers. Had a resolution problem. Fixed after olaying in a terminal with rpm and driver packages. 2. Does not mount cdrom automatically all the time. Not a problem for me, since I can mount it in command line, but woul be a source of frustration for a first time user. 3. Graphical package management sucks. With windows user is used to Add/Remove Programs in Control Panel. Here you install a package from lets say linux.org and if you wish to remove it, you wont see it in graphical interface. No big deal for a UNIX geek, but a problem for a first time user. 4. Problems upgrading Java plug in in Mozilla. 5. An error trying to use Red Hat Network update, needed to install new packages (command line again), really nasty for a first timer. 6. Quite a hog for Linux (do not try to install on Pentium 2:)) 7. Lack of any built in media support (mpeg,real,mp3,etc) Verdict: Still not a system for a home user. Red Hat realized this I guess, and there will be no more Red Hat Linux. They are leaving home market for Enterprise Server market.A home user will be stuck with Fedora project, which is free, but totally built for an enthusiast Linux geek. p.s. For hardcore Linux people. No I am not paid by Microsoft, do not live in Washington and not a personal aquaintance of Bill Gates. :)
+---
+Name: R3ELC5LZL109N0
+Helpful: 10 of 16 people found the following review helpful
+Stars: 1.0 out of 5 stars
+Header: NO multi-media support!, November 21, 2003
+Comment:
+For starters you cannot even play MP3's with this operating system. That was where the search began on the internet, aggrr!Next up, trying to update such common compenents as the web brower requires a Masters degree in computer science. When you finally get it upgraded the fonts are not updated, very nice. Then to find out after paying for this operating system, no product updates! I feel like I should get a refund on this product. So you are on your own, like a used car to fix it yourself, good luck.Lastly, if anyone thinks Linux is for them, then they must be an alien or something. I wound up purchasing Windows XP Professional and being completey satified. It comes with support for mulit-media and you can actually play MP3's in Windows. Something I guess the linux community must think is not popular......If I could have given a negitive number for a review of Redhat Linux I would!Everyone else, save your money and buy Windows XP Professional you will be so much happier!
+---
+Name: RL7ADM9270VSA
+Helpful: 7 of 8 people found the following review helpful
+Stars: 3.0 out of 5 stars
+Header: support actually goes until April 30, 2004, October 29, 2003
+Comment:
+While this isn't the strongest distro of Linux ever, the new threading code (supposedly the primary reason this is v 9 instead of v 8.1) isn't rock solid yet, and they've not fully integrated the new character set (makes the man pages hard to read unless you know which environment variable to change), the support runs into 2004. Despite what you might read in other reviews. :-)Older versions of RedHat, those that haven't already been removed from support, have support dropped at the end of 2003.Consider Suse Linux as an alternative. Or Debian. Or FreeBSD. Or even Windows XP, if you must. :-)
+---
+Name: RPEBE5U6Z13ZD
+Helpful: 5 of 7 people found the following review helpful
+Stars: 5.0 out of 5 stars
+Header: Great Distro, October 23, 2003
+Comment:
+First off.. skip down to ara_usa and totally ignore his one star. He's a blatant Microsoft devotee and uses their tag lines of why you shouldn't go Linux.Now then, this distro worked well on my former Windows XP machine: For the record, I use an HP (yeah I know, but it was cheap on-line) flat panel monitor and Mandrake would not support this...Redhat does. This has been a huge issue and I'm glad it's cleared up.So I've saved thousands using this O/S and cheaper software than what Microsoft offers (and then never shows THOSE dollar comparisons).
+---
+Name: RF6757MI1B76I
+Helpful: 6 of 7 people found the following review helpful
+Stars: 5.0 out of 5 stars
+Header: Absolutely Brilliant!!!!, October 18, 2003
+Comment:
+I've only been in the Linux world for a year now (I run Linux on a dual boot with windows 98). In that time I've tried around a dozen different distros. This is the one I stayed with and I love it! Not that the other Linux distros were bad, because they were not, but this one is just so much better!!!OK, some background: I run a Intel Pentium P4 2ghz processor; 512 megs of Ram; a ASUS P4S533-X Motherboard; GeForce 2 MX video card with 64 megs; 40 gig e/ide hard drive; sound blaster live sound card; a LITEON 52X24X52 CDRW IDE; an Epson CX 5200 printer/scanner/fax; read on for my ethernet card...I think that's enough background. First let me give you the bad. I was using a Netware ethernet card that Red Hat 9.0 would not support. I chalk that one up to me because I should have checked. No big deal. I got a $9 D-Link DFE-550TX and everything was great!!! Red Hat loaded up perfect and booted perfect the first time. It found everything, all my hardware and never complained once (which is more then I can say for windows). The installer had some questions that a very new person may not know how to answer, BUT the default settings for these questions are just fine and a new person to Linux could just hit &quot;next&quot; with those settings and have no problems what-so-ever. The display is marvelous! The &quot;Bluecurve&quot; design beats out everything I've seen in other Linux distros. It is very clear, the fonts are sharp and easy to read and...BEST OF ALL!!!...the software that comes with Red Hat is named in a way that a non-Linux guru can understand! (It saddens me that many Linux people think that everyone else has to become a guru and learn all the technical jargon...great way to kill Linux if you ask me) No worries though with Red Hat 9.0! Everything is laid out logically and very comprehensible to someone like me who doesn't have time to read every linux book ever written to understand what's going on. The online update went off without a hitch. I guess I just can't heap enough praise onto this product. Of all the Linux distros I have personally tried plus the others I have researched Red Hat 9 is simply the best.
+---
+Name: R1VEDX2GTJGRZK
+Helpful: 1 of 1 people found the following review helpful
+Stars: 4.0 out of 5 stars
+Header: Best for users comfortable with using the command line..., October 14, 2003
+Comment:
+Red Hat 9 is very user friendly in terms of the GUI. However it does not include a lot of the multimedia features of other distros (i.e. Mandrake) In order to install Flash or Real player the user should expect to use the command line.That being said though. There are countless websites willing to help and if you have access to Red Hat's tech support they are GREAT, friendly and very helpful. I would strongly reccommend the RED HAT Linux 9 Bible as a compliment to this distro.
+---
+Name: R3PLSOFYMUEM2L
+Helpful: 1 of 1 people found the following review helpful
+Stars: 4.0 out of 5 stars
+Header: Windows finally has competition, October 14, 2003
+Comment:
+This is a good, strong product. Installation was easy and all my hardware was detected -- sound has been a historic problem with Linux but multimedia runs fine with this release. Many commands are different from XP but the documentation is good (it's on CD and you have the option of adding it to the menu at the end of the installation process. There are many online resources as well. Where else can you find an operating system with office suite for under $40?
+---
+Name: RPC51F0C3BJV5
+Helpful: 11 of 11 people found the following review helpful
+Stars: 5.0 out of 5 stars
+Header: Excellent Linux distribution, best I've work with., September 7, 2003
+Comment:
+I was very impressed with this offering from Red Hat. The install was clean and simple, with no problems on my Dell 8200 (P4 2GHz, 512MB RDRAM, 40GB). Video and sound was working right out of the box. The install process was simple. Took me a little while to get my printers working the way I wanted, but nothing major.Linux is an operating system for experienced users, or a new user who is *really* willing to put in the time needed to learn a computer system. If you're an average user with no technical understanding of computers, and are looking for something stable and non-mico$oft, you'd be better off to look into Apple's Mac OS X. Having said that, I feel this is the best, most user friendly version of Linux I've ever worked on, and would highly recommend it to any experienced user.
+---
+Name: R1RH7755KT6GA0
+Helpful: 3 of 5 people found the following review helpful
+Stars: 5.0 out of 5 stars
+Header: Not for everyone, August 31, 2003
+Comment:
+I've been a Linux user since 1993 and have been running Red Hat since 1995. Bottom line: Linux, frankly, isn't for everyone. If you're easily frustrated with technology, have more money than time, are satisfied with whatever comes out of the box, and don't mind security and privacy problems, then you're probably better off just sticking with whatever Microsoft puts in the box. Personally, I like a little more choice and a little more frugality, so Red Hat works for me. Their support has been good enough to get me over whatever glitches I've run into that I can't figure out on my own.
+---
+Name: R2EIBPY088BN5L
+Helpful: Help other customers find the most helpful reviews
+Stars: 4.0 out of 5 stars
+Header: Red hat ready for prime time, August 25, 2003
+Comment:
+I am a Certified Microsft guy that is a closet RHer. Been here for a while, red hat came from being a nightmare to a blessing. Now since all thoses patches and such from MS got me annoyed I went from using my RH machine 10% / win 2000 90%, to full swing 10% to 90% RH. RH has to impporove a little on graphics support, but once you get used to the OS you'll find it very easy, AND A TIP for easy use of administration try WEBMIN!!! Download that, makes life a lot easier. It also likes memory!
+---
+Name: R1L0ZLWKF4PHLK
+Helpful: 1 of 2 people found the following review helpful
+Stars: 4.0 out of 5 stars
+Header: the best redhat ever...still need a book to help you along, August 24, 2003
+Comment:
+I have been a windows user since 3.11 and have learned alot about computer. Setup a home network, etc etc. I got RH9 personal and installed it on an old cpu and installation was PAINLESS. I didn't read the book i got until after installation. I installed with GUI. If you want to partition with another OS like XP or something. I don't have first hand knowledge but SAMS book &quot;Learn RH9 in 24 hrs&quot; made it seem easy. Go ahaead be daring and you'll learn why alot of people debate WIndows vs. LInux. You choose which is better. Im out :)))))
+---
+Name: R2LK5K3EXVOF2D
+Helpful: 4 of 10 people found the following review helpful
+Stars: 1.0 out of 5 stars
+Header: Resolution Problems, August 23, 2003
+Comment:
+I gave this product a 1 simply because it wouldn't work with my Dell's video card.
+---
+Name: R1MUFSV1O1J3JW
+Helpful: 3 of 3 people found the following review helpful
+Stars: 4.0 out of 5 stars
+Header: Good - but not perfect, August 17, 2003
+Comment:
+I was pleasently surprised by this distro. I performed side-by-side installations of Red Hat 9 and SuSe 8.2, and found them to be pretty comparable in ease of installation. Red Hat takes a bit more time to install, and, opposite SuSE, seems to prefer the GNOME desktop over KDE. However, unlike SuSE, Red Hat is a bit of a memory hog, both in terms of hard drive and RAM; it also does not provide as much in the way of multimedia as does SuSE. Bluecurve presents a nice, clean look to both KDE and GNOME. In the end, my major issue with this distro was its responsiveness; with 256 meg of RAM on my 933 MhZ system, Red Hat just was not as quick as SuSE . Still, I would not hesitate to recommend this distro to first-time Linux users.
+---
+Name: R26IAPCOX6ML18
+Helpful: 21 of 27 people found the following review helpful
+Stars: 5.0 out of 5 stars
+Header: Tell Bill Gates where to stick his licensing fees, July 30, 2003
+Comment:
+I only started to use Linux (starting with Red Hat 8.1) in May of 2003, but as of writing this in the following July, I can say that I was hooked from day one. The latest Mac commercials say that &quot;Anything you can do on a PC, you can do on a Mac. And more.&quot; Add another more for Red Hat Linux.Integration with Windows XP is absolutely seamless. Because MS likes wiping out your hard drive's master boot record, it is necessary to partition using the XP installation disk first for three partitions. One will be NTFS for the XP install. Second will be a FAT32 partition, considering that Linux can't write to NTFS. The third will be simply blank, that will go to your Linux partitions. Once the XP install is done, you can install Linux by using Disk Druid (included in the installation disks) to split the third partition into what you need (ext3, swap, etc.). Tell the guy who says that fdisk won't work with XP that he's right and wrong. It won't work, and you don't need it.Red Hat comes with all the programs you need. OpenOffice.org handles just about any MS Office file with ease. If you've ever used any web browser, Mozilla doesn't even need to be learned. GIMP (GNU Image Manipulation Program) is far better than anything when prices are compared. It does everything that a Paint Shop Pro-level program would do for FREE. Quanta Plus for KDE is equal to or better than Macromedia HomeSite.Best of all, Linux in itself is a stable and secure open-source operating system. All programs have bugs, and Linux programs are no exception. Regardless, you won't find yourself restarting three times daily because of the blue screen of death. In fact, I highly suggest using the included &quot;BSOD&quot; screen saver to laugh at your former agony. Open source also means that you have the entire Linux community at your hands if anything ever goes wrong, rather than just a few-hundred overpaid Microsoft programmers. Somebody once said, &quot;If you want your words read, write error messages for Microsoft.&quot; I've only found two real problems. The first is that Red Hat doesn't include support for MPEG video or MP3 compression, notwithstanding that it's way too easy to simply download programs that will play such files. Second is the current lack of games available for Linux. Even I run Windows, but it's only for nothing more than games. As far as drivers are concerned, the only big problems you'll find are on network controllers, software-controlled modems, and certain brands of printers. Epson and HP have the best track record in this respect, and LinuxPrinting.org rates the Epson Stylus C82 as the best Linux printer out there. NONE of these problems deserve me docking a star off a 5-star rating.Linux has already sliced up a huge share of Microsoft's hold on the server market, and within the next five to ten years many expect it to start accelerating its pace at the home and business market. The open source revolution is only getting started. Microsoft's claims to fame with Windows Server 2003's security can be easily read as a huge desperation move. They're about to lose, and they know it. Home users are next.Jump on the bandwagon, everyone! If the Internet was a revolution, the next one is Linux. Don't listen to the naysayers; you'll never regret spending just forty bucks on this. I know I didn't.
+---
+Name: RRRZQOCBA9218
+Helpful: 5 of 6 people found the following review helpful
+Stars: 4.0 out of 5 stars
+Header: Worthy buy, though not recommended new hardware, July 29, 2003
+Comment:
+I got a copy of RH9 through my college's computing department and have been working with it for a week. I had purchased a new computer (XP 2700+, Asus A7n8x (nforce2 board)) without much consideration into foraying into the world of Linux, however, so I wasn't too surprised (though a bit aggrevated) that my hardware wasn't detected. However, redhat recognized everything except my network cards (builtin ethernet and USB wireless) and my AGP port, which isn't too bad considering that I consulted the linux documentation project at ... and found a quick fix for my networking and drivers from Nvidia to enable hardware 3d acceleration. I still have a couple of problems and have crashed the kernel a few times doing too much at the terminal prompt. All in all, I still feel that this distribution of Linux is almost ready for mainstream, as long as your hardware is over 6 months old (Good news is that all of my hardware will be supported in the 2.6 kernel due out by the end of the year). The great thing about open source is that somewhere out there someone has probably had your problem and solved it, thus, no waiting for microsoft to issue updates. Even though my hardware was brand new, I was able to find experimental patches that worked. And the other great thing is that the product cycle is so fast (6 months between releases) that make Linux far superior to windows. I would give Linux itself a 5, but Redhat 9 a 4 due to personal frustrations in install and configuration compared to Mandrake 9.1 on a friend's computer
+---
+Name: R2JLSG2J83V261
+Helpful: 6 of 6 people found the following review helpful
+Stars: 5.0 out of 5 stars
+Header: Wonderful OS! Does So Much For So Little $$$!, June 27, 2003
+Comment:
+I was amazed - this is a very complete package. Besides a tight OS you get full-featured word processing, spreadsheet, presentation graphics, task management, web editing & browsing, e-mail, contact and organization software, fax software, CD burning software, multimedia, and on and on and on.It installed effortlessly on two computers, recognized everything and installed the proper drivers, and configuration is a piece of cake. About the only thing that requires any more than casual computer familiarity is the disk partitioning before you do the actual install but it is explained very well in the manual. All you have to do is read it and follow the steps.And it doesn't care if you change hardware or install on other computers. No codes to enable it and no disabling if it detects too many changes. I'm still running dual boot simply because I have a few program where I still need Windows so I can boot into either OS whenever I want or need.... Unbelievable value!
+---
+Name: RBG2LXW7MNZDA
+Helpful: 4 of 4 people found the following review helpful
+Stars: 5.0 out of 5 stars
+Header: so easy even a child can install it, June 21, 2003
+Comment:
+This is the easiest install ever! Easier than WinXP! I see some reviews that say their scanners don't work...Almost every single scanner is TWAIN (Technology Without An Interesting Name) compatible, i.e. a STANDARDIZED DRIVER will make it go. One scanner driver on Linux to do it all baby, just like windows. Other peripherals may be flaky, but it simply has not been my experience. Kodak digital camera, Lexmark printer, Netgear wireless 802.11b pcmcia, Dell Latitude CPi laptop, Compaq Presario dual boot with WinXP, all worked out of the box with less hassle than WinXP. I lurv it!
+---
+Name: RZI2P8LUW1GK7
+Helpful: 1 of 5 people found the following review helpful
+Stars: 3.0 out of 5 stars
+Header: Red Hat Linux 9.0 Personal, June 13, 2003
+Comment:
+It is beyond me why this is the most popular distribution. it feels clunky and unfinished, it certainly offers nothing more (and for multimedia support considerably less) than other packages out there. Documentation is pitiful. It's not the cheapest either. I personally think that running Linux on the desktop is as practical as driving around town on a Mack truck, but if you insist on giving it a whirl you'll be better served by the like of Mandrake or Suse.
+---
+Name: R37JJJ8NAUALAS
+Helpful: 1 of 7 people found the following review helpful
+Stars: 3.0 out of 5 stars
+Header: Red Hat Linux 9.0 Personal, June 13, 2003
+Comment:
+It is beyond me why this is the most popular distribution. it feels clunky and unfinished, it certainly offers nothing more (and for multimedia support considerably less) than other packages out there. Documentation is pitiful. It's not the cheapest either. I personally think that running Linux on the desktop is as practical as driving around town on a Mack truck, but if you insist on giving it a whirl you'll be better served by the like of Mandrake or Suse.
+---
+Name: R1TG28ZBQ07NY6
+Helpful: 7 of 42 people found the following review helpful
+Stars: 2.0 out of 5 stars
+Header: Red Hat Linux 9.0, June 8, 2003
+Comment:
+This will be a one word, well maybe two word review..It Stinks!! Don't plan on getting any real work done until you can figure out how to make this thing work and recognize your entire system, you know, printer, scanner, USB port, etc. Poorly written and just not worth the effort to get it running correctly. MS Bob would be a better investment!!
+---
+Name: R1GN9ROOWBFGHN
+Helpful: 19 of 19 people found the following review helpful
+Stars: 5.0 out of 5 stars
+Header: Redhat makes it easy., May 25, 2003
+Comment:
+I use a custom built system K7ADA with AMD1600+, Gforce4 ti4200. I am also pretty new to linux. The one thing I can say is I didn't have a single problem installing Redhat9. I put RH on it's own HD, and it installed everything just fine. I started it up and everything worked great. It even recognized my gforce4 which was a nightmare on RH8. (but luckily nvidia's drivers are getting easier too.) IMHO this is a great distro for all people interested in linux. It has the ease of use for us begginers, but also comes with all the advanced stuff you'll want to learn later on. All in all a great OS!
+---
+Name: R1GNZXO2O2UBEL
+Helpful: 53 of 110 people found the following review helpful
+Stars: 2.0 out of 5 stars
+Header: [bad] operating system from ..., May 23, 2003
+Comment:
+The install didn't detect my printer, modem and soundcard. Had to spend 2 days scavenging for drivers and patches, and delving into unix console arcana. Fun for some, but I was hoping to do some meaningful work instead.I have no doubt the OS is powerful and very flexible, but from a user standpoint it lacks a basic prerequisite: the ability to disappear and get out of the way. Hopefully in 5-10 years all the rough edges will be ironed out. In its present form is nowhere near to being a viable desktop alternative.Recommended for those who enjoy fixing their car, growing their own food, and messing around with things. For Joe User, this ain't the ticket.
+---
+Name: R1UODYJGWF6N8Z
+Helpful: 16 of 29 people found the following review helpful
+Stars: 2.0 out of 5 stars
+Header: Lack of progress is frustrating., May 20, 2003
+Comment:
+Red Hat Linux is a fast and stable operating system but don't be fooled by the by the one whole number jump from 8 to 9. Red Hat 9.0 is just Red Hat 8 with a different logout icon. How do they expect us to be impressed anymore? You would expect the leading linux distribution to take charge and improve things, but that is not the case. Multimedia support still stinks, my palm pilot, webcam, scanner, and printer don't work either. They have also chosen to leave out NTFS support in their &quot;New Kernel.&quot; This product's only plus is BlueCurve user interface, but 8.0 had that. I wonder which icon they will change for their next release.
+---
+Name: R2NQVJS3ZQU9EG
+Helpful: 11 of 11 people found the following review helpful
+Stars: 3.0 out of 5 stars
+Header: Less Than What I Expected, May 19, 2003
+Comment:
+I expected very much the release of RedHat 8.1 with a bit of impatience, and I was glad when I heard that it was not RedHat 8.1, it was going to be RedHat 9!When it was released I bought it, to find myself so disappointed in many aspects.First I'm going to mention the virtues. It has not changed much and it looks in most ways very similar to RedHat 8.0. The only significant difference is the upgrade of GNOME to 2.2, and KDE 3.1, both very beautiful and easy to handle. It can be very easily installed, you can make several logical partitions of the Hard Drive with Disk Druid (specially using "ext3 and "swap"). Recognizes almost all the hardware in your system, I don't even have to configure GNU/Linux for it to recognize my two CD Drives (a DVD Drive and a CD-RW Drive).Now the negative part. RedHat 9 is very buggy, specially concerning graphics. When I began using RedHat 9, I noticed that there were some lines going down the screen that made it uncomfortable to see what was going on or what you were doing. I have to constantly reboot my computer once I log out to eliminate it.. still with that there are other small graphic problems. According to one user, this problem is corrected using VESA as the default graphic card.Before, with RedHat 8, it configured my Hauppage WinTV perfectly, and I could run XawTV without any kinds of problems. This is not the case with RedHat 9. The XawTV apparently is buggy or doesn't configure the TV Card correctly. I had lots of trouble using XCDRoast which crashed constantly every time I tried to record some file in the CD-RW. This also didn't happen with RedHat 8.Also, there are some facts that for me are so surprising coming from RedHat, if they wish to maintain their status as the most popular GNU/Linux distribution. First, during the installation procedure, RedHat 9 doesn't offer (yet!!) in its graphic installation the option of formatting the Hard Drive using ReiserFS filesystem. You have to go to command prompt, and write "mkreiserfs /dev/hdx" where x is the number of the logical drive you want to format, then go again to the GUI and click "Reset" so that the ReiserFS format appears, and in the process of assigning "root", "boot", "usr", etc., you have to constantly tell the machine that you don't want to choose a format. If you want multiple partitions, it is recommended to have it partitioned previously (Mandrake is good for that, and also Partition Magic) so you can format with ReiserFS more effectively.Furthermore, they didn't do the least effort to make it more user friendly, specially for those who use Winmodems. It is incredible that a distribution like Lindows OS (for me, not a good distribution) in its most recent release included them, and RedHat has not included them in any way. This will make the Linux users (specially beginners) to go through all the task of figuring out where to download the drivers, how to compile them and install them, and then configure the Winmodem so that it works (which for a beginner, it is a very tedious, frustrating and long process).I don't know what happened to RedHat people this time, but I don't think they made a good job doing this new release. What happened was that I reinstalled RedHat Linux 8, and will stay with it until they release the next one (9.1 or the 10). ... believe me, you won't regret it, and you won't miss RedHat in any way. It is the best GNU/Linux distribution today....
+---
+Name: RT68K6JM67EJK
+Helpful: 27 of 29 people found the following review helpful
+Stars: 5.0 out of 5 stars
+Header: The Best Linux Distro So Far, May 7, 2003
+Comment:
+I've struggled through many Linux distros recently--printer and modem problems with Red Hat 7.3 and 8.0; configuration challenges with Suse 8.1. I had thought that Mandrake offered the best distribution of Linux, in terms of ease of installation and configuration, until now.This latest version of Red Hat Linux is by far the most user friendly, as well as the easiest to install that I've ever had the pleasure to deal with.The graphical interface is very impressive--this is an attractive distribution. Red Hat 9.0 is vivid proof that Linux has arrived as a viable alternative to Windows in the personal desktop market.Red Hat 9.0 may be the best Linux distribution released up to now. For the curious PC owner who wants to investigate Linux, it is the way to go.
+---
+Name: R2TTCFJRFS2YQ1
+Helpful: 8 of 11 people found the following review helpful
+Stars: 5.0 out of 5 stars
+Header: Redhat 9 Tops the Chart, April 5, 2003
+Comment:
+Best Redhat Linux Ever! A lot easier, faster, more stable than the previous 8.0 version. If you are thinking about choosing between this and Mandrake 9.1 personal- I'd recommend Mandrake if you are a linux newbie. But I heard Redhat support is a lot better than Mandrake- so depends on what you need- a friendlier software, or friendlier customer service. Also, Mandrake 9.1 comes with this software called urpmi - just like apt-get in debian, to download software and automatically resolve the dependencies. No GUI interface, but it works good.
+---
