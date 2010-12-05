@@ -1,12 +1,6 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
-
 package wordretrieval;
 
 import java.io.*;
-//import java.util.Scanner;
 import java.util.*;
 
 class WordInfo implements Comparable
@@ -42,28 +36,18 @@ class WordInfo implements Comparable
  * @author Arjen
  */
 public class Main {
-
-    /**
-     * @param args the command line arguments
-     */
     public static void main(String[] args) throws IOException
     {
         //FIXME need to have dynbamic array for stopwords instead of fixed size
-        String[] stopWords = new String[20000];
-        for(int i = 0; i < 20000; i++)
-            stopWords[i] = "zzzzzzzzzzzzzzzzzzzzzzzz";
-        
+        Vector<String> stopWords = new Vector<String>();
         Scanner s = null;
+
         try
         {
-            s = new Scanner(new BufferedReader(new FileReader("D:\\tue\\WIS\\wordret\\Java\\stopwordsbig.txt")));
+            s = new Scanner(new BufferedReader(new FileReader("../../stopwordsbig.txt")));
             //s = new Scanner(new BufferedReader(new FileReader("D:\\tue\\WIS\\review1.txt")));
-            int i=0;
             while (s.hasNext())
-            {
-                stopWords[i] = s.next();
-                i++;
-            }
+                stopWords.add(s.next());
         }
         finally {
             if (s != null) {
@@ -71,18 +55,20 @@ public class Main {
             }
         }
 
-        Arrays.sort(stopWords);
+        //Arrays.sort(stopWords);
+        Collections.sort(stopWords);
         //FIXME need to have dynbamic array for comment words instead of fixed size
-        String[] revWords = new String[20000];
-        for(int i = 0; i < 20000; i++)
-            revWords[i] = "zzzzzzzzzzzzzzzzzzzzzzzz";
+        //String[] revWords = new String[20000];
+        Vector<String> revWords = new Vector<String>();
+//        for(int i = 0; i < 20000; i++)
+//            revWords.elementAt(i) = "zzzzzzzzzzzzzzzzzzzzzzzz";
 
-        int k=0;
-        int rNum=1;
+        int k = 0;
+        int rNum = 1;
 
         try
         {
-            s = new Scanner(new BufferedReader(new FileReader("D:\\tue\\WIS\\wordret\\amazonereviews.txt")));
+            s = new Scanner(new BufferedReader(new FileReader("../../amazonereviews.txt")));
             //s = new Scanner(new BufferedReader(new FileReader("D:\\tue\\WIS\\review1.txt")));
             //s = new Scanner(new BufferedReader(new FileReader("D:\\tue\\WIS\\wordret\\revlogitechg5.txt")));
 
@@ -100,7 +86,8 @@ public class Main {
                 curW = curW.replace("\"", "");
                 curW = curW.replace(":", "");
 
-                int stopLoc = Arrays.binarySearch(stopWords, curW);
+                //int stopLoc = Arrays.binarySearch(stopWords, curW);
+                int stopLoc = Collections.binarySearch(stopWords, curW);
 
                 if(curW.equals("---"))
                     rNum++;
@@ -108,12 +95,9 @@ public class Main {
                 {
                     if(stopLoc < 0)
                     {
-                        revWords[k] = curW;
-                        revWords[k] = revWords[k].replace("-", "");
-                        String temp = "|" + rNum;
-                        revWords[k] = revWords[k].concat(temp);
+                    	String temp = curW.replace("-", "").concat("|" + rNum);
+                    	revWords.set(k, temp);
                     }
-                    
                 }
                 k = k + 1;
             }
@@ -128,7 +112,8 @@ public class Main {
 
         System.out.println("number of reviews:" + rNum);
 
-        Arrays.sort(revWords);
+        //Arrays.sort(revWords);
+        Collections.sort(revWords);
         String curWord = "";
         WordInfo[] countedWords = new WordInfo[k];
         int j = -1;
@@ -136,11 +121,11 @@ public class Main {
 
         String prevWord = "zzzzzzzzzzzzzzzzzzzzzzzz";
         int prevNum = 0;
-        while(!revWords[k].equals("zzzzzzzzzzzzzzzzzzzzzzzz"))
+        while(!revWords.get(k).equals("zzzzzzzzzzzzzzzzzzzzzzzz"))
         {
-            int loc = revWords[k].indexOf("|");
-            int num = Integer.parseInt(revWords[k].substring(loc+1));
-            curWord = revWords[k].substring(0, loc);
+            int loc = revWords.get(k).indexOf("|");
+            int num = Integer.parseInt(revWords.get(k).substring(loc+1));
+            curWord = revWords.get(k).substring(0, loc);
 
             if(!curWord.equals(prevWord))
             {
@@ -159,8 +144,6 @@ public class Main {
                 prevNum = num;
             }
             k++;
-
-
         }
         k = 0;
 
