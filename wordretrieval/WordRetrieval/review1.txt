@@ -1,2 +1,0 @@
-This is the first review to test word retrieval.
-And a second line.
