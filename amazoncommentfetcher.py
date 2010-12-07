@@ -346,7 +346,7 @@ def main():
     cmntTotal = int(parseCommentsTotalCount(data[commentsLineNro]))
 
     if cmntTotal < 0:
-            print "No reviews"
+        print "No reviews"
         exit(0)
     if revStarts is None:
         print "Cannot determine where the comment area is"
@@ -396,7 +396,7 @@ def main():
         fileOut.close()
     finally:
         timePassed = time() - timePassed
-        stderr.write("Operation took %d:%d minute(s)" % (timePassed/60, timePassed%60))
+        stderr.write("Operation took %.2d:%.2d minute(s)" % (timePassed/60, timePassed%60))
         fileOut.close()
 
     # Check whether we have gone through all pages
