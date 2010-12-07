@@ -27,13 +27,16 @@
 *.sql
 *.sqlite
 *.swp
+*.swo
 
-# OS generated files #
+# OS and IDE generated files #
 ######################
 .DS_Store?
 ehthumbs.db
 Icon?
 Thumbs.db
+nbproject
+build
 
 comments.txt
 debug*
