@@ -17,11 +17,7 @@ fileName = "comments.txt"
 fileOut = 0
 
 
-### TODO
-#   o  make strip_html error less error prone
-#   o  check whether there are comments or not
-
-
+# FIXME -*- approach comment parsing from the different angle: use reverse, luke!
 
 def getNextPageURL(data):
     """
@@ -309,9 +305,8 @@ def writeToFile():
         return
 
     c  = comments[len(comments)-1]
-    fileOut.write(c.__repr__())
-    for i in c.comment:
-        fileOut.write(i)
+    fileOut.write(c.__repr__()) # Write name, helpfulness etc.
+    fileOut.writelines(c.comment)
     fileOut.write("\n---")
 
 
@@ -332,9 +327,7 @@ def main():
     pageCount = 1
 
     if len(argv) < 2:
-        #WORKS amazonurl = "http://www.amazon.com/Asus-T91SA-VU1X-BK-8-9-Inch-Netbook-Computer/dp/B002GCR04Y/ref=sr_1_6?s=pc&ie=UTF8&qid=1290198472&sr=1-6"
-        #amazonurl = "data2.html" # Example file
-        amazonurl = "http://www.amazon.com/Sennheiser-CX300-B-In-Ear-Stereo-Headphone/product-reviews/B000E6G9RI/ref=cm_cr_pr_link_prev_149?ie=UTF8&showViewpoints=0&pageNumber=150"
+        amazonurl = str(raw_input())
     else:
         amazonurl = argv[1]
 
@@ -352,8 +345,8 @@ def main():
     commentsLineNro = int(revStarts[0])
     cmntTotal = int(parseCommentsTotalCount(data[commentsLineNro]))
 
-    if cmntTotal < 1: # XXX IS THIS REALLY WORKING?
-        print "No reviews"
+    if cmntTotal < 0:
+            print "No reviews"
         exit(0)
     if revStarts is None:
         print "Cannot determine where the comment area is"
@@ -375,7 +368,7 @@ def main():
         #    o  cboundaries has linenumbers of where the comments starts
         #    o  tmpbndr includes begin and end linenumbers of the comment area
         nextPage = getNextPageURL(data)
-        while nextPage:
+        while True:
             if pageCount  == 1:
                 pagesTotal = parsePagesTotal(data)
             cboundaries = [] # Remember to flush
@@ -393,7 +386,7 @@ def main():
                     pageCount, pagesTotal, estimatedTimeOfArrival(timePassed,\
                             pageCount, pagesTotal))
             stderr.write(printable)
-            # Prepare to move in the next page
+            # Prepare to move on the next page
             nextPage = getNextPageURL(data)
             if nextPage is None:
             	break
@@ -402,6 +395,8 @@ def main():
     except:
         fileOut.close()
     finally:
+        timePassed = time() - timePassed
+        stderr.write("Operation took %d:%d minute(s)" % (timePassed/60, timePassed%60))
         fileOut.close()
 
     # Check whether we have gone through all pages
