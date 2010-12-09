@@ -1,7 +1,8 @@
 //package wordretrieval;
 
-import java.util.Scanner;
-import java.util.*;
+import java.util.HashSet;
+import java.util.Set;
+import java.util.TreeSet;
 
 public class SpellCheckers
 {
@@ -47,36 +48,25 @@ public class SpellCheckers
 		Set ny = new HashSet();
 		Set intersection = null;
 
+		if (s1 == null || s2 == null || s1.length() <= 1 || s2.length() <= 1)
+			return -1;
+
 		for (int i=0; i < s1.length()-1; i++) {
 			char x1 = s1.charAt(i);
 			char x2 = s1.charAt(i+1);
 			String tmp = Character.toString(x1) + Character.toString(x2);
-			System.out.println("\tWill add[x1+x2]: " + x1 + " " + x2 + " tmp=" + tmp);
 			nx.add(tmp);
 		}
-		System.out.println("Size after iteration: " + nx.size() + "\n");
 		for (int j=0; j < s2.length()-1; j++) {
 			char y1 = s2.charAt(j);
 			char y2 = s2.charAt(j+1);
 			String tmp = Character.toString(y1) + Character.toString(y2);
-			System.out.println("\tWill add[y1+y2]: " + y1 + " " + y2 + " tmp=" + tmp);
 			ny.add(tmp);
 		}
-		System.out.println("Size after iteration: " + ny.size() + "\n");
-
 
 		intersection = new TreeSet(nx);
 		intersection.retainAll(ny);
-		Iterator it = intersection.iterator();
-		System.out.println("Intersection:");
-		while (it.hasNext())
-			System.out.println("\t" + it.next());
-
-		// Now that we know overlapping bigrams
-		// let's count the rest of the formula:
-		// (2 * overlap count) / total bigrams
 		totcombigrams = intersection.size();
-		System.out.println("Total " + totcombigrams);
 
 		return (2*totcombigrams) / (nx.size()+ny.size());
 	}
@@ -86,11 +76,8 @@ public class SpellCheckers
 	{
 		String s1 = null;
 		String s2 = null;
-		Scanner sc = new Scanner(System.in);
 
 		if (args.length < 2) {
-			//s1 = sc.next();
-			//s2 = sc.next();
 			s1 = "button";
 			s2 = "buttons";
 		} else {
