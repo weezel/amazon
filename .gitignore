@@ -35,9 +35,12 @@
 ehthumbs.db
 Icon?
 Thumbs.db
+tags
+cscope*
 #nbproject
 #build
 
+*.html
 comments.txt
 debug*
 Levenstein*
