@@ -1,6 +1,7 @@
 //package wordretrieval;
 
 import java.util.Scanner;
+import java.util.*;
 
 public class SpellCheckers
 {
@@ -41,31 +42,43 @@ public class SpellCheckers
 	 */
 	public static double diceCoefficient(String s1, String s2)
 	{
-		int count;
-		double total;
-		char nx1, nx2, ny1, ny2;
+		double totcombigrams = 0;
+		Set nx = new HashSet();
+		Set ny = new HashSet();
+		Set intersection = null;
 
-		count = 0;
+		for (int i=0; i < s1.length()-1; i++) {
+			char x1 = s1.charAt(i);
+			char x2 = s1.charAt(i+1);
+			String tmp = Character.toString(x1) + Character.toString(x2);
+			System.out.println("\tWill add[x1+x2]: " + x1 + " " + x2 + " tmp=" + tmp);
+			nx.add(tmp);
+		}
+		System.out.println("Size after iteration: " + nx.size() + "\n");
+		for (int j=0; j < s2.length()-1; j++) {
+			char y1 = s2.charAt(j);
+			char y2 = s2.charAt(j+1);
+			String tmp = Character.toString(y1) + Character.toString(y2);
+			System.out.println("\tWill add[y1+y2]: " + y1 + " " + y2 + " tmp=" + tmp);
+			ny.add(tmp);
+		}
+		System.out.println("Size after iteration: " + ny.size() + "\n");
 
-		// Here we do intersection and count overlaps
-		for (int j=0; j < s1.length()-1; j++) {
-			nx1 = s1.charAt(j);
-			nx2 = s1.charAt(j+1);
-			for (int i=0; i < s2.length()-1; i++) {
-				ny1 = s2.charAt(i);
-				ny2 = s2.charAt(i+1);
-				if (nx1 == ny1 && nx2 == ny2)
-					count++;
-			} // inner for
-		} // outer for
+
+		intersection = new TreeSet(nx);
+		intersection.retainAll(ny);
+		Iterator it = intersection.iterator();
+		System.out.println("Intersection:");
+		while (it.hasNext())
+			System.out.println("\t" + it.next());
 
 		// Now that we know overlapping bigrams
 		// let's count the rest of the formula:
 		// (2 * overlap count) / total bigrams
-		total = s1.length() + s2.length() - 2;
-		System.out.println("Total " + total);
+		totcombigrams = intersection.size();
+		System.out.println("Total " + totcombigrams);
 
-		return 2 * count / total;
+		return (2*totcombigrams) / (nx.size()+ny.size());
 	}
 
 
@@ -88,8 +101,8 @@ public class SpellCheckers
 		int levenResult = levensteinDistance(s1, s2);
 		double diceResult = diceCoefficient(s1, s2);
 
-		System.out.println("Levenstein distance between ''" + s1 + "'' and ''" + s2 + "'' is " + levenResult);
-		System.out.println("Dice's coeffiency for ''" + s1 + "'' and ''" + s2 + "'' is " + diceResult);
+		System.out.println("Levenstein distance between '" + s1 + "' and '" + s2 + "' is " + levenResult);
+		System.out.println("Dice's coeffiency for '" + s1 + "' and '" + s2 + "' is " + diceResult);
 		sc.close();
 	}
 
