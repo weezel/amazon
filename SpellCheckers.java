@@ -88,9 +88,10 @@ public class SpellCheckers
 		int levenResult = levensteinDistance(s1, s2);
 		double diceResult = diceCoefficient(s1, s2);
 
+		assert (diceCoefficient("kokko", "kokkot") <= 1) : "Should be < 1";
+
 		System.out.println("Levenstein distance between '" + s1 + "' and '" + s2 + "' is " + levenResult);
 		System.out.println("Dice's coeffiency for '" + s1 + "' and '" + s2 + "' is " + diceResult);
-		sc.close();
 	}
 
 }
