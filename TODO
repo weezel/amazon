@@ -1,19 +1,16 @@
-Please add your TODO lists here!!
-
 TODO:
   amazoncommentfetcher.py
 	o  Do a better comment start matcher,
 	   otherwise program is completed, though
 
-   
+
 Arjen:
   WIS:
-  	o  Webcrawling amazon.
-	o  For each product all comments made about this product need to be
-	retrieved. A webcrawler needs to be made that downloads each individual
-	comment from amazon and stores all these comments.
+	o  Webcrawling amazon. For each product all comments made about this
+	product need to be retrieved. A webcrawler needs to be made that downloads
+	each individual comment from amazon and stores all these comments.
   IR:
-	From the collection of comments, the keywords have to be retreived. For
+	o  From the collection of comments, the keywords have to be retreived. For
 	each unique keyword found in the comments we store:
   	  1: The number of comments in which this keyword appears.
   	  2: The average rating based on the ratings of the comments.
@@ -23,45 +20,44 @@ Arjen:
 	filtering for certain intersting combinations of words for example,
 	adjective combined with subjects etc.
   ML:
-	The application should be able to determine whether certain keywords can be
-	concidered good or bad for the product. This will be done based on the
-	rating information and user input. Keywords could be clustered based on
+	o  The application should be able to determine whether certain keywords can
+	be concidered good or bad for the product. This will be done based on the
+	rating information and user input. Keywords will be classification based on
 	their rating. This information could indicate that a keyword is bad for one
 	product and good for another.
 
 Ville:
   WIS:
-  	o  Webcrawling amazon.
-  	o  For each product all comments made about this product need to be
-  	retrieved. A webcrawler needs to be made that downloads each individual
-  	comment from amazon and stores all these comments.
+	o  Webcrawling amazon. For each product all comments made about this
+	product need to be retrieved. A webcrawler needs to be made that downloads
+	each individual comment from amazon and stores all these comments.
   IR:
   	o  Typing errors may result in certain keywords appearing multiple times in
   	the list for example, button, buttn, buttonn or even buttons. We want to
   	give the user the option to combine these keywords. Two algorithm
-  	levenstein and ?? are investigated to see what gives the best results. In
-  	our application it is important to not combine keywords
-  	with different meaning.
-  
-  	o  Due to the large size of the list we need to investigate how to apply
-  	the algorithms in such a way that the application is not too slow.  ML:
+	levenstein and dice coefficient are investigated to see what gives the best
+	results. In our application it is important to not combine keywords
+	with different meaning.  Due to the large size of the list we need to
+	investigate how to apply the algorithms in such a way that the application
+	is not too slow.
+  ML:
 	o  The application should be able to give a verdict based on the keywords
-	whether a product is concidered to be good or bad.
+	whether a product is concidered to be good or bad. To determine this
+	we use frequency–inverse document frequency and compare results against the
+	naive bayesian rules whether the product is good or bad.
+	o  We show both classification results and intersection of them.
 
-	
+
 Javier:
 IR:
 	o  Once a user finds a keyword he is interested in, the user wants to find
 	out why this keyword is relevant to the product. The application should
 	link a keyword to the most relevant comments for this keyword such that the
 	user can quickly find the relation between the keyword and the product.
-
-	o  The user would also want to compare the keyword between multiple
-	products he selected.
-
+	The user would also want to compare the keyword between multiple products
+	he selected.
 ML:
-	The user must be able to indicate what keywords are interesing for him. A
-	user might want to see if a product has a certain propery. The application
-	should then focus on this property and display this possibly in relation to
-	other products.
+	Association rules analyzis based on the keywords, number of the appearances
+	and rating.
+
 
