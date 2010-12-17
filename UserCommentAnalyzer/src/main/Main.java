@@ -27,7 +27,7 @@ public class Main {
             @Override
             public void run() {
                 // Shows the input data window
-                new MainWindow().setVisible(true);
+                MainWindow.getInstance().setVisible(true);
             }
         });
     }

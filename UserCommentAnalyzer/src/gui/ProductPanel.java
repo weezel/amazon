@@ -23,12 +23,31 @@ import wordRetrieval.WordInfo;
  */
 public class ProductPanel extends javax.swing.JPanel {
 
+    /**
+     * Product panel index in the main window.
+     */
+    private int _index;
+
     /** 
      * Creates new form ProductPanel.
      */
     public ProductPanel() {
 
+        // Initializes the window components
         initComponents();
+    }
+
+    /**
+     * Creates a new product panel.
+     *
+     * @param index product panel index in the main window.
+     */
+    ProductPanel(int index) {
+
+        // Initializes the window components
+        initComponents();
+
+        _index = index;
     }
 
     /** This method is called from within the constructor to
@@ -43,12 +62,11 @@ public class ProductPanel extends javax.swing.JPanel {
 
         _productScrollPane = new javax.swing.JScrollPane();
         _productList = new javax.swing.JList();
-        _separator = new javax.swing.JSeparator();
         _buttonPanel = new javax.swing.JPanel();
         _closeButton = new javax.swing.JButton();
         _statisticsButton = new javax.swing.JButton();
 
-        setBorder(javax.swing.BorderFactory.createTitledBorder("Product"));
+        setPreferredSize(new java.awt.Dimension(325, 475));
         setLayout(new java.awt.GridBagLayout());
 
         _productScrollPane.setName("_productScrollPane"); // NOI18N
@@ -63,20 +81,13 @@ public class ProductPanel extends javax.swing.JPanel {
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 0;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-        gridBagConstraints.ipadx = 239;
-        gridBagConstraints.ipady = 205;
+        gridBagConstraints.ipadx = 5;
+        gridBagConstraints.ipady = 5;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.weighty = 1.0;
-        gridBagConstraints.insets = new java.awt.Insets(42, 26, 26, 26);
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         add(_productScrollPane, gridBagConstraints);
-
-        _separator.setBorder(javax.swing.BorderFactory.createEtchedBorder());
-        _separator.setName("_separator"); // NOI18N
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-        add(_separator, gridBagConstraints);
 
         _buttonPanel.setName("_buttonPanel"); // NOI18N
         _buttonPanel.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.RIGHT));
@@ -85,7 +96,7 @@ public class ProductPanel extends javax.swing.JPanel {
         _closeButton.setName("_closeButton"); // NOI18N
         _closeButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                _closeButtonActionPerformed(evt);
+                closeButtonActionPerformed(evt);
             }
         });
         _buttonPanel.add(_closeButton);
@@ -96,7 +107,7 @@ public class ProductPanel extends javax.swing.JPanel {
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 2;
+        gridBagConstraints.gridy = 1;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.EAST;
         add(_buttonPanel, gridBagConstraints);
@@ -108,9 +119,14 @@ public class ProductPanel extends javax.swing.JPanel {
      * 
      * @param evt action event.
      */
-    private void _closeButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event__closeButtonActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event__closeButtonActionPerformed
+    private void closeButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_closeButtonActionPerformed
+
+        // Removes the product keyword list from the main list
+        MainWindow.getInstance().getProductKeywordList().remove(_index);
+
+        // Builds the results panel again
+        MainWindow.getInstance().buildResultsPanel();
+    }//GEN-LAST:event_closeButtonActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -118,7 +134,6 @@ public class ProductPanel extends javax.swing.JPanel {
     private javax.swing.JButton _closeButton;
     private javax.swing.JList _productList;
     private javax.swing.JScrollPane _productScrollPane;
-    private javax.swing.JSeparator _separator;
     private javax.swing.JButton _statisticsButton;
     // End of variables declaration//GEN-END:variables
 
