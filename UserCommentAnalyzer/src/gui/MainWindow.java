@@ -10,7 +10,6 @@
  */
 package gui;
 
-import apple.laf.CoreUIConstants.ShowArrows;
 import gui.aboutUs.AboutUsWindow;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
