@@ -1,4 +1,4 @@
-//package wordretrieval;
+package wordretrieval;
 
 import java.util.HashSet;
 import java.util.Set;
