@@ -31,7 +31,6 @@ public class TfIdf
 			if (doc[spos].equals(s))
 				matchCount++;
 		}
-		// TODO: Declare nTimesInComments also
 		//System.out.println("matchCount = '" + matchCount + "'" + ", doc.length=" + doc.length);
 
 		return (double) matchCount / doc.length;
@@ -44,46 +43,51 @@ public class TfIdf
 	 */
 	public static double inverseDocumentFrequency(String[] doc, int[] sArea, int cmtcount, String s)
 	{
-		int foundNtimes, spos, epos;
+		int matchCount, spos, epos;
 
-		foundNtimes = 0;
+		matchCount = 0;
 		spos = sArea[0];
 		epos = sArea[1];
 
-		assert (foundNtimes > 0) : "Cannot divide with zero! \n\tCaused by foundNtimes: " + foundNtimes;
+		for (; spos <= epos; spos++) {
+			if (doc[spos].equals(s))
+				matchCount++;
+		}
 
-		if (foundNtimes <= 0)
+		assert (matchCount > 0) : "Cannot divide by zero! \n\tCaused by foundNtimes: " + matchCount;
+		if (matchCount <= 0)
 			return 0.0;
 
-		return (double) Math.log10(doc.length / foundNtimes);
+		return (double) Math.log10(doc.length / matchCount);
 	}
 
 	
+	/* doc is the entire document
+	 * cmcnt is count of the comments
+	 * searchable is searchable word
+	 */
 	public static double tf_idf(String[] doc, int cmcnt, String searchable)
 	{
 		int[] searchArea;
-		double invtermfreq, termfreq, tfidf_score;
+		double invtermfreq, termfreq;
 
-		tfidf_score = 0.0;
 		searchArea = filterByInitials(doc, searchable);
 
 		termfreq = termFrequencyInDocument(doc, searchArea, searchable); // this also declares nTimesInComment(s)
-		System.out.println("TERMFREQ = " + termfreq);
-//FIXME		invtermfreq = inverseDocumentFrequency(cmcnt, nTimesInComments);
+		//System.out.println("TERMFREQ = " + termfreq);
 		invtermfreq = inverseDocumentFrequency(doc, searchArea, cmcnt, searchable);
-		System.out.println("INVTERMFREQ = " + invtermfreq);
+		//System.out.println("INVTERMFREQ = " + invtermfreq);
 
 		if (termfreq == -1)
 			return (0.0);
 
-		tfidf_score = termfreq / invtermfreq;
-
-		return tfidf_score;
+		return termfreq * invtermfreq;
 	}
 
 
 	/*
-	 * Reduce search area to the same initial and avoid useless looping.
+	 * Reduce search area to the same initial and afterwards only words that
+	 * equals "s".
 	 * @return start and ending position to the document
 	 */
 	public static int[] filterByInitials(String[] doc, String s)
@@ -91,9 +95,9 @@ public class TfIdf
 		int spos, epos;
 		int[] r = new int[2];
 		char cmpr = s.charAt(0);
-		
+
 		spos = epos = -1;
-		
+
 		for (int i = 0; i < doc.length; i++) {
 			/* Rewind to the correct inital position in the array */
 			if (doc[i].charAt(0) == cmpr) {
@@ -103,7 +107,7 @@ public class TfIdf
 				break;
 			}
 		}
-		System.out.println("Before, spos: " + spos + ", epos: " + epos);
+		//System.out.println("Before, spos: " + spos + ", epos: " + epos);
 
 		/* There is no such initial letter that equals s[0] */
 		if (spos == -1 || epos == -1)
@@ -118,8 +122,8 @@ public class TfIdf
 				break;
 			}
 		}
-		System.out.println("After, spos: " + spos + ", epos: " + epos);
-		
+		//System.out.println("After, spos: " + spos + ", epos: " + epos);
+
 		r[0] = spos;
 		r[1] = epos;
 

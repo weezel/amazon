@@ -42,7 +42,7 @@ Ville:
 	investigate how to apply the algorithms in such a way that the application
 	is not too slow.
   ML:
-	[ ]  The application should be able to give a verdict based on the keywords
+	[½]  The application should be able to give a verdict based on the keywords
 	whether a product is concidered to be good or bad. To determine this
 	we use frequency–inverse document frequency and compare results against the
 	naive bayesian rules whether the product is good or bad.
