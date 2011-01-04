@@ -326,10 +326,13 @@ def main():
     global cmntCount, comments, fileName, fileOut
     pageCount = 1
 
-    if len(argv) < 2:
+    if len(argv) == 1:
         amazonurl = str(raw_input())
-    else:
+    if len(argv) == 2:
         amazonurl = argv[1]
+    elif len(argv) >= 3:
+        amazonurl = argv[1]
+        fileName = argv[2]
 
     data = urlopener(amazonurl) # Read data
     if data is None:
@@ -369,16 +372,18 @@ def main():
         #    o  tmpbndr includes begin and end linenumbers of the comment area
         nextPage = getNextPageURL(data)
         while True:
-            if pageCount  == 1:
+            if pageCount is 1:
                 pagesTotal = parsePagesTotal(data)
+                if nextPage is None:
+                    pagesTotal = 1
             cboundaries = [] # Remember to flush
             tmpbndr = commentsStartStopLineNmbr(data)
             cboundaries.extend(commentsStartLines(data, tmpbndr))
             cboundaries.append(tmpbndr[1])
             # Parse comments
             if parseComments(data, cboundaries) is False:
-            	print "\nFAILURE! Cannot parse comments"
-            	exit(20)
+                print "\nFAILURE! Cannot parse comments"
+                exit(20)
             cmntCount = len(comments)
             # Append end line number of a comment area to comment boundaries
             cboundaries.append(tmpbndr[1])
@@ -389,7 +394,7 @@ def main():
             # Prepare to move on the next page
             nextPage = getNextPageURL(data)
             if nextPage is None:
-            	break
+                break
             data = urlopener(nextPage)
             pageCount += 1
     except:
