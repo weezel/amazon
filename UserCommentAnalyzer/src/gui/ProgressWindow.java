@@ -13,6 +13,7 @@ package gui;
 import java.awt.Dimension;
 import java.awt.Toolkit;
 import javax.swing.JFrame;
+import javax.swing.SwingUtilities;
 
 /**
  * Fetching comment analysis window. Displays a progress bar which shows the
@@ -68,37 +69,26 @@ public class ProgressWindow extends JFrame{
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
+        java.awt.GridBagConstraints gridBagConstraints;
 
-        _buttonPanel = new javax.swing.JPanel();
-        _stopProcessButton = new javax.swing.JButton();
         _progressPanel = new javax.swing.JPanel();
         _scrollPane = new javax.swing.JScrollPane();
         _progressProcessTextPane = new javax.swing.JTextPane();
+        _buttonPanel = new javax.swing.JPanel();
+        _closeButton = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         org.jdesktop.application.ResourceMap resourceMap = org.jdesktop.application.Application.getInstance().getContext().getResourceMap(ProgressWindow.class);
         setTitle(resourceMap.getString("Form.title")); // NOI18N
-        setLocationByPlatform(true);
+        setBounds(new java.awt.Rectangle(10, 10, 10, 10));
         setName("Form"); // NOI18N
-
-        _buttonPanel.setName("_buttonPanel"); // NOI18N
-        _buttonPanel.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.RIGHT));
-
-        _stopProcessButton.setText(resourceMap.getString("_stopProcessButton.text")); // NOI18N
-        _stopProcessButton.setName("_stopProcessButton"); // NOI18N
-        _stopProcessButton.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                _stopProcessButtonActionPerformed(evt);
-            }
-        });
-        _buttonPanel.add(_stopProcessButton);
-
-        getContentPane().add(_buttonPanel, java.awt.BorderLayout.SOUTH);
+        setResizable(false);
 
         _progressPanel.setBorder(javax.swing.BorderFactory.createTitledBorder("Fetching comments progress status"));
         _progressPanel.setName("_progressPanel"); // NOI18N
-        _progressPanel.setLayout(new java.awt.BorderLayout());
+        _progressPanel.setLayout(new java.awt.GridBagLayout());
 
+        _scrollPane.setAutoscrolls(true);
         _scrollPane.setName("_scrollPane"); // NOI18N
 
         _progressProcessTextPane.setBackground(resourceMap.getColor("_progressProcessTextPane.background")); // NOI18N
@@ -108,32 +98,60 @@ public class ProgressWindow extends JFrame{
         _progressProcessTextPane.setName("_progressProcessTextPane"); // NOI18N
         _scrollPane.setViewportView(_progressProcessTextPane);
 
-        _progressPanel.add(_scrollPane, java.awt.BorderLayout.CENTER);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.ipadx = 200;
+        gridBagConstraints.ipady = 300;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.weighty = 1.0;
+        gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
+        _progressPanel.add(_scrollPane, gridBagConstraints);
 
         getContentPane().add(_progressPanel, java.awt.BorderLayout.CENTER);
+
+        _buttonPanel.setName("_buttonPanel"); // NOI18N
+        _buttonPanel.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.RIGHT));
+
+        _closeButton.setText(resourceMap.getString("_closeButton.text")); // NOI18N
+        _closeButton.setEnabled(false);
+        _closeButton.setName("_closeButton"); // NOI18N
+        _closeButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                _closeButtonActionPerformed(evt);
+            }
+        });
+        _buttonPanel.add(_closeButton);
+
+        getContentPane().add(_buttonPanel, java.awt.BorderLayout.SOUTH);
 
         java.awt.Dimension screenSize = java.awt.Toolkit.getDefaultToolkit().getScreenSize();
         setBounds((screenSize.width-450)/2, (screenSize.height-600)/2, 450, 600);
     }// </editor-fold>//GEN-END:initComponents
 
-    private void _stopProcessButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event__stopProcessButtonActionPerformed
-        // TODO add your handling code here:
-        // STOPS THE PROCESS
+    private void _closeButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event__closeButtonActionPerformed
 
-    }//GEN-LAST:event__stopProcessButtonActionPerformed
+        // Clsoe the progress window
+        closeProgressWindow();
+
+        // Starts the build results process
+        MainWindow.getInstance().getGettingResultsProcess().start();
+    }//GEN-LAST:event__closeButtonActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel _buttonPanel;
+    private javax.swing.JButton _closeButton;
     private javax.swing.JPanel _progressPanel;
     private javax.swing.JTextPane _progressProcessTextPane;
     private javax.swing.JScrollPane _scrollPane;
-    private javax.swing.JButton _stopProcessButton;
     // End of variables declaration//GEN-END:variables
 
     /**
      * Shows the progress window.
      */
     public void showProgressWindow(){
+
+        // Disables the close button
+        _closeButton.setEnabled(false);
 
         // Shows the progress window
         setVisible(true);
@@ -144,12 +162,20 @@ public class ProgressWindow extends JFrame{
      *
      * @param value new value to set.
      */
-    public void updateProgressWindow(String value){
-        //_progressBar.setValue(Integer.parseInt(value));
-        _progressProcessTextPane.setText(_progressProcessTextPane.getText().concat(value) + "\n");
+    public void updateProgressWindow(final String value){
 
-        validate();
-        repaint();
+        SwingUtilities.invokeLater(new Runnable(){
+
+            @Override
+            public void run() {
+
+                //_progressBar.setValue(Integer.parseInt(value));
+                _progressProcessTextPane.setText(_progressProcessTextPane.getText().concat(value) + "\n");
+
+                validate();
+                repaint();
+            }
+        });     
     }
 
     /**
@@ -168,5 +194,12 @@ public class ProgressWindow extends JFrame{
 
         // Clears the text area which displays the process
         _progressProcessTextPane.setText("");
+    }
+
+    /**
+     * Enables the close button once the fetching process has been done.
+     */
+    public void enableCloseButton() {
+        _closeButton.setEnabled(true);
     }
 }

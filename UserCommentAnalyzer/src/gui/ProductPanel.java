@@ -42,7 +42,7 @@ public class ProductPanel extends javax.swing.JPanel {
      *
      * @param index product panel index in the main window.
      */
-    ProductPanel(int index) {
+    public ProductPanel(int index) {
 
         // Initializes the window components
         initComponents();
@@ -75,6 +75,11 @@ public class ProductPanel extends javax.swing.JPanel {
         _productList.setLayoutOrientation(javax.swing.JList.HORIZONTAL_WRAP);
         _productList.setName("_productList"); // NOI18N
         _productList.setVisibleRowCount(-1);
+        _productList.addListSelectionListener(new javax.swing.event.ListSelectionListener() {
+            public void valueChanged(javax.swing.event.ListSelectionEvent evt) {
+                _productListValueChanged(evt);
+            }
+        });
         _productScrollPane.setViewportView(_productList);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -127,6 +132,11 @@ public class ProductPanel extends javax.swing.JPanel {
         // Builds the results panel again
         MainWindow.getInstance().buildResultsPanel();
     }//GEN-LAST:event_closeButtonActionPerformed
+
+    private void _productListValueChanged(javax.swing.event.ListSelectionEvent evt) {//GEN-FIRST:event__productListValueChanged
+
+
+    }//GEN-LAST:event__productListValueChanged
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

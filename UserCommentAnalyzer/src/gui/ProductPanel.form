@@ -45,6 +45,9 @@
             <Property name="name" type="java.lang.String" value="_productList" noResource="true"/>
             <Property name="visibleRowCount" type="int" value="-1"/>
           </Properties>
+          <Events>
+            <EventHandler event="valueChanged" listener="javax.swing.event.ListSelectionListener" parameters="javax.swing.event.ListSelectionEvent" handler="_productListValueChanged"/>
+          </Events>
         </Component>
       </SubComponents>
     </Container>

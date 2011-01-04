@@ -6,7 +6,7 @@
 package main;
 
 import gui.MainWindow;
-import java.awt.EventQueue;
+import javax.swing.SwingUtilities;
 
 /**
  * Main class of the application. Shows the Main Window of the application.
@@ -23,7 +23,7 @@ public class Main {
      */
     public static void main(String[] args) {
 
-        EventQueue.invokeLater(new Runnable() {
+        SwingUtilities.invokeLater(new Runnable() {
             @Override
             public void run() {
                 // Shows the input data window
