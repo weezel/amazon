@@ -62,7 +62,7 @@ public class SpellCheckers
 	/** 
 	 * Converted to Java from Wikipedia's article:
 	 * http://en.wikipedia.org/wiki/Levenshtein_distance
-	 * includes Damerau addition to detect transpositions too
+	 * and added Damerau algorithm to detect transpositions too
 	 */
 	public static int levensteinDistance(String s1, String s2)
 	{
