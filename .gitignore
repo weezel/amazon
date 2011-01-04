@@ -37,10 +37,10 @@ Icon?
 Thumbs.db
 tags
 cscope*
+built-jar.properties
 #nbproject
 #build
 
 *.html
-comments.txt
+comments*.txt
 debug*
-Levenstein*
