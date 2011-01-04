@@ -132,11 +132,10 @@ public class SpellCheckers
 		intersection.retainAll(ny);
 		totcombigrams = intersection.size();
 
-		return (2*totcombigrams) / (nx.size()+ny.size());
+		return (2 * totcombigrams) / (nx.size() + ny.size());
 	}
 
-
-	public static void main(String[] args)
+	public static void runTests(String[] args)
 	{
 		String s1 = null;
 		String s2 = null;
@@ -156,6 +155,13 @@ public class SpellCheckers
 
 		System.out.println("Levenstein distance between '" + s1 + "' and '" + s2 + "' is " + levenResult);
 		System.out.println("Dice's coeffiency for '" + s1 + "' and '" + s2 + "' is " + diceResult);
+
+	}
+
+
+	public static void main(String[] args)
+	{
+		runTests(args);
 	}
 
 }

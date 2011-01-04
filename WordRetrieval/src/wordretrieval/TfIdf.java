@@ -129,9 +129,8 @@ public class TfIdf
 
 		return r;
 	}
-	
 
-	public static void main (String[] args)
+	public static void runTests(String[] args)
 	{
 		double jaa;
 		String[] t = {
@@ -149,6 +148,12 @@ public class TfIdf
 		//jaa = termFrequencyInDocument(t, "dukka");
 		jaa = tf_idf(t, t.length, "boo");
 		System.out.println("jaa = " + jaa);
+	}
+
+
+	public static void main (String[] args)
+	{
+		runTests(args);
 	}
 
 }
