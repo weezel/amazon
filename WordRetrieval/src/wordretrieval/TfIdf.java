@@ -1,7 +1,7 @@
 package wordretrieval;
 
-//import java.util.StringTokenizer;
-import java.util.Vector;
+import java.util.ArrayList;
+import java.util.Collections;
 
 public class TfIdf
 {
@@ -19,21 +19,49 @@ public class TfIdf
 	 * Count how many times searhcable word appears in a comment and divide the
 	 * total count of the words in comment by the sum of the found words.
 	 */
-	public static double termFrequencyInDocument(String[] doc, int[] sArea, String s)
+	public static double termFrequencyInDocument(String doc, String s)
 	{
 		int matchCount, spos, epos;
+		String splitted_comment[];
+		ArrayList<String> comment_arr;
 
-		matchCount = 0;
-		spos = sArea[0];
-		epos = sArea[1];
+		matchCount = spos = epos = 0;
+		comment_arr = new ArrayList<String>();
 
+		/* Sort comments */
+		splitted_comment = doc.split(":");
+		for (int i = 0; i < splitted_comment.length; i++)
+			comment_arr.add(splitted_comment[i]);
+		Collections.sort(comment_arr);
+
+//		System.out.println(comment_arr.toString());
+
+		/* Rewind to the correct inital position in the array */
+		for (int i = 0; i < comment_arr.size(); i++) {
+			if (comment_arr.get(i).charAt(0) == s.charAt(0)) {
+				spos = i;
+				while (i < comment_arr.size() - 1 && comment_arr.get(++i).charAt(0) == s.charAt(0));
+				epos = i - 1;
+				break;
+			}
+		}
+		/* Only count in words that equals with the parameter 's' */
+		for (int i = spos; i <= epos; i++) {
+			if (comment_arr.get(i).equals(s)) {
+				spos = i;
+				while (i < comment_arr.size() - 1 && comment_arr.get(++i).equals(s));
+				epos = i - 1;
+				break;
+			}
+		}
+		/* The actual counting happens here */
 		for (; spos <= epos; spos++) {
-			if (doc[spos].equals(s))
+			if (comment_arr.get(spos).equals(s))
 				matchCount++;
 		}
-		//System.out.println("matchCount = '" + matchCount + "'" + ", doc.length=" + doc.length);
+//		System.out.println("matchCount = " + matchCount + ", doc.length = " + comment_arr.size());
 
-		return (double) matchCount / doc.length;
+		return (double) matchCount / comment_arr.size();
 	}
 
 
@@ -66,14 +94,15 @@ public class TfIdf
 	 * cmcnt is count of the comments
 	 * searchable is searchable word
 	 */
-	public static double tf_idf(String[] doc, int cmcnt, String searchable)
+	public static double tf_idf(String[] doc, String cmnt, int cmcnt, String searchable)
 	{
 		int[] searchArea;
 		double invtermfreq, termfreq;
 
 		searchArea = filterByInitials(doc, searchable);
 
-		termfreq = termFrequencyInDocument(doc, searchArea, searchable); // this also declares nTimesInComment(s)
+		termfreq = termFrequencyInDocument(cmnt, searchable); 
+		//termfreq = termFrequencyInDocument(cmnt, searchable);
 		//System.out.println("TERMFREQ = " + termfreq);
 		invtermfreq = inverseDocumentFrequency(doc, searchArea, cmcnt, searchable);
 		//System.out.println("INVTERMFREQ = " + invtermfreq);
@@ -130,23 +159,33 @@ public class TfIdf
 		return r;
 	}
 
+
 	public static void runTests(String[] args)
 	{
 		double jaa;
 		String[] t = {
-			"14sia",
-			"auto", "amiraali", "anjovis",
-			"boredom", "boo", "boo", "boo", "burzum",
-			"klonkku",
-			"jee"
+			"14sia|1:50",
+			"auto|1:50",
+			"amiraali|3:40",
+			"anjovis|3:10",
+			"boredom|",
+			"boo|5:10",
+			"boo|5:60",
+			"boo|6:20",
+			"burzum|12:80",
+			"klonkku|15:12",
+			"jee|18:30"
 		};
+		String singlecomment = "14sia:boo:boo:boo:banjovis:auto:urzum:klonkku:bamiraali:oredom:jee:";
 
+		/*
 		for (int i=0; i < t.length; i++)
 			System.out.println(String.format("[%d] = %s", i, t[i]));
 		System.out.println();
+		*/
 
-		//jaa = termFrequencyInDocument(t, "dukka");
-		jaa = tf_idf(t, t.length, "boo");
+		jaa = termFrequencyInDocument(singlecomment, "boo");
+		//jaa = tf_idf(t, t.length, "boo");
 		System.out.println("jaa = " + jaa);
 	}
 
