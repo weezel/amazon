@@ -59,12 +59,12 @@ public class AboutUsWindow extends javax.swing.JFrame {
         _homeSiteLabel = new javax.swing.JLabel();
         jLabel1 = new javax.swing.JLabel();
         _buttonPanel = new javax.swing.JPanel();
-        _closeButton = new javax.swing.JButton();
+        _okButton = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("About Us");
 
-        _imageLabel.setIcon(new javax.swing.ImageIcon(getClass().getResource("/gui/resources/userCommentAnalyzer.png"))); // NOI18N
+        _imageLabel.setIcon(new javax.swing.ImageIcon(getClass().getResource("/gui/resources/images/aboutUs/userCommentAnalyzer.png"))); // NOI18N
         _imageLabel.setName("_imageLabel"); // NOI18N
         getContentPane().add(_imageLabel, java.awt.BorderLayout.NORTH);
 
@@ -72,7 +72,7 @@ public class AboutUsWindow extends javax.swing.JFrame {
         _infoPanel.setName("_infoPanel"); // NOI18N
         _infoPanel.setLayout(new java.awt.GridBagLayout());
 
-        _authorsLabel.setFont(new java.awt.Font("Lucida Grande", 1, 14)); // NOI18N
+        _authorsLabel.setFont(new java.awt.Font("Lucida Grande", 1, 14));
         _authorsLabel.setText("Authors:");
         _authorsLabel.setName("_authorsLabel"); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -107,7 +107,7 @@ public class AboutUsWindow extends javax.swing.JFrame {
         gridBagConstraints.insets = new java.awt.Insets(0, 18, 0, 18);
         _infoPanel.add(_javierLabel, gridBagConstraints);
 
-        _homeSiteLabel.setFont(new java.awt.Font("Lucida Grande", 1, 14)); // NOI18N
+        _homeSiteLabel.setFont(new java.awt.Font("Lucida Grande", 1, 14));
         _homeSiteLabel.setText("Home Site:");
         _homeSiteLabel.setName("_homeSiteLabel"); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -129,14 +129,16 @@ public class AboutUsWindow extends javax.swing.JFrame {
         _buttonPanel.setName("_buttonPanel"); // NOI18N
         _buttonPanel.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.RIGHT));
 
-        _closeButton.setText("Close");
-        _closeButton.setName("_closeButton"); // NOI18N
-        _closeButton.addActionListener(new java.awt.event.ActionListener() {
+        _okButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/gui/resources/images/icons/ok.png"))); // NOI18N
+        _okButton.setText("Ok");
+        _okButton.setToolTipText("Closes the about us window");
+        _okButton.setName("_okButton"); // NOI18N
+        _okButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                _closeButtonActionPerformed(evt);
+                _okButtonActionPerformed(evt);
             }
         });
-        _buttonPanel.add(_closeButton);
+        _buttonPanel.add(_okButton);
 
         getContentPane().add(_buttonPanel, java.awt.BorderLayout.SOUTH);
 
@@ -148,11 +150,11 @@ public class AboutUsWindow extends javax.swing.JFrame {
      * 
      * @param evt action event.
      */
-    private void _closeButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event__closeButtonActionPerformed
+    private void _okButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event__okButtonActionPerformed
 
         // Closes the window
         dispose();
-    }//GEN-LAST:event__closeButtonActionPerformed
+    }//GEN-LAST:event__okButtonActionPerformed
 
     /**
     * @param args the command line arguments
@@ -169,11 +171,11 @@ public class AboutUsWindow extends javax.swing.JFrame {
     private javax.swing.JLabel _arjenLabel;
     private javax.swing.JLabel _authorsLabel;
     private javax.swing.JPanel _buttonPanel;
-    private javax.swing.JButton _closeButton;
     private javax.swing.JLabel _homeSiteLabel;
     private javax.swing.JLabel _imageLabel;
     private javax.swing.JPanel _infoPanel;
     private javax.swing.JLabel _javierLabel;
+    private javax.swing.JButton _okButton;
     private javax.swing.JLabel _villeLabel;
     private javax.swing.JLabel jLabel1;
     // End of variables declaration//GEN-END:variables

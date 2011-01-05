@@ -26,7 +26,7 @@
     <Component class="javax.swing.JLabel" name="_imageLabel">
       <Properties>
         <Property name="icon" type="javax.swing.Icon" noResource="true" editor="org.netbeans.modules.form.editors2.IconEditor">
-          <Image iconType="3" name="/gui/resources/userCommentAnalyzer.png"/>
+          <Image iconType="3" name="/gui/resources/images/aboutUs/userCommentAnalyzer.png"/>
         </Property>
         <Property name="name" type="java.lang.String" value="_imageLabel" noResource="true"/>
       </Properties>
@@ -55,7 +55,7 @@
       <SubComponents>
         <Component class="javax.swing.JLabel" name="_authorsLabel">
           <Properties>
-            <Property name="font" type="java.awt.Font" noResource="true" editor="org.netbeans.beaninfo.editors.FontEditor">
+            <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
               <Font name="Lucida Grande" size="14" style="1"/>
             </Property>
             <Property name="text" type="java.lang.String" value="Authors:"/>
@@ -102,7 +102,7 @@
         </Component>
         <Component class="javax.swing.JLabel" name="_homeSiteLabel">
           <Properties>
-            <Property name="font" type="java.awt.Font" noResource="true" editor="org.netbeans.beaninfo.editors.FontEditor">
+            <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
               <Font name="Lucida Grande" size="14" style="1"/>
             </Property>
             <Property name="text" type="java.lang.String" value="Home Site:"/>
@@ -141,13 +141,17 @@
         <Property name="alignment" type="int" value="2"/>
       </Layout>
       <SubComponents>
-        <Component class="javax.swing.JButton" name="_closeButton">
+        <Component class="javax.swing.JButton" name="_okButton">
           <Properties>
-            <Property name="text" type="java.lang.String" value="Close"/>
-            <Property name="name" type="java.lang.String" value="_closeButton" noResource="true"/>
+            <Property name="icon" type="javax.swing.Icon" noResource="true" editor="org.netbeans.modules.form.editors2.IconEditor">
+              <Image iconType="3" name="/gui/resources/images/icons/ok.png"/>
+            </Property>
+            <Property name="text" type="java.lang.String" value="Ok"/>
+            <Property name="toolTipText" type="java.lang.String" value="Closes the about us window"/>
+            <Property name="name" type="java.lang.String" value="_okButton" noResource="true"/>
           </Properties>
           <Events>
-            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="_closeButtonActionPerformed"/>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="_okButtonActionPerformed"/>
           </Events>
         </Component>
       </SubComponents>

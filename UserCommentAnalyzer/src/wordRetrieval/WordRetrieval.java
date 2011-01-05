@@ -1,6 +1,6 @@
 package wordRetrieval;
 
-import gui.ProgressWindow;
+import gui.progressWindow.ProgressWindow;
 import java.io.*;
 import java.util.*;
 import java.util.regex.*;
