@@ -119,6 +119,7 @@ public class KeywordRetrieval {
 
         //////////////////comments////////////////////////////////////
         ArrayList revWords = new ArrayList();
+        StringBuffer thisComment = new StringBuffer();
 
         int k = 0;
         int rNum = 0;
@@ -220,7 +221,9 @@ public class KeywordRetrieval {
                             String temp = "|" + rNum + ":" + curRating;
                             result = result.concat(temp);
 
-                            revWords.add(result);
+                            revWords.add(result);  
+                            thisComment.append(tokenArray[regExpressionLen - 1]);
+                            thisComment.append(":");
                             k = k + 1;
                         }
 
@@ -234,7 +237,7 @@ public class KeywordRetrieval {
                         tokenArray[regExpressionLen - 1] = curW;
 
                     }
-
+                    int l = 1;
                 }
             }
 
