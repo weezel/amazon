@@ -44,3 +44,4 @@ built-jar.properties
 *.html
 comments*.txt
 debug*
+.netbeans_automatic_build

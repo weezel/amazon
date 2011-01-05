@@ -3,21 +3,24 @@ package wordretrieval;
 import java.util.ArrayList;
 import java.util.Collections;
 
+/*
+  Consider a document containing 100 words wherein the word cow appears 3
+  times.  Following the previously defined formulas, the term frequency (TF)
+  for cow is then (3 / 100) = 0.03.
+  Now, assume we have 10 million documents and cow appears in one thousand of
+  these. Then, the inverse document frequency is calculated as log(10 000 000 /
+  1 000) = 4. The TF-IDF score is the product of these quantities: 0.03 × 4 =
+  0.12.
+*/
+
+
 public class TfIdf
 {
-	/*
-	Consider a document containing 100 words wherein the word cow appears 3
-	times. Following the previously defined formulas, the term frequency
-	(TF) for cow is then (3 / 100) = 0.03.
-	Now, assume we have 10 million documents and cow appears in one thousand of
-	these. Then, the inverse document frequency is calculated as log(10 000 000
-	/ 1 000) = 4. The TF-IDF score is the product of these quantities: 0.03 × 4
-	= 0.12.
-    */
 
 	/*
-	 * Count how many times searhcable word appears in a comment and divide the
-	 * total count of the words in comment by the sum of the found words.
+	 * Count how many times searhcable word appears in a comment and divide by
+	 * the total count of the words in the comment.
+	 * @return term frequency in comment
 	 */
 	public static double termFrequencyInDocument(String doc, String s)
 	{
@@ -33,8 +36,6 @@ public class TfIdf
 		for (int i = 0; i < splitted_comment.length; i++)
 			comment_arr.add(splitted_comment[i]);
 		Collections.sort(comment_arr);
-
-//		System.out.println(comment_arr.toString());
 
 		/* Rewind to the correct inital position in the array */
 		for (int i = 0; i < comment_arr.size(); i++) {
@@ -59,65 +60,48 @@ public class TfIdf
 			if (comment_arr.get(spos).equals(s))
 				matchCount++;
 		}
-//		System.out.println("matchCount = " + matchCount + ", doc.length = " + comment_arr.size());
 
-		return (double) matchCount / comment_arr.size();
+		return (double)matchCount / (double)comment_arr.size();
 	}
 
 
 	/*
 	 * Count how many times searhcable word appears in all comments and
 	 * calculate the inverse frequency.
+	 * @return inverse term frequency in document
 	 */
-	public static double inverseDocumentFrequency(String[] doc, int[] sArea, int cmtcount, String s)
+	public static double inverseDocumentFrequency(String[] doc, String s)
 	{
 		int matchCount, spos, epos;
+		int[] searchArea;
 
 		matchCount = 0;
-		spos = sArea[0];
-		epos = sArea[1];
+		searchArea = filterByInitials(doc, s); // Reduces search space dramatically
 
+		if (searchArea == null)
+			return (0.0);
+
+		spos = searchArea[0];
+		epos = searchArea[1];
+
+		/* Count matches in all comments */
 		for (; spos <= epos; spos++) {
-			if (doc[spos].equals(s))
+			String tmp[] = doc[spos].split("\\|");
+			if (tmp.length > 0 && tmp[0].equals(s))
 				matchCount++;
 		}
 
-		assert (matchCount > 0) : "Cannot divide by zero! \n\tCaused by foundNtimes: " + matchCount;
 		if (matchCount <= 0)
 			return 0.0;
 
-		return (double) Math.log10(doc.length / matchCount);
-	}
-
-	
-	/* doc is the entire document
-	 * cmcnt is count of the comments
-	 * searchable is searchable word
-	 */
-	public static double tf_idf(String[] doc, String cmnt, int cmcnt, String searchable)
-	{
-		int[] searchArea;
-		double invtermfreq, termfreq;
-
-		searchArea = filterByInitials(doc, searchable);
-
-		termfreq = termFrequencyInDocument(cmnt, searchable); 
-		//termfreq = termFrequencyInDocument(cmnt, searchable);
-		//System.out.println("TERMFREQ = " + termfreq);
-		invtermfreq = inverseDocumentFrequency(doc, searchArea, cmcnt, searchable);
-		//System.out.println("INVTERMFREQ = " + invtermfreq);
-
-		if (termfreq == -1)
-			return (0.0);
-
-		return termfreq * invtermfreq;
+		return Math.log10((double)doc.length / (double)matchCount);
 	}
 
 
 	/*
-	 * Reduce search area to the same initial and afterwards only words that
-	 * equals "s".
-	 * @return start and ending position to the document
+	 * Reduce search area to the same initial and afterwards, only to words
+	 * that equals "s".
+	 * @return start and ending position for the same word
 	 */
 	public static int[] filterByInitials(String[] doc, String s)
 	{
@@ -136,7 +120,6 @@ public class TfIdf
 				break;
 			}
 		}
-		//System.out.println("Before, spos: " + spos + ", epos: " + epos);
 
 		/* There is no such initial letter that equals s[0] */
 		if (spos == -1 || epos == -1)
@@ -151,8 +134,6 @@ public class TfIdf
 				break;
 			}
 		}
-		//System.out.println("After, spos: " + spos + ", epos: " + epos);
-
 		r[0] = spos;
 		r[1] = epos;
 
@@ -160,15 +141,22 @@ public class TfIdf
 	}
 
 
+	public static double tfidf_score(double a, double b)
+	{
+		return a * b;
+	}
+
+
 	public static void runTests(String[] args)
 	{
-		double jaa;
-		String[] t = {
+		double termfreq, invfreq;
+		String boo = "boo";
+		String[] documents1 = {
 			"14sia|1:50",
 			"auto|1:50",
 			"amiraali|3:40",
 			"anjovis|3:10",
-			"boredom|",
+			"boredom|4:55",
 			"boo|5:10",
 			"boo|5:60",
 			"boo|6:20",
@@ -177,16 +165,21 @@ public class TfIdf
 			"jee|18:30"
 		};
 		String singlecomment = "14sia:boo:boo:boo:banjovis:auto:urzum:klonkku:bamiraali:oredom:jee:";
+		String[] documents2 = {
+			"bono:boo:hanjovis:kissa:koira:",
+			"14sia:boo:boo:boo:banjovis:auto:urzum:klonkku:bamiraali:oredom:jee:",
+			"jerkku:hekkku:takki:pakki:",
+			"joona:erkki:merkki:",
+			"cat:sack:hack:track:back:"
+		};
 
-		/*
-		for (int i=0; i < t.length; i++)
-			System.out.println(String.format("[%d] = %s", i, t[i]));
-		System.out.println();
-		*/
-
-		jaa = termFrequencyInDocument(singlecomment, "boo");
-		//jaa = tf_idf(t, t.length, "boo");
-		System.out.println("jaa = " + jaa);
+		termfreq = termFrequencyInDocument(singlecomment, "boo");
+		assert (Math.abs(termfreq - 0.2727272727272727) < 1.0E-8) : "termfreq should be: 0.2727272727272727, current value: " + termfreq;
+		invfreq = inverseDocumentFrequency(documents1, "boo");
+		assert (Math.abs(invfreq - 0.5642714304385625) < 1.0E-8) : "invfreq should be: 0.5642714304385625, current value: " + invfreq;
+		System.out.println("'" + boo + "'" + " comment frequenzy: " + termfreq);
+		System.out.println("'" + boo + "'" + " inverse frequenzy: " + invfreq);
+		System.out.println("'" + boo + "'" + " tf-idf score     : " + tfidf_score(termfreq, invfreq));
 	}
 
 
