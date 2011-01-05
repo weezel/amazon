@@ -6,6 +6,7 @@
 package process;
 
 import gui.mainWindow.MainWindow;
+import javax.swing.SwingUtilities;
 
 /**
  * Executes the applying filter process to update the product list displayed in
@@ -24,6 +25,15 @@ public class ApplyFilterProcess extends Thread{
 
     @Override
     public void run(){
-        MainWindow.getInstance().applyFilter();
+
+        SwingUtilities.invokeLater(new Runnable(){
+
+            @Override
+            public void run() {
+
+                // Applies the filter in the main window
+                MainWindow.getInstance().applyFilter();
+            }
+        });
     }
 }

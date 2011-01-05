@@ -26,7 +26,7 @@ public class FetchingProcess extends Thread {
     /**
      * Python program for fetching the comments from the amazon.com.
      */
-    public static final String ARGUMENTS = "src/commentFetcher/python/amazoncommentfetcher.py";
+    public static final String ARGUMENTS = "src/commentFetcher/amazoncommentfetcher.py";
     /**
      * Name for the output file which contains the comments. To generate it will
      * take the size of the keyword list in the main window.

@@ -29,6 +29,10 @@ public class ProductPanel extends javax.swing.JPanel {
      * Product panel index in the main window.
      */
     private int _index;
+    /**
+     * Product panel name in the main window.
+     */
+    private String _name;
 
     /** 
      * Creates new form ProductPanel.
@@ -50,6 +54,7 @@ public class ProductPanel extends javax.swing.JPanel {
         initComponents();
 
         _index = index;
+        _name = "Product " + (index + 1);
     }
 
         /**
@@ -61,6 +66,15 @@ public class ProductPanel extends javax.swing.JPanel {
      */
     public JList getProductList() {
         return _productList;
+    }
+
+    /**
+     * Returns the product panel name.
+     *  
+     * @return the product panel name.
+     */
+    public String getProductPanelName(){
+        return _name;
     }
 
     /**
@@ -179,6 +193,7 @@ public class ProductPanel extends javax.swing.JPanel {
         _closeButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/gui/resources/images/icons/Close.png"))); // NOI18N
         _closeButton.setText("Close");
         _closeButton.setToolTipText("Closes the product panel list");
+        _closeButton.setEnabled(false);
         _closeButton.setName("_closeButton"); // NOI18N
         _closeButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {

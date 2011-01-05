@@ -85,6 +85,7 @@
             </Property>
             <Property name="text" type="java.lang.String" value="Close"/>
             <Property name="toolTipText" type="java.lang.String" value="Closes the product panel list"/>
+            <Property name="enabled" type="boolean" value="false"/>
             <Property name="name" type="java.lang.String" value="_closeButton" noResource="true"/>
           </Properties>
           <Events>

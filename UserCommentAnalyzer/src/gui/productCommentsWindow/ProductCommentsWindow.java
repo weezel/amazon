@@ -211,9 +211,7 @@ class KeywordSearcher {
                 firstOffset = lastIndex;
             }
             lastIndex = endIndex;
-
         }
-
 
         return firstOffset;
     }
