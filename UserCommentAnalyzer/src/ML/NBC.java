@@ -1,5 +1,5 @@
 /* Naïve Bayes Classifier */
-public class NMC
+public class NBC
 {
 
 	public static void runTests(String[] args)
