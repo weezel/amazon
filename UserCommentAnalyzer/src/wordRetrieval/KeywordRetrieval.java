@@ -1,27 +1,9 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package wordRetrieval;
 
-/**
- *
- * @author Arjen
- */
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 import java.io.*;
-//import java.util.Scanner;
 import java.util.*;
 
-/**
- *
- * @author Arjen
- */
 public class KeywordRetrieval {
-
     /**
      * @param filter filter to apply to the keyword retrieval part.
      * @param index index for the comments file.
@@ -33,61 +15,26 @@ public class KeywordRetrieval {
      * If it is false the it takes the info from the new file generated.
      */
     public WordInfo[] run(String filter, int index) throws IOException {
+        ArrayList adjectives = new ArrayList();
+        ArrayList connectionWords = new ArrayList();
+        ArrayList revWords = new ArrayList();
+        ArrayList stopWords = new ArrayList();
+        ArrayList<String>[] commentWords = (ArrayList<String>[])new ArrayList[10];
+        Scanner s = null;
+        StringBuffer thisComment = new StringBuffer();
 
         //////////////////stopwords////////////////////////////////////
         //list of stopwords are read from the stopwords file
         //stopwords are stored in the stopwords array list
-        ArrayList stopWords = new ArrayList();
-        Scanner s = null;
-        try {
-            s = new Scanner(new BufferedReader(new FileReader("src/wordRetrieval/resources/StopWords.txt")));
-            //s = new Scanner(new BufferedReader(new FileReader("D:\\tue\\WIS\\review1.txt")));
-            int i = 0;
-            while (s.hasNext()) {
-                stopWords.add(s.next());
-                i++;
-            }
-        } finally {
-            if (s != null) {
-                s.close();
-            }
-        }
 
-        Collections.sort(stopWords);
+        stopWords = readWordList("src/wordRetrieval/resources/StopWords.txt");
 
         //////////////////adjectives////////////////////////////////////
-        ArrayList adjectives = new ArrayList();
-        try {
-            s = new Scanner(new BufferedReader(new FileReader("src/wordRetrieval/resources/Adjectives.txt")));
-            //s = new Scanner(new BufferedReader(new FileReader("D:\\tue\\WIS\\review1.txt")));
-            int i = 0;
-            while (s.hasNext()) {
-                adjectives.add(s.next());
-                i++;
-            }
-        } finally {
-            if (s != null) {
-                s.close();
-            }
-        }
-        Collections.sort(adjectives);
+        adjectives = readWordList("src/wordRetrieval/resources/Adjectives.txt");
 
         //////////////////connection words////////////////////////////////////
-        ArrayList connectionWords = new ArrayList();
-        try {
-            s = new Scanner(new BufferedReader(new FileReader("src/wordRetrieval/resources/ConnectionWords.txt")));
-            //s = new Scanner(new BufferedReader(new FileReader("D:\\tue\\WIS\\review1.txt")));
-            int i = 0;
-            while (s.hasNext()) {
-                connectionWords.add(s.next());
-                i++;
-            }
-        } finally {
-            if (s != null) {
-                s.close();
-            }
-        }
-        Collections.sort(connectionWords);
+        connectionWords = readWordList("src/wordRetrieval/resources/ConnectionWords.txt");
+
 
         /////the custom regular expression///
         //We use a self defined regular expression to manipulate the result
@@ -118,8 +65,6 @@ public class KeywordRetrieval {
         tokenArray = new String[regExpressionLen];
 
         //////////////////comments////////////////////////////////////
-        ArrayList revWords = new ArrayList();
-
         int k = 0;
         int rNum = 0;
         String curRating = "";
@@ -166,10 +111,10 @@ public class KeywordRetrieval {
 
                     //Walk through all words in the comment
                     while (!curW.equals("---")) {
-
                         int tPos = -1;
                         char curToken;
                         boolean match = true;
+
                         for (int i = 0; i < regExpressionLen; i++) {
                             tPos = regExpression.indexOf("[", tPos + 1);
                             curToken = regExpression.substring(tPos + 1, tPos + 2).charAt(0);
@@ -221,6 +166,8 @@ public class KeywordRetrieval {
                             result = result.concat(temp);
 
                             revWords.add(result);
+                            thisComment.append(tokenArray[regExpressionLen - 1]);
+                            thisComment.append(":");
                             k = k + 1;
                         }
 
@@ -232,9 +179,8 @@ public class KeywordRetrieval {
                         curW = curW.toLowerCase();
                         curW = removeSpecialCharacters(curW);
                         tokenArray[regExpressionLen - 1] = curW;
-
                     }
-
+                    int l = 1;
                 }
             }
 
@@ -257,8 +203,9 @@ public class KeywordRetrieval {
 
         String prevWord = "";
         int prevNum = 0;
-
-        int len = revWords.size();
+        int len;
+        
+        len = revWords.size();
 
         while (k != len) {
             curWord = revWords.get(k).toString();
@@ -336,6 +283,30 @@ public class KeywordRetrieval {
 
         return curW;
     }
+
+    /**
+     * @param fname Filename to read
+     * @return list of the words
+     *
+     * Reads filename, tokenizes it to ArrayList and sorts it.
+     */
+    public static ArrayList readWordList(String fname) throws IOException
+    {
+        ArrayList wordList = new ArrayList();
+        Scanner s = null;
+        try {
+            s = new Scanner(new BufferedReader(new FileReader(fname)));
+            while (s.hasNext())
+                wordList.add(s.next());
+        } finally {
+            if (s != null)
+            s.close();
+        }
+        Collections.sort(wordList);
+
+        return wordList;
+    }
+
 }
 
 
