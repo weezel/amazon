@@ -1,4 +1,4 @@
-package wordretrieval;
+package spellcheck;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -63,6 +63,7 @@ public class SpellCheckers
 	 * Converted to Java from Wikipedia's article:
 	 * http://en.wikipedia.org/wiki/Levenshtein_distance
 	 * and added Damerau algorithm to detect transpositions too
+	 * http://en.wikipedia.org/wiki/Damerau%E2%80%93Levenshtein_distance
 	 */
 	public static int levensteinDistance(String s1, String s2)
 	{
@@ -76,34 +77,35 @@ public class SpellCheckers
 			resultable[i][0] = i;
 		for (int j=0; j <= s2.length(); j++)
 			resultable[0][j] = j;
-		for (int j=1; j <= s2.length(); j++) {
-			for (int i=1; i <= s1.length(); i++) {
-				if (s1.charAt(i-1) == s2.charAt(j-1)) {
+
+		for (int i=1; i < s1.length(); i++) {
+			for (int j=1; j < s2.length(); j++) {
+				if (s1.charAt(i) == s2.charAt(j))
 					cost = 0;
-					//resultable[i][j] = resultable[i-1][j-1];
-				} else {
+				else
 					cost = 1;
-					resultable[i][j] = Math.min(
-							Math.min(resultable[i-1][j] + 1, // deletion
-								resultable[i][j-1] + 1),     // insertion
-							resultable[i-1][j-1] + cost);    // substitution
-				}
-				if (i > 2 && j > 2 &&
-					s1.charAt(i-1) == s2.charAt(j-2) &&
-					s1.charAt(i-2) == s2.charAt(j-1)) {
-					resultable[i][j] = Math.min(resultable[i][j],
-							resultable[i-2][j-2] + cost);	  // transposition
+				resultable[i][j] = Math.min(
+						Math.min(resultable[i-1][j] + 1, // deletion
+							resultable[i][j-1] + 1),     // insertion
+						resultable[i-1][j-1] + cost);    // substitution
+				if (i > 1 && j > 1 &&
+					s1.charAt(i) == s2.charAt(j-1) &&
+					s1.charAt(i-1) == s2.charAt(j)) {
+						resultable[i][j] = Math.min(resultable[i][j],
+								resultable[i-2][j-2] + cost);	  // transposition
 				}
 
 			} // inner for
 		} // outer for
-		return resultable[s1.length()][s2.length()];
+		return resultable[s1.length()-1][s2.length()-1];
 	}
 
 
 	/**
 	 * Converted to Java from Wikipedia's article:
 	 * http://en.wikipedia.org/wiki/Dice%27s_coefficient
+	 * also sent this implementation to WikiBooks
+	 * http://en.wikibooks.org/wiki/Algorithm_Implementation/Strings/Dice%27s_coefficient
 	 */
 	public static double diceCoefficient(String s1, String s2)
 	{
@@ -152,6 +154,7 @@ public class SpellCheckers
 		double diceResult = diceCoefficient(s1, s2);
 
 		assert (diceCoefficient("kokko", "kokkot") <= 1) : "Should be < 1";
+		assert (levensteinDistance("the", "teh") == 1) : "Should be 1";
 
 		System.out.println("Levenstein distance between '" + s1 + "' and '" + s2 + "' is " + levenResult);
 		System.out.println("Dice's coeffiency for '" + s1 + "' and '" + s2 + "' is " + diceResult);
