@@ -16,13 +16,12 @@ import java.util.Collections;
 
 public class TfIdf
 {
-
 	/*
 	 * Count how many times searhcable word appears in a comment and divide by
 	 * the total count of the words in the comment.
 	 * @return term frequency in comment
 	 */
-	public static double termFrequencyInDocument(String doc, String s)
+	public static double termFrequencyInComment(String doc, String s)
 	{
 		int matchCount, spos, epos;
 		String splitted_comment[];
@@ -173,7 +172,7 @@ public class TfIdf
 			"cat:sack:hack:track:back:"
 		};
 
-		termfreq = termFrequencyInDocument(singlecomment, "boo");
+		termfreq = termFrequencyInComment(singlecomment, "boo");
 		assert (Math.abs(termfreq - 0.2727272727272727) < 1.0E-8) : "termfreq should be: 0.2727272727272727, current value: " + termfreq;
 		invfreq = inverseDocumentFrequency(documents1, "boo");
 		assert (Math.abs(invfreq - 0.5642714304385625) < 1.0E-8) : "invfreq should be: 0.5642714304385625, current value: " + invfreq;

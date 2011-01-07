@@ -58,7 +58,7 @@ IR:
 	The user would also want to compare the keyword between multiple products
 	he selected.
 ML:
-	[ ]  Association rules analyzis based on the keywords, number of the appearances
-	and rating.
+	[ ]  Association rules analyzis based on the keywords, number of the
+	appearances and rating.
 
 

@@ -97,16 +97,13 @@ public class KeywordRetrieval {
                     }
 
                     //Store the first word in the token array
-                    curW = curW.toLowerCase();
-                    if(!curW.equals("---"))
-                        curW = removeSpecialCharacters(curW);
+                    curW = removeSpecialCharacters(curW.toLowerCase());
                     tokenArray[0] = curW;
 
                     //Store the remaining n-1 words in the token array
                     for (int i = 1; i < regExpressionLen; i++) {
                         curW = s.next();
-                        curW = curW.toLowerCase();
-                        curW = removeSpecialCharacters(curW);
+                        curW = removeSpecialCharacters(curW.toLowerCase());
                         tokenArray[i] = curW;
                     }
 
@@ -158,17 +155,20 @@ public class KeywordRetrieval {
 
                         if (match) {
                             String result = "";// = tokenArray[0] + " " + curWnext + " " + curWnext2;
-                            for (int i = 0; i < regExpressionLen - 1; i++) {
+                            for (int i=0; i < regExpressionLen - 1; i++) {
                                 result = result + tokenArray[i] + " ";
                             }
 
                             result = result + tokenArray[regExpressionLen - 1];
                             String temp = "|" + rNum + ":" + curRating;
                             result = result.concat(temp);
-
-                            revWords.add(result);
                             thisComment.append(tokenArray[regExpressionLen - 1]);
                             thisComment.append(":");
+                            // XXX Consult Arjen whether this is right
+                            for (int i=0; i < regExpressionLen-1; i++)
+                                result = result.concat(";" + termFrequencyInDocument(thisComment, tokenArray[i]));
+
+                            revWords.add(result);
                             k = k + 1;
                         }
 
@@ -177,8 +177,7 @@ public class KeywordRetrieval {
                             tokenArray[i] = tokenArray[i + 1];
                         }
                         curW = s.next();
-                        curW = curW.toLowerCase();
-                        curW = removeSpecialCharacters(curW);
+                        curW = removeSpecialCharacters(curW.toLowerCase());
                         tokenArray[regExpressionLen - 1] = curW;
                     }
                 }
@@ -258,6 +257,18 @@ public class KeywordRetrieval {
             //System.out.println(result[i].rating/result[i].count);
             //System.out.println(result[i].count + ",'" + result[i].theWord + "'," + result[i].rating/result[i].count);
 
+        }
+
+        // XXX Count inverse frequency here!
+        // Basically: 
+        //    inverseDocumentFrequency(String[] all comments, String searchable word)
+
+        for (int i=0; i < revWords.size(); i++) {
+            String word = revWords.get(i).substring(0, revWords.get(i).find("|"));
+            String[] termfreq = revWords.get(i).split(";");
+            double invfreq = inverseDocumentFrequency(revWords, word);
+            double tfscore = tfidf_score(Double.parseDouble(termfreq[1]), invfreq);
+            revWords.set(revWords.get(i) + termfreq[0] + ";" + tfscore);
         }
 
         return result;
