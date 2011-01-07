@@ -3,6 +3,8 @@ package wordRetrieval;
 import java.io.*;
 import java.util.*;
 
+import ML.TfIdf;
+
 public class KeywordRetrieval {
     /**
      * @param filter filter to apply to the keyword retrieval part.
@@ -68,6 +70,7 @@ public class KeywordRetrieval {
         int k = 0;
         int rNum = 0;
         String curRating = "";
+        TfIdf TF = new TfIdf();
 
         try {
             
@@ -164,9 +167,15 @@ public class KeywordRetrieval {
                             result = result.concat(temp);
                             thisComment.append(tokenArray[regExpressionLen - 1]);
                             thisComment.append(":");
+                            int commentLenght = 0;
+                            int l = 0;
+                            while (l < thisComment.length()) {
+                                if (thisComment.charAt(index) == ':')
+                                    commentLenght++;
+                            }
                             // XXX Consult Arjen whether this is right
-                            for (int i=0; i < regExpressionLen-1; i++)
-                                result = result.concat(";" + termFrequencyInDocument(thisComment, tokenArray[i]));
+                            for (int i=0; i < commentLenght; i++)
+                                result = result.concat(";" + TF.termFrequencyInComment(thisComment.toString(), tokenArray[i]));
 
                             revWords.add(result);  
                             thisComment.append(tokenArray[regExpressionLen - 1]);
@@ -266,11 +275,15 @@ public class KeywordRetrieval {
         //    inverseDocumentFrequency(String[] all comments, String searchable word)
 
         for (int i=0; i < revWords.size(); i++) {
-            String word = revWords.get(i).substring(0, revWords.get(i).find("|"));
-            String[] termfreq = revWords.get(i).split(";");
-            double invfreq = inverseDocumentFrequency(revWords, word);
-            double tfscore = tfidf_score(Double.parseDouble(termfreq[1]), invfreq);
-            revWords.set(revWords.get(i) + termfreq[0] + ";" + tfscore);
+            String word = revWords.get(i).toString().substring(0, revWords.get(i).toString().indexOf("|"));
+            String[] termfreq = revWords.get(i).toString().split(";");
+            String[] commentsarr = new String[revWords.size()];
+            for (int z=0; z < revWords.size(); z++) {
+                commentsarr[z] = revWords.get(z).toString();
+            }
+            double invfreq = TF.inverseDocumentFrequency(commentsarr, word);
+            double tfscore = TF.tfidf_score(Double.parseDouble(termfreq[1]), invfreq);
+            revWords.set(i, revWords.get(i) + termfreq[0] + ";" + tfscore);
         }
 
         return result;

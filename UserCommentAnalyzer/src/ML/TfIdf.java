@@ -1,4 +1,4 @@
-package wordretrieval;
+package ML;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -21,7 +21,7 @@ public class TfIdf
 	 * the total count of the words in the comment.
 	 * @return term frequency in comment
 	 */
-	public static double termFrequencyInComment(String doc, String s)
+	public double termFrequencyInComment(String doc, String s)
 	{
 		int matchCount, spos, epos;
 		String splitted_comment[];
@@ -69,7 +69,7 @@ public class TfIdf
 	 * calculate the inverse frequency.
 	 * @return inverse term frequency in document
 	 */
-	public static double inverseDocumentFrequency(String[] doc, String s)
+	public double inverseDocumentFrequency(String[] doc, String s)
 	{
 		int matchCount, spos, epos;
 		int[] searchArea;
@@ -102,7 +102,7 @@ public class TfIdf
 	 * that equals "s".
 	 * @return start and ending position for the same word
 	 */
-	public static int[] filterByInitials(String[] doc, String s)
+	public int[] filterByInitials(String[] doc, String s)
 	{
 		int spos, epos;
 		int[] r = new int[2];
@@ -140,13 +140,13 @@ public class TfIdf
 	}
 
 
-	public static double tfidf_score(double a, double b)
+	public double tfidf_score(double a, double b)
 	{
 		return a * b;
 	}
 
 
-	public static void runTests(String[] args)
+	public void runTests(String[] args)
 	{
 		double termfreq, invfreq;
 		String boo = "boo";
@@ -182,9 +182,9 @@ public class TfIdf
 	}
 
 
-	public static void main (String[] args)
-	{
-		runTests(args);
-	}
+//	public static void main (String[] args)
+//	{
+//		runTests(args);
+//	}
 
 }
