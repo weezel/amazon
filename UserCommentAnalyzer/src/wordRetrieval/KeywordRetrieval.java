@@ -1,27 +1,9 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package wordRetrieval;
 
-/**
- *
- * @author Arjen
- */
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 import java.io.*;
-//import java.util.Scanner;
 import java.util.*;
 
-/**
- *
- * @author Arjen
- */
 public class KeywordRetrieval {
-
     /**
      * @param filter filter to apply to the keyword retrieval part.
      * @param index index for the comments file.
@@ -33,61 +15,26 @@ public class KeywordRetrieval {
      * If it is false the it takes the info from the new file generated.
      */
     public WordInfo[] run(String filter, int index) throws IOException {
+        ArrayList adjectives = new ArrayList();
+        ArrayList connectionWords = new ArrayList();
+        ArrayList revWords = new ArrayList();
+        ArrayList stopWords = new ArrayList();
+        ArrayList<String>[] commentWords = (ArrayList<String>[])new ArrayList[10];
+        Scanner s = null;
+        StringBuffer thisComment = new StringBuffer();
 
         //////////////////stopwords////////////////////////////////////
         //list of stopwords are read from the stopwords file
         //stopwords are stored in the stopwords array list
-        ArrayList stopWords = new ArrayList();
-        Scanner s = null;
-        try {
-            s = new Scanner(new BufferedReader(new FileReader("src/wordRetrieval/resources/StopWords.txt")));
-            //s = new Scanner(new BufferedReader(new FileReader("D:\\tue\\WIS\\review1.txt")));
-            int i = 0;
-            while (s.hasNext()) {
-                stopWords.add(s.next());
-                i++;
-            }
-        } finally {
-            if (s != null) {
-                s.close();
-            }
-        }
 
-        Collections.sort(stopWords);
+        stopWords = readWordList("src/wordRetrieval/resources/StopWords.txt");
 
         //////////////////adjectives////////////////////////////////////
-        ArrayList adjectives = new ArrayList();
-        try {
-            s = new Scanner(new BufferedReader(new FileReader("src/wordRetrieval/resources/Adjectives.txt")));
-            //s = new Scanner(new BufferedReader(new FileReader("D:\\tue\\WIS\\review1.txt")));
-            int i = 0;
-            while (s.hasNext()) {
-                adjectives.add(s.next());
-                i++;
-            }
-        } finally {
-            if (s != null) {
-                s.close();
-            }
-        }
-        Collections.sort(adjectives);
+        adjectives = readWordList("src/wordRetrieval/resources/Adjectives.txt");
 
         //////////////////connection words////////////////////////////////////
-        ArrayList connectionWords = new ArrayList();
-        try {
-            s = new Scanner(new BufferedReader(new FileReader("src/wordRetrieval/resources/ConnectionWords.txt")));
-            //s = new Scanner(new BufferedReader(new FileReader("D:\\tue\\WIS\\review1.txt")));
-            int i = 0;
-            while (s.hasNext()) {
-                connectionWords.add(s.next());
-                i++;
-            }
-        } finally {
-            if (s != null) {
-                s.close();
-            }
-        }
-        Collections.sort(connectionWords);
+        connectionWords = readWordList("src/wordRetrieval/resources/ConnectionWords.txt");
+
 
         /////the custom regular expression///
         //We use a self defined regular expression to manipulate the result
@@ -118,9 +65,6 @@ public class KeywordRetrieval {
         tokenArray = new String[regExpressionLen];
 
         //////////////////comments////////////////////////////////////
-        ArrayList revWords = new ArrayList();
-        StringBuffer thisComment = new StringBuffer();
-
         int k = 0;
         int rNum = 0;
         String curRating = "";
@@ -153,24 +97,22 @@ public class KeywordRetrieval {
                     }
 
                     //Store the first word in the token array
-                    curW = curW.toLowerCase();
-                    curW = removeSpecialCharacters(curW);
+                    curW = removeSpecialCharacters(curW.toLowerCase());
                     tokenArray[0] = curW;
 
                     //Store the remaining n-1 words in the token array
                     for (int i = 1; i < regExpressionLen; i++) {
                         curW = s.next();
-                        curW = curW.toLowerCase();
-                        curW = removeSpecialCharacters(curW);
+                        curW = removeSpecialCharacters(curW.toLowerCase());
                         tokenArray[i] = curW;
                     }
 
                     //Walk through all words in the comment
                     while (!curW.equals("---")) {
-
                         int tPos = -1;
                         char curToken;
                         boolean match = true;
+
                         for (int i = 0; i < regExpressionLen; i++) {
                             tPos = regExpression.indexOf("[", tPos + 1);
                             curToken = regExpression.substring(tPos + 1, tPos + 2).charAt(0);
@@ -213,13 +155,18 @@ public class KeywordRetrieval {
 
                         if (match) {
                             String result = "";// = tokenArray[0] + " " + curWnext + " " + curWnext2;
-                            for (int i = 0; i < regExpressionLen - 1; i++) {
+                            for (int i=0; i < regExpressionLen - 1; i++) {
                                 result = result + tokenArray[i] + " ";
                             }
 
                             result = result + tokenArray[regExpressionLen - 1];
                             String temp = "|" + rNum + ":" + curRating;
                             result = result.concat(temp);
+                            thisComment.append(tokenArray[regExpressionLen - 1]);
+                            thisComment.append(":");
+                            // XXX Consult Arjen whether this is right
+                            for (int i=0; i < regExpressionLen-1; i++)
+                                result = result.concat(";" + termFrequencyInDocument(thisComment, tokenArray[i]));
 
                             revWords.add(result);  
                             thisComment.append(tokenArray[regExpressionLen - 1]);
@@ -232,12 +179,9 @@ public class KeywordRetrieval {
                             tokenArray[i] = tokenArray[i + 1];
                         }
                         curW = s.next();
-                        curW = curW.toLowerCase();
-                        curW = removeSpecialCharacters(curW);
+                        curW = removeSpecialCharacters(curW.toLowerCase());
                         tokenArray[regExpressionLen - 1] = curW;
-
                     }
-                    int l = 1;
                 }
             }
 
@@ -260,8 +204,9 @@ public class KeywordRetrieval {
 
         String prevWord = "";
         int prevNum = 0;
-
-        int len = revWords.size();
+        int len;
+        
+        len = revWords.size();
 
         while (k != len) {
             curWord = revWords.get(k).toString();
@@ -274,22 +219,24 @@ public class KeywordRetrieval {
             float rating = Float.parseFloat(curWord.substring(ratingLoc + 1));
 
             curWord = curWord.substring(0, loc);
-
-            if (!curWord.equals(prevWord)) {
-                j++;
-                countedWords[j] = new WordInfo("", 0, 0);
-                countedWords[j].setTheWord(curWord);
-                countedWords[j].setCount(1);
-                countedWords[j].setRating(rating);
-                prevWord = curWord;
-                prevNum = 1;
-                numWords++;
-            } else {
-                if (num > prevNum) {
-                    countedWords[j].setCount(countedWords[j].getCount() + 1);
-                    countedWords[j].setRating(countedWords[j].getRating() + rating);
+            if(!curWord.equals(""))
+            {
+                if (!curWord.equals(prevWord)) {
+                    j++;
+                    countedWords[j] = new WordInfo("", 0, 0);
+                    countedWords[j].setTheWord(curWord);
+                    countedWords[j].setCount(1);
+                    countedWords[j].setRating(rating);
+                    prevWord = curWord;
+                    prevNum = 1;
+                    numWords++;
+                } else {
+                    if (num > prevNum) {
+                        countedWords[j].setCount(countedWords[j].getCount() + 1);
+                        countedWords[j].setRating(countedWords[j].getRating() + rating);
+                    }
+                    prevNum = num;
                 }
-                prevNum = num;
             }
             k++;
 
@@ -314,31 +261,68 @@ public class KeywordRetrieval {
 
         }
 
+        // XXX Count inverse frequency here!
+        // Basically: 
+        //    inverseDocumentFrequency(String[] all comments, String searchable word)
+
+        for (int i=0; i < revWords.size(); i++) {
+            String word = revWords.get(i).substring(0, revWords.get(i).find("|"));
+            String[] termfreq = revWords.get(i).split(";");
+            double invfreq = inverseDocumentFrequency(revWords, word);
+            double tfscore = tfidf_score(Double.parseDouble(termfreq[1]), invfreq);
+            revWords.set(revWords.get(i) + termfreq[0] + ";" + tfscore);
+        }
+
         return result;
     }
 
-    public static String removeSpecialCharacters(String curW) {
-        curW = curW.replace(".", "");
-        curW = curW.replace(",", "");
-        curW = curW.replace("?", "");
-        curW = curW.replace("!", "");
-        curW = curW.replace("(", "");
-        curW = curW.replace(")", "");
-        curW = curW.replace("{", "");
-        curW = curW.replace("}", "");
-        curW = curW.replace("[", "");
-        curW = curW.replace("]", "");
-        curW = curW.replace("\"", "");
-        curW = curW.replace(":", "");
-        curW = curW.replace("|", "");
-        curW = curW.replace("~", "");
-        curW = curW.replace("/", "");
-        curW = curW.replace("'", "");
-        curW = curW.replace(";", "");
-        curW = curW.replace("#", "");
+    public static String removeSpecialCharacters(String curW)
+    {
+        if(!curW.equals("---"))
+        {
+            int len = curW.length();
+            StringBuffer result = new StringBuffer();
+            char[] cArray = curW.toCharArray();
+            int i = 0;
+            while (i < len)
+            {
+                if (cArray[i] > 96 && cArray[i] < 123)
+                {
+                    result.append(cArray[i]);
+                }
+                i++;
+            }
+
+            String str = new String(result);
+            curW = str;
+        }
 
         return curW;
     }
+
+    /**
+     * @param fname Filename to read
+     * @return list of the words
+     *
+     * Reads filename, tokenizes it to ArrayList and sorts it.
+     */
+    public static ArrayList readWordList(String fname) throws IOException
+    {
+        ArrayList wordList = new ArrayList();
+        Scanner s = null;
+        try {
+            s = new Scanner(new BufferedReader(new FileReader(fname)));
+            while (s.hasNext())
+                wordList.add(s.next());
+        } finally {
+            if (s != null)
+            s.close();
+        }
+        Collections.sort(wordList);
+
+        return wordList;
+    }
+
 }
 
 
