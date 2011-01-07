@@ -168,9 +168,8 @@ public class KeywordRetrieval {
                             thisComment.append(tokenArray[regExpressionLen - 1]);
                             thisComment.append(":");
                             int commentLenght = 0;
-                            int l = 0;
-                            while (l < thisComment.length()) {
-                                if (thisComment.charAt(index) == ':')
+                            for (int l=0; l < thisComment.length(); l++) {
+                                if (thisComment.charAt(l) == ':')
                                     commentLenght++;
                             }
                             // XXX Consult Arjen whether this is right
