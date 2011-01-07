@@ -98,7 +98,8 @@ public class KeywordRetrieval {
 
                     //Store the first word in the token array
                     curW = curW.toLowerCase();
-                    curW = removeSpecialCharacters(curW);
+                    if(!curW.equals("---"))
+                        curW = removeSpecialCharacters(curW);
                     tokenArray[0] = curW;
 
                     //Store the remaining n-1 words in the token array
@@ -180,7 +181,6 @@ public class KeywordRetrieval {
                         curW = removeSpecialCharacters(curW);
                         tokenArray[regExpressionLen - 1] = curW;
                     }
-                    int l = 1;
                 }
             }
 
@@ -218,22 +218,24 @@ public class KeywordRetrieval {
             float rating = Float.parseFloat(curWord.substring(ratingLoc + 1));
 
             curWord = curWord.substring(0, loc);
-
-            if (!curWord.equals(prevWord)) {
-                j++;
-                countedWords[j] = new WordInfo("", 0, 0);
-                countedWords[j].setTheWord(curWord);
-                countedWords[j].setCount(1);
-                countedWords[j].setRating(rating);
-                prevWord = curWord;
-                prevNum = 1;
-                numWords++;
-            } else {
-                if (num > prevNum) {
-                    countedWords[j].setCount(countedWords[j].getCount() + 1);
-                    countedWords[j].setRating(countedWords[j].getRating() + rating);
+            if(!curWord.equals(""))
+            {
+                if (!curWord.equals(prevWord)) {
+                    j++;
+                    countedWords[j] = new WordInfo("", 0, 0);
+                    countedWords[j].setTheWord(curWord);
+                    countedWords[j].setCount(1);
+                    countedWords[j].setRating(rating);
+                    prevWord = curWord;
+                    prevNum = 1;
+                    numWords++;
+                } else {
+                    if (num > prevNum) {
+                        countedWords[j].setCount(countedWords[j].getCount() + 1);
+                        countedWords[j].setRating(countedWords[j].getRating() + rating);
+                    }
+                    prevNum = num;
                 }
-                prevNum = num;
             }
             k++;
 
@@ -261,25 +263,26 @@ public class KeywordRetrieval {
         return result;
     }
 
-    public static String removeSpecialCharacters(String curW) {
-        curW = curW.replace(".", "");
-        curW = curW.replace(",", "");
-        curW = curW.replace("?", "");
-        curW = curW.replace("!", "");
-        curW = curW.replace("(", "");
-        curW = curW.replace(")", "");
-        curW = curW.replace("{", "");
-        curW = curW.replace("}", "");
-        curW = curW.replace("[", "");
-        curW = curW.replace("]", "");
-        curW = curW.replace("\"", "");
-        curW = curW.replace(":", "");
-        curW = curW.replace("|", "");
-        curW = curW.replace("~", "");
-        curW = curW.replace("/", "");
-        curW = curW.replace("'", "");
-        curW = curW.replace(";", "");
-        curW = curW.replace("#", "");
+    public static String removeSpecialCharacters(String curW)
+    {
+        if(!curW.equals("---"))
+        {
+            int len = curW.length();
+            StringBuffer result = new StringBuffer();
+            char[] cArray = curW.toCharArray();
+            int i = 0;
+            while (i < len)
+            {
+                if (cArray[i] > 96 && cArray[i] < 123)
+                {
+                    result.append(cArray[i]);
+                }
+                i++;
+            }
+
+            String str = new String(result);
+            curW = str;
+        }
 
         return curW;
     }
