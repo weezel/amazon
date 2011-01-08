@@ -42,7 +42,7 @@ public class TfIdf
 		/* Rewind to the correct inital position in the array */
 		for (int i = 0; i < comment_arr.size(); i++) {
                     char ccc = comment_arr.get(i).charAt(0);
-                    System.out.println("\t '" + ccc + "'");
+                    //System.out.println("\t '" + ccc + "'");
 			if (comment_arr.get(i).charAt(0) == s.charAt(0)) {
 				spos = i;
 				while (i < comment_arr.size() - 1 && comment_arr.get(++i).charAt(0) == s.charAt(0));

@@ -3,6 +3,8 @@ package wordRetrieval;
 import java.io.*;
 import java.util.*;
 
+import ML.TfIdf;
+
 public class KeywordRetrieval {
     /**
      * @param filter filter to apply to the keyword retrieval part.
@@ -66,6 +68,7 @@ public class KeywordRetrieval {
         int k = 0;
         int rNum = 0;
         String curRating = "";
+        TfIdf TF = new TfIdf();
 
         try {
             
@@ -94,10 +97,11 @@ public class KeywordRetrieval {
                         curW = s.next();
                     }
 
+                    String thisComment = "";
+                    ArrayList curCommentWords = new ArrayList();
+
                     //Store the first word in the token array
-                    curW = curW.toLowerCase();
-                    if(!curW.equals("---"))
-                        curW = removeSpecialCharacters(curW);
+                    curW = removeSpecialCharacters(curW.toLowerCase());
                     tokenArray[0] = curW;
 
                     //Store the remaining n-1 words in the token array
@@ -107,7 +111,6 @@ public class KeywordRetrieval {
                         tokenArray[i] = curW;
                     }
 
-                    StringBuilder thisComment = new StringBuilder();
                     //Walk through all words in the comment
                     while (!curW.equals("---")) {
                         int tPos = -1;
@@ -161,21 +164,23 @@ public class KeywordRetrieval {
                             }
 
                             result = result + tokenArray[regExpressionLen - 1];
-// XXX CHANGES
-                            thisComment.append(tokenArray[regExpressionLen - 1]);
-                            thisComment.append(";");
-                            String[] ttt = thisComment.toString().split(";");
-                            for (String string : ttt) {
-                                System.out.println("\t-*-" + ttt);
-                            }
-                            String temp = "|" + rNum + ":" + curRating + ";" + "0.0";
-// XXX CHANGES
+                            String temp = "|" + rNum + ":" + curRating;
                             result = result.concat(temp);
 
-                            revWords.add(result);
+
+                            if(tokenArray[regExpressionLen - 1].equals(""))
+                            {
+                                thisComment = thisComment + "a" + ";";
+                                curCommentWords.add("a" + "|" + rNum + ":" + curRating);
+
+                            }
+                            else
+                            {
+                                thisComment = thisComment + tokenArray[regExpressionLen - 1] + ";";
+                                curCommentWords.add(result);
+                            }
+
                             k = k + 1;
-// XXX PROBABLY USELESS
-                            thisComment.delete(0, thisComment.length());
                         }
 
 
@@ -186,6 +191,21 @@ public class KeywordRetrieval {
                         curW = removeSpecialCharacters(curW.toLowerCase());
                         tokenArray[regExpressionLen - 1] = curW;
                     }
+
+                    /////tifidf code/////
+                    for (int i = 0; i < curCommentWords.size(); i++) {
+                        String iWord = curCommentWords.get(i).toString().substring(0, curCommentWords.get(i).toString().indexOf("|"));
+                        //String singlecomment = "14sia:boo:boo:boo:banjovis:auto:urzum:klonkku:bamiraali:oredom:jee:";
+
+                        double tfVal = TF.termFrequencyInComment(thisComment, iWord);
+                        //double tfVal = TF.termFrequencyInComment(singlecomment, "boo");
+                        revWords.add(curCommentWords.get(i).toString() + ";" + tfVal);
+                        if (i == 15) {
+                            tfVal = tfVal + 1;
+                        }
+                    }
+                    /////end tifidf code/////
+
                 }
             }
 
@@ -197,6 +217,33 @@ public class KeywordRetrieval {
 
 
         int numWords = 0;
+
+        /////tifidf code/////
+        String[] allWords;              // declares an array of integers
+
+        allWords = new String[revWords.size()];      // allocates memory for 10 integers
+        for (int i = 0; i < revWords.size(); i++) {
+            allWords[i] = revWords.get(i).toString();
+        }
+
+        for (int i = 0; i < revWords.size(); i++) {
+            String word = revWords.get(i).toString().substring(0, revWords.get(i).toString().indexOf("|"));
+            String[] termfreq = revWords.get(i).toString().split(";");
+
+            double invFreq = TF.inverseDocumentFrequency(allWords, word);
+            if(invFreq == 0.0)
+            {
+                int o = 1;
+            }
+            double tfscore = TF.tfidf_score(Double.parseDouble(termfreq[1]), invFreq);
+            if(tfscore == 0.0)
+            {
+                int o = 1;
+            }
+            revWords.set(i, termfreq[0] + ";" + tfscore);
+        }
+
+        /////end tifidf code/////
 
         System.out.println("number of reviews:" + rNum);
 
@@ -217,13 +264,13 @@ public class KeywordRetrieval {
             //store the comment number of the current keyword
             int loc = curWord.indexOf("|");
             int ratingLoc = curWord.indexOf(":");
+            int idfVal = curWord.indexOf(";");
             int num = Integer.parseInt(curWord.substring(loc + 1, ratingLoc));
-            int tfRatingSep = curWord.indexOf(";");
 
             //store the rating of the current keyword
-            //float rating = Float.parseFloat(curWord.substring(ratingLoc + 1));
-            float rating = Float.parseFloat(curWord.substring(ratingLoc + 1, tfRatingSep));
-            double tfratingscore = Double.parseDouble(curWord.substring(tfRatingSep + 1));
+            float rating = Float.parseFloat(curWord.substring(ratingLoc + 1, idfVal));
+
+            float tfScore = Float.parseFloat(curWord.substring(idfVal+1));
 
             curWord = curWord.substring(0, loc);
             if(!curWord.equals(""))
@@ -234,6 +281,7 @@ public class KeywordRetrieval {
                     countedWords[j].setTheWord(curWord);
                     countedWords[j].setCount(1);
                     countedWords[j].setRating(rating);
+                    countedWords[j].setTFScore(tfScore);
                     prevWord = curWord;
                     prevNum = 1;
                     numWords++;
@@ -241,6 +289,8 @@ public class KeywordRetrieval {
                     if (num > prevNum) {
                         countedWords[j].setCount(countedWords[j].getCount() + 1);
                         countedWords[j].setRating(countedWords[j].getRating() + rating);
+                        if(countedWords[j].getTFRating() < tfScore)
+                            countedWords[j].setTFScore(tfScore);
                     }
                     prevNum = num;
                 }
@@ -255,7 +305,7 @@ public class KeywordRetrieval {
             result[i].setCount(countedWords[i].getCount());
             result[i].setRating(countedWords[i].getRating());
             result[i].setTheWord(countedWords[i].getTheWord());
-            result[i].setTFScore(0.0);
+            result[i].setTFScore(countedWords[i].getTFRating());
         }
 
         Arrays.sort(result);
