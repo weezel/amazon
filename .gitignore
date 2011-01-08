@@ -16,7 +16,6 @@
 *.dmg
 *.gz
 *.iso
-*.jar
 *.rar
 *.tar
 *.zip
@@ -38,8 +37,9 @@ Thumbs.db
 tags
 cscope*
 built-jar.properties
-#nbproject
+nbproject
 #build
+#UserCommentAnalyzer/nbproject
 
 *.html
 comments*.txt

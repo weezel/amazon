@@ -26,6 +26,8 @@ public class WordInfo implements Comparable {
      */
     private float _rating;
 
+    private double _tfrating;
+
     /**
      * Creates a new word info with the parameters received.
      *
@@ -33,11 +35,12 @@ public class WordInfo implements Comparable {
      * @param count keyword count.
      * @param rating keyword rating.
      */
-    public WordInfo(String theWord, int count, float rating) {
+    public WordInfo(String theWord, int count, float rating, double tfrating) {
 
         _count = count;
         _rating = rating;
         _theWord = theWord;
+        _tfrating = tfrating;
     }
 
     @Override
@@ -59,7 +62,7 @@ public class WordInfo implements Comparable {
     @Override
     public String toString() {
 
-        return "count: " + _count + ", " + _theWord + ", Rating: " + _rating/_count;
+        return "count: " + _count + ", " + _theWord + ", Rating: " + _rating/_count + ", TF-Idf: " + _tfrating;
     }
 
 
@@ -116,5 +119,16 @@ public class WordInfo implements Comparable {
      */
     public void setTheWord(String theWord) {
         _theWord = theWord;
+    }
+
+    /**
+     *  hii
+     */
+    public double getTFRating() {
+        return _tfrating;
+    }
+
+    public void setTFScore(double d) {
+        _tfrating = d;
     }
 }

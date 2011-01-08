@@ -1,4 +1,4 @@
-package ML;
+package spellcheck;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -21,23 +21,28 @@ public class TfIdf
 	 * the total count of the words in the comment.
 	 * @return term frequency in comment
 	 */
-	public double termFrequencyInComment(String doc, String s)
+	public static double termFrequencyInComment(String doc, String s)
 	{
 		int matchCount, spos, epos;
 		String splitted_comment[];
 		ArrayList<String> comment_arr;
 
 		matchCount = spos = epos = 0;
-		comment_arr = new ArrayList<String>();
+		comment_arr = new ArrayList<String>(doc.length());
+
+                if (doc == null || doc.length() == 0)
+                    return (0.0);
 
 		/* Sort comments */
-		splitted_comment = doc.split(":");
+		splitted_comment = doc.split("#");
 		for (int i = 0; i < splitted_comment.length; i++)
 			comment_arr.add(splitted_comment[i]);
 		Collections.sort(comment_arr);
 
 		/* Rewind to the correct inital position in the array */
 		for (int i = 0; i < comment_arr.size(); i++) {
+                    char ccc = comment_arr.get(i).charAt(0);
+                    System.out.println("\t '" + ccc + "'");
 			if (comment_arr.get(i).charAt(0) == s.charAt(0)) {
 				spos = i;
 				while (i < comment_arr.size() - 1 && comment_arr.get(++i).charAt(0) == s.charAt(0));
@@ -69,16 +74,19 @@ public class TfIdf
 	 * calculate the inverse frequency.
 	 * @return inverse term frequency in document
 	 */
-	public double inverseDocumentFrequency(String[] doc, String s)
+	public static double inverseDocumentFrequency(String[] doc, String s)
 	{
 		int matchCount, spos, epos;
 		int[] searchArea;
+
+                if (doc == null || doc.length < 1 || s == null || s.length() < 1)
+                    return (0.0);
 
 		matchCount = 0;
 		searchArea = filterByInitials(doc, s); // Reduces search space dramatically
 
 		if (searchArea == null)
-			return (0.0);
+                    return (0.0);
 
 		spos = searchArea[0];
 		epos = searchArea[1];
@@ -102,11 +110,14 @@ public class TfIdf
 	 * that equals "s".
 	 * @return start and ending position for the same word
 	 */
-	public int[] filterByInitials(String[] doc, String s)
+	public static int[] filterByInitials(String[] doc, String s)
 	{
 		int spos, epos;
 		int[] r = new int[2];
 		char cmpr = s.charAt(0);
+
+                if (doc == null || doc.length < 1 || s == null || s.length() < 1)
+                    return null;
 
 		spos = epos = -1;
 
@@ -140,7 +151,7 @@ public class TfIdf
 	}
 
 
-	public double tfidf_score(double a, double b)
+	public static double tfidf_score(double a, double b)
 	{
 		return a * b;
 	}
