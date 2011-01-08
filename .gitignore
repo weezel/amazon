@@ -37,9 +37,9 @@ Thumbs.db
 tags
 cscope*
 built-jar.properties
-nbproject
+#nbproject
 #build
-UserCommentAnalyzer/nbproject
+UserCommentAnalyzer/nbproject/private
 
 *.html
 comments*.txt
