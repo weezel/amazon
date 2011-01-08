@@ -36,10 +36,8 @@ Icon?
 Thumbs.db
 tags
 cscope*
-built-jar.properties
 #nbproject
-#build
-UserCommentAnalyzer/nbproject/private
+build
 
 *.html
 comments*.txt
