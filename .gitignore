@@ -40,6 +40,7 @@ cscope*
 build
 
 *.html
+*.psd
 comments*.txt
 debug*
 .netbeans_automatic_build
