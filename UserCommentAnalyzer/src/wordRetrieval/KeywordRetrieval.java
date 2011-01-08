@@ -163,8 +163,8 @@ public class KeywordRetrieval {
                             result = result + tokenArray[regExpressionLen - 1];
 // XXX CHANGES
                             thisComment.append(tokenArray[regExpressionLen - 1]);
-                            thisComment.append("#");
-                            String[] ttt = thisComment.toString().split("#");
+                            thisComment.append(";");
+                            String[] ttt = thisComment.toString().split(";");
                             for (String string : ttt) {
                                 System.out.println("\t-*-" + ttt);
                             }

@@ -1,4 +1,4 @@
-package spellcheck;
+package ML;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -34,7 +34,7 @@ public class TfIdf
                     return (0.0);
 
 		/* Sort comments */
-		splitted_comment = doc.split("#");
+		splitted_comment = doc.split(";");
 		for (int i = 0; i < splitted_comment.length; i++)
 			comment_arr.add(splitted_comment[i]);
 		Collections.sort(comment_arr);

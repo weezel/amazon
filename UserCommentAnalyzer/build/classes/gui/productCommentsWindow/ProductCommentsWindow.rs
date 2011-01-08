@@ -1,2 +1,0 @@
-gui.productCommentsWindow.KeywordSearcher
-gui.productCommentsWindow.ProductCommentsWindow
