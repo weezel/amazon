@@ -23,7 +23,7 @@ public class KeywordRetrieval {
         ArrayList stopWords = new ArrayList();
         ArrayList<String>[] commentWords = (ArrayList<String>[])new ArrayList[10];
         Scanner s = null;
-        StringBuffer thisComment = new StringBuffer();
+
 
         //////////////////stopwords////////////////////////////////////
         //list of stopwords are read from the stopwords file
@@ -85,6 +85,7 @@ public class KeywordRetrieval {
 
                 while (s.hasNext()) {
                     rNum++;
+                    StringBuffer thisComment = new StringBuffer();
                     //Walk through the header of a comment
                     //Store the rating information
                     String curW = s.next();
@@ -111,6 +112,7 @@ public class KeywordRetrieval {
                     }
 
                     //Walk through all words in the comment
+                    ArrayList wordsOfThisComment = new ArrayList();
                     while (!curW.equals("---")) {
                         int tPos = -1;
                         char curToken;
@@ -167,21 +169,9 @@ public class KeywordRetrieval {
                             result = result.concat(temp);
                             thisComment.append(tokenArray[regExpressionLen - 1]);
                             thisComment.append(":");
-                            int commentLenght = 0;
-                            for (int l=0; l < thisComment.length(); l++) {
-                                if (thisComment.charAt(l) == ':')
-                                    commentLenght++;
-                            }
-                            // XXX Consult Arjen whether this is right
-                            for (int i=0; i < commentLenght; i++)
-                                result = result.concat(";" + TF.termFrequencyInComment(thisComment.toString(), tokenArray[i]));
-
-                            revWords.add(result);  
-                            thisComment.append(tokenArray[regExpressionLen - 1]);
-                            thisComment.append(":");
+                            wordsOfThisComment.add(result);
                             k = k + 1;
                         }
-
 
                         for (int i = 0; i < regExpressionLen - 1; i++) {
                             tokenArray[i] = tokenArray[i + 1];
@@ -190,6 +180,27 @@ public class KeywordRetrieval {
                         curW = removeSpecialCharacters(curW.toLowerCase());
                         tokenArray[regExpressionLen - 1] = curW;
                     }
+                    // XXX Here we do the termfreq counting
+                    int commentLenght = 0;
+                    for (int l = 0; l < thisComment.length()-1; l++) {
+                        if (thisComment.charAt(l) == ':') {
+                            commentLenght++;
+                        }
+                    }
+                    System.out.println("commentLength = " + commentLenght);
+                    for (int i=0; i < commentLenght; i++) {
+                        System.out.println(i);
+                        if (i == 54) {
+                            int zd = 1;
+                        }
+                        String word = wordsOfThisComment.get(i).toString().substring(0, wordsOfThisComment.get(i).toString().indexOf("|"));
+                        String result = wordsOfThisComment.get(i).toString();
+                        result = result + ";" + TF.termFrequencyInComment(thisComment.toString(), word);
+                        //result = result + ";" + "0.0";
+                        revWords.add(result);
+                    }
+                    commentLenght = 0;
+
                 }
             }
 
@@ -221,20 +232,24 @@ public class KeywordRetrieval {
             //store the comment number of the current keyword
             int loc = curWord.indexOf("|");
             int ratingLoc = curWord.indexOf(":");
+            int tfRatingSep = curWord.indexOf(";");
             int num = Integer.parseInt(curWord.substring(loc + 1, ratingLoc));
 
             //store the rating of the current keyword
-            float rating = Float.parseFloat(curWord.substring(ratingLoc + 1));
+            float rating = Float.parseFloat(curWord.substring(ratingLoc + 1, tfRatingSep));
+
+            double tfratingscore = Double.parseDouble(curWord.substring(tfRatingSep + 1));
 
             curWord = curWord.substring(0, loc);
             if(!curWord.equals(""))
             {
                 if (!curWord.equals(prevWord)) {
                     j++;
-                    countedWords[j] = new WordInfo("", 0, 0);
+                    countedWords[j] = new WordInfo("", 0, 0, 0.0);
                     countedWords[j].setTheWord(curWord);
                     countedWords[j].setCount(1);
                     countedWords[j].setRating(rating);
+                    countedWords[j].setTFScore(tfratingscore);
                     prevWord = curWord;
                     prevNum = 1;
                     numWords++;
@@ -255,15 +270,16 @@ public class KeywordRetrieval {
 
         WordInfo[] result = new WordInfo[numWords];
         for (int i = 0; i < numWords; i++) {
-            result[i] = new WordInfo("", 0, 0);
+            result[i] = new WordInfo("", 0, 0, 0.0);
             result[i].setCount(countedWords[i].getCount());
             result[i].setRating(countedWords[i].getRating());
             result[i].setTheWord(countedWords[i].getTheWord());
+            result[i].setTFScore(countedWords[i].getTFRating());
         }
 
         Arrays.sort(result);
         for (int i = 0; i < numWords; i++) {
-            System.out.println("count:" + result[i].getCount() + " " + result[i].getTheWord() + " " + result[i].getRating() / result[i].getCount());
+            System.out.println("count:" + result[i].getCount() + " " + result[i].getTheWord() + " " + result[i].getRating() / result[i].getCount() + " " + result[i].getTFRating());
             //System.out.println(result[i].rating/result[i].count);
             //System.out.println(result[i].count + ",'" + result[i].theWord + "'," + result[i].rating/result[i].count);
 
@@ -280,7 +296,8 @@ public class KeywordRetrieval {
             for (int z=0; z < revWords.size(); z++) {
                 commentsarr[z] = revWords.get(z).toString();
             }
-            double invfreq = TF.inverseDocumentFrequency(commentsarr, word);
+            //XXX double invfreq = TF.inverseDocumentFrequency(commentsarr, word);
+            double invfreq = 0.0;
             double tfscore = TF.tfidf_score(Double.parseDouble(termfreq[1]), invfreq);
             revWords.set(i, revWords.get(i) + termfreq[0] + ";" + tfscore);
         }
