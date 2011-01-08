@@ -39,7 +39,7 @@ cscope*
 built-jar.properties
 nbproject
 #build
-#UserCommentAnalyzer/nbproject
+UserCommentAnalyzer/nbproject
 
 *.html
 comments*.txt
