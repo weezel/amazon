@@ -38,7 +38,7 @@ tags
 cscope*
 built-jar.properties
 #nbproject
-#build
+build
 UserCommentAnalyzer/nbproject/private
 
 *.html
