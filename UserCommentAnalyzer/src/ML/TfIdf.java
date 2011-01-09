@@ -20,28 +20,20 @@ public class TfIdf
      * the total count of the words in the comment.
      * @return term frequency in comment
      */
-    public static double termFrequencyInComment(String doc, String s)
+    public static double termFrequencyInComment(ArrayList doc, String s)
     {
         int matchCount, spos, epos;
-        String splitted_comment[];
-        ArrayList<String> comment_arr;
 
         matchCount = spos = epos = 0;
-        comment_arr = new ArrayList<String>(doc.length());
 
-        if (doc == null || doc.length() == 0)
+        if (doc == null || doc.size() == 0)
             return (0.0);
 
-        /* Sort comments */
-        splitted_comment = doc.split(";");
-        comment_arr.addAll(Arrays.asList(splitted_comment));
-        Collections.sort(comment_arr);
-
         /* Rewind to the correct inital position in the array */
-        for (int i = 0; i < comment_arr.size(); i++) {
-            if (comment_arr.get(i).charAt(0) == s.charAt(0)) {
+        for (int i = 0; i < doc.size(); i++) {
+            if (doc.get(i).toString().charAt(0) == s.charAt(0)) {
                 spos = i;
-                while (i < comment_arr.size() - 1 && comment_arr.get(++i).charAt(0) == s.charAt(0));
+                while (i < doc.size() - 1 && doc.get(++i).toString().charAt(0) == s.charAt(0));
                 epos = i - 1;
                 if (epos < spos)
                     epos = spos;
@@ -50,9 +42,9 @@ public class TfIdf
         }
         /* Only count in words that equals with the parameter 's' */
         for (int i = spos; i <= epos; i++) {
-            if (comment_arr.get(i).equals(s)) {
+            if (doc.get(i).equals(s)) {
                 spos = i;
-                while (i < comment_arr.size() - 1 && comment_arr.get(++i).equals(s));
+                while (i < doc.size() - 1 && doc.get(++i).equals(s));
                 epos = i - 1;
                 if (epos < spos)
                     epos = spos;
@@ -61,11 +53,11 @@ public class TfIdf
         }
         /* The actual counting happens here */
         for (; spos <= epos; spos++) {
-            if (comment_arr.get(spos).equals(s))
+            if (doc.get(spos).equals(s))
                 matchCount++;
         }
 
-        return (double) matchCount / (double) comment_arr.size();
+        return (double)matchCount / (double)doc.size();
     }
 
 
@@ -82,7 +74,6 @@ public class TfIdf
         if (doc == null || doc.length < 1 || s == null)
             return (0.0);
 
-        Arrays.sort(doc);
         matchCount = 0;
         searchArea = filterByInitials(doc, s); // Reduces search space dramatically
 
@@ -185,6 +176,8 @@ public class TfIdf
             "cat:sack:hack:track:back:"
         };
 
+     /*
+        Collenctions.sort(singlecomment);
         termfreq = termFrequencyInComment(singlecomment, "boo");
         assert (Math.abs(termfreq - 0.2727272727272727) < 1.0E-8) : "termfreq should be: 0.2727272727272727, current value: " + termfreq;
         invfreq = inverseDocumentFrequency(documents1, "boo");
@@ -192,6 +185,7 @@ public class TfIdf
         System.out.println("'" + boo + "'" + " comment frequenzy: " + termfreq);
         System.out.println("'" + boo + "'" + " inverse frequenzy: " + invfreq);
         System.out.println("'" + boo + "'" + " tf-idf score     : " + tfidf_score(termfreq, invfreq));
+         */
     }
 //	public static void main (String[] args)
 //	{

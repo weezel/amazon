@@ -61,7 +61,8 @@ public class WordInfo implements Comparable {
 
     @Override
     public String toString() {
-        return String.format("%d: %-15s (%-4.2f) [%-4.2f]", _count, _theWord, (_rating / _count), _tfrating);
+        return String.format("%d: %-15s (%-4.2f) [%-4.2f]",
+                _count, _theWord, (_rating / _count), _tfrating);
     }
 
 

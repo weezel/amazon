@@ -175,20 +175,21 @@ public class KeywordRetrieval {
                         curW = removeSpecialCharacters(curW.toLowerCase());
                         tokenArray[regExpressionLen - 1] = curW;
                     }
-
                     /////tifidf code/////
+                    /* Sort comments */
+                    ArrayList<String> comment_arr = new ArrayList<String>(thisComment.length());
+                    String[] splitted_comment = thisComment.split(";");
+                    comment_arr.addAll(Arrays.asList(splitted_comment));
+                    Collections.sort(comment_arr);
+                    
                     for (int i = 0; i < curCommentWords.size(); i++) {
                         String iWord = curCommentWords.get(i).toString().substring(0, curCommentWords.get(i).toString().indexOf("|"));
-                        //String singlecomment = "14sia:boo:boo:boo:banjovis:auto:urzum:klonkku:bamiraali:oredom:jee:";
 
-                        double tfVal = TfIdf.termFrequencyInComment(thisComment, iWord);
-                        //double tfVal = TF.termFrequencyInComment(singlecomment, "boo");
+                        double tfVal = TfIdf.termFrequencyInComment(comment_arr, iWord);
                         revWords.add(curCommentWords.get(i).toString() + ";" + tfVal);
                         if (i == 15)
                             tfVal = tfVal + 1;
-                    }
-                    /////end tifidf code/////
-
+                    } /////end tifidf code/////
                 }
             }
 
@@ -205,6 +206,7 @@ public class KeywordRetrieval {
         for (int i = 0; i < revWords.size(); i++)
             allWords[i] = revWords.get(i).toString();
 
+        Arrays.sort(allWords);
         for (int i = 0; i < revWords.size(); i++) {
             String word = revWords.get(i).toString().substring(0, revWords.get(i).toString().indexOf("|"));
             String[] termfreq = revWords.get(i).toString().split(";");
