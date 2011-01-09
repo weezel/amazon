@@ -68,7 +68,6 @@ public class KeywordRetrieval {
         int k = 0;
         int rNum = 0;
         String curRating = "";
-        TfIdf TF = new TfIdf();
 
         try {
             
@@ -197,7 +196,7 @@ public class KeywordRetrieval {
                         String iWord = curCommentWords.get(i).toString().substring(0, curCommentWords.get(i).toString().indexOf("|"));
                         //String singlecomment = "14sia:boo:boo:boo:banjovis:auto:urzum:klonkku:bamiraali:oredom:jee:";
 
-                        double tfVal = TF.termFrequencyInComment(thisComment, iWord);
+                        double tfVal = TfIdf.termFrequencyInComment(thisComment, iWord);
                         //double tfVal = TF.termFrequencyInComment(singlecomment, "boo");
                         revWords.add(curCommentWords.get(i).toString() + ";" + tfVal);
                         if (i == 15) {
@@ -230,12 +229,12 @@ public class KeywordRetrieval {
             String word = revWords.get(i).toString().substring(0, revWords.get(i).toString().indexOf("|"));
             String[] termfreq = revWords.get(i).toString().split(";");
 
-            double invFreq = TF.inverseDocumentFrequency(allWords, word);
+            double invFreq = TfIdf.inverseDocumentFrequency(allWords, word);
             if(invFreq == 0.0)
             {
                 int o = 1;
             }
-            double tfscore = TF.tfidf_score(Double.parseDouble(termfreq[1]), invFreq);
+            double tfscore = TfIdf.tfidf_score(Double.parseDouble(termfreq[1]), invFreq);
             if(tfscore == 0.0)
             {
                 int o = 1;

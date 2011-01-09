@@ -1,6 +1,7 @@
 package ML;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 
 /*
@@ -35,8 +36,7 @@ public class TfIdf
 
 		/* Sort comments */
 		splitted_comment = doc.split(";");
-		for (int i = 0; i < splitted_comment.length; i++)
-			comment_arr.add(splitted_comment[i]);
+                comment_arr.addAll(Arrays.asList(splitted_comment));
 		Collections.sort(comment_arr);
 
 		/* Rewind to the correct inital position in the array */
@@ -47,6 +47,8 @@ public class TfIdf
 				spos = i;
 				while (i < comment_arr.size() - 1 && comment_arr.get(++i).charAt(0) == s.charAt(0));
 				epos = i - 1;
+                                if (epos < spos)
+                                    epos = spos;
 				break;
 			}
 		}
@@ -56,6 +58,8 @@ public class TfIdf
 				spos = i;
 				while (i < comment_arr.size() - 1 && comment_arr.get(++i).equals(s));
 				epos = i - 1;
+                                if (epos < spos)
+                                    epos = spos;
 				break;
 			}
 		}
@@ -79,9 +83,10 @@ public class TfIdf
 		int matchCount, spos, epos;
 		int[] searchArea;
 
-                if (doc == null || doc.length < 1 || s == null || s.length() < 1)
+                if (doc == null || doc.length < 1 || s == null)
                     return (0.0);
 
+                Arrays.sort(doc);
 		matchCount = 0;
 		searchArea = filterByInitials(doc, s); // Reduces search space dramatically
 
@@ -127,6 +132,8 @@ public class TfIdf
 				spos = i;
 				while (i < doc.length - 1 && doc[++i].charAt(0) == cmpr);
 				epos = i - 1;
+                                if (epos < spos)
+                                    epos = spos;
 				break;
 			}
 		}
@@ -141,6 +148,8 @@ public class TfIdf
 				spos = i;
 				while (i < doc.length - 1 && doc[++i].equals(s));
 				epos = i - 1;
+                                if (epos < spos)
+                                    epos = spos;
 				break;
 			}
 		}
