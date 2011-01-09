@@ -1,9 +1,5 @@
 package ML;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-
 /*
 Consider a document containing 100 words wherein the word cow appears 3
 times.  Following the previously defined formulas, the term frequency (TF)

@@ -4,8 +4,10 @@ import java.io.*;
 import java.util.*;
 
 import ML.TfIdf;
+import spellcheck.SpellCheckers;
 
-public class KeywordRetrieval {
+public class KeywordRetrieval
+{
     /**
      * @param filter filter to apply to the keyword retrieval part.
      * @param index index for the comments file.
@@ -21,7 +23,6 @@ public class KeywordRetrieval {
         ArrayList connectionWords = new ArrayList();
         ArrayList revWords = new ArrayList();
         ArrayList stopWords = new ArrayList();
-        ArrayList<String>[] commentWords = (ArrayList<String>[])new ArrayList[10];
         Scanner s = null;
 
         //////////////////stopwords////////////////////////////////////
@@ -216,8 +217,22 @@ public class KeywordRetrieval {
             double tfscore = TfIdf.tfidf_score(Double.parseDouble(termfreq[1]), invFreq);
             revWords.set(i, termfreq[0] + ";" + tfscore);
         }
-
         /////end tifidf code/////
+        // XXX TEST SPELLCHECK
+        HashMap testspell = new HashMap<String, Double>();
+        ValueComparator vc = new ValueComparator(testspell);
+        TreeMap<String, Double> sortedSpells = new TreeMap<String, Double>(testspell);
+        String searchThis;
+
+        searchThis = "as";
+        testspell = nearWords(allWords, searchThis);
+        sortedSpells.putAll(testspell);
+
+        System.out.println("<SPELLCHECK>");
+        for (String key : sortedSpells.keySet())
+            System.out.println(String.format("\t%s: %.2f", key, sortedSpells.get(key)));
+        System.out.println("</SPELLCHECK>");
+
 
         System.out.println("number of reviews:" + rNum);
 
@@ -292,6 +307,25 @@ public class KeywordRetrieval {
         return result;
     }
 
+    public static HashMap nearWords(String[] doc, String s)
+    {
+        int levenst;
+        double dice;
+        HashMap tophits = new HashMap<String, Double>();
+
+        levenst = 0;
+        dice = 0.0;
+
+        for (int i=0; i < doc.length; i++) {
+            String cWord = doc[i].substring(0, doc[i].indexOf("|"));
+            dice = SpellCheckers.diceCoefficient(cWord, s);
+            if (SpellCheckers.combinedSpellcheck(cWord, s, 60) != 0.0)
+                tophits.put(cWord, new Double(dice));
+        }
+
+        return tophits;
+    }
+
 
     public static String removeSpecialCharacters(String curW)
     {
@@ -313,6 +347,7 @@ public class KeywordRetrieval {
 
         return curW;
     }
+
 
     /**
      * @param fname Filename to read
@@ -337,6 +372,20 @@ public class KeywordRetrieval {
         return wordList;
     }
 
+    /* @Override Treemap comparator */
+    class ValueComparator implements Comparator
+    {
+        Map base;
+
+        public ValueComparator(Map b) { base = b; }
+
+        public int compare(Object a, Object b) {
+            if ((Double) base.get(a) < (Double) base.get(b))
+                return 1;
+            else if (Math.abs((Double)base.get(a) - (Double)base.get(b)) <= 1.0E-8)
+                return 0;
+            else
+                return -1;
+        }
+    }
 }
-
-

@@ -161,11 +161,38 @@ public class SpellCheckers
 
 	}
 
+     /**
+         *
+         * @param s1 comparable word
+         * @param s2 comparable word
+         * @param epsilon user given boundary that dice coeffiency should exceed
+         * @return if words exceed epsilon value, return dice coeffiency, 0.0 on false
+         */
+        public static double combinedSpellcheck(String s1, String s2, double epsilon)
+        {
+            int lev;
+            double dice;
 
+            lev = 0;
+            dice = 0.0;
+
+            lev = levensteinDistance(s1, s2);
+            dice = diceCoefficient(s1, s2);
+
+            if (lev != -1 && dice != -1) {
+                if (lev <= 2 && (dice*100) >= epsilon)
+                    return dice;
+            }
+
+            return (0.0);
+        }
+
+/*
 	public static void main(String[] args)
 	{
 		runTests(args);
 	}
+*/
 
 }
 
