@@ -70,29 +70,23 @@ public class KeywordRetrieval {
         String curRating = "";
 
         try {
-            
             // Creates the file
             File file = new File("comments" + index + ".txt");
-
             // If the file exists then 
             if (file.exists()) {
-
                 // Do the process
                 s = new Scanner(new BufferedReader(new FileReader("comments" + index + ".txt")));
-
                 while (s.hasNext()) {
                     rNum++;
                     //Walk through the header of a comment
                     //Store the rating information
                     String curW = s.next();
                     if (curW.equals("Name:")) {
-                        while (!curW.equals("Stars:")) {
+                        while (!curW.equals("Stars:"))
                             curW = s.next();
-                        }
                         curRating = s.next();
-                        while (!curW.equals("Comment:")) {
+                        while (!curW.equals("Comment:"))
                             curW = s.next();
-                        }
                         curW = s.next();
                     }
 
@@ -123,35 +117,30 @@ public class KeywordRetrieval {
                             switch (curToken) {
                                 case '+':
                                     int stopLoc = Collections.binarySearch(stopWords, tokenArray[i]);
-                                    if (stopLoc >= 0) {
+                                    if (stopLoc >= 0)
                                         match = false;
-                                    }
                                     break;
                                 case '*':
                                     break;
                                 case 'a':
                                     int adjLoc = Collections.binarySearch(adjectives, tokenArray[i]);
-                                    if (adjLoc < 0) {
+                                    if (adjLoc < 0)
                                         match = false;
-                                    }
                                     break;
                                 case 'c':
                                     int connLoc = Collections.binarySearch(connectionWords, tokenArray[i]);
-                                    if (connLoc < 0) {
+                                    if (connLoc < 0)
                                         match = false;
-                                    }
                                     break;
                                 case ';':
                                     String cWord;
-                                    if (regExpression.indexOf("[", tPos + 1) > 0) {
+                                    if (regExpression.indexOf("[", tPos + 1) > 0)
                                         cWord = regExpression.substring(tPos + 2, regExpression.indexOf("[", tPos + 1) - 1);
-                                    } else {
+                                    else
                                         cWord = regExpression.substring(tPos + 2, regExpression.length() - 1);
-                                    }
 
-                                    if (!cWord.equals(tokenArray[i])) {
+                                    if (!cWord.equals(tokenArray[i]))
                                         match = false;
-                                    }
                                     break;
                             }
                         }
@@ -167,14 +156,11 @@ public class KeywordRetrieval {
                             result = result.concat(temp);
 
 
-                            if(tokenArray[regExpressionLen - 1].equals(""))
-                            {
+                            if (tokenArray[regExpressionLen - 1].equals("")) {
                                 thisComment = thisComment + "a" + ";";
                                 curCommentWords.add("a" + "|" + rNum + ":" + curRating);
 
-                            }
-                            else
-                            {
+                            } else {
                                 thisComment = thisComment + tokenArray[regExpressionLen - 1] + ";";
                                 curCommentWords.add(result);
                             }
@@ -183,9 +169,8 @@ public class KeywordRetrieval {
                         }
 
 
-                        for (int i = 0; i < regExpressionLen - 1; i++) {
+                        for (int i = 0; i < regExpressionLen - 1; i++)
                             tokenArray[i] = tokenArray[i + 1];
-                        }
                         curW = s.next();
                         curW = removeSpecialCharacters(curW.toLowerCase());
                         tokenArray[regExpressionLen - 1] = curW;
@@ -199,9 +184,8 @@ public class KeywordRetrieval {
                         double tfVal = TfIdf.termFrequencyInComment(thisComment, iWord);
                         //double tfVal = TF.termFrequencyInComment(singlecomment, "boo");
                         revWords.add(curCommentWords.get(i).toString() + ";" + tfVal);
-                        if (i == 15) {
+                        if (i == 15)
                             tfVal = tfVal + 1;
-                        }
                     }
                     /////end tifidf code/////
 
@@ -209,36 +193,24 @@ public class KeywordRetrieval {
             }
 
         } finally {
-            if (s != null) {
+            if (s != null)
                 s.close();
-            }
         }
 
 
         int numWords = 0;
-
         /////tifidf code/////
         String[] allWords;              // declares an array of integers
-
         allWords = new String[revWords.size()];      // allocates memory for 10 integers
-        for (int i = 0; i < revWords.size(); i++) {
+        for (int i = 0; i < revWords.size(); i++)
             allWords[i] = revWords.get(i).toString();
-        }
 
         for (int i = 0; i < revWords.size(); i++) {
             String word = revWords.get(i).toString().substring(0, revWords.get(i).toString().indexOf("|"));
             String[] termfreq = revWords.get(i).toString().split(";");
 
             double invFreq = TfIdf.inverseDocumentFrequency(allWords, word);
-            if(invFreq == 0.0)
-            {
-                int o = 1;
-            }
             double tfscore = TfIdf.tfidf_score(Double.parseDouble(termfreq[1]), invFreq);
-            if(tfscore == 0.0)
-            {
-                int o = 1;
-            }
             revWords.set(i, termfreq[0] + ";" + tfscore);
         }
 
@@ -272,8 +244,7 @@ public class KeywordRetrieval {
             float tfScore = Float.parseFloat(curWord.substring(idfVal+1));
 
             curWord = curWord.substring(0, loc);
-            if(!curWord.equals(""))
-            {
+            if(!curWord.equals("")) {
                 if (!curWord.equals(prevWord)) {
                     j++;
                     countedWords[j] = new WordInfo("", 0, 0, 0.0);
@@ -321,18 +292,15 @@ public class KeywordRetrieval {
 
     public static String removeSpecialCharacters(String curW)
     {
-        if(!curW.equals("---"))
-        {
+        if (!curW.equals("---")) {
             int len = curW.length();
             StringBuffer result = new StringBuffer();
             char[] cArray = curW.toCharArray();
             int i = 0;
-            while (i < len)
-            {
+
+            while (i < len) {
                 if (cArray[i] > 96 && cArray[i] < 123)
-                {
                     result.append(cArray[i]);
-                }
                 i++;
             }
 
@@ -359,7 +327,7 @@ public class KeywordRetrieval {
                 wordList.add(s.next());
         } finally {
             if (s != null)
-            s.close();
+                s.close();
         }
         Collections.sort(wordList);
 
