@@ -20,44 +20,30 @@ public class TfIdf
      * the total count of the words in the comment.
      * @return term frequency in comment
      */
-    public static double termFrequencyInComment(ArrayList doc, String s)
+    public static double termFrequencyInComment(String[] doc, String s)
     {
         int matchCount, spos, epos;
+        int[] searchArea;
 
-        matchCount = spos = epos = 0;
-
-        if (doc == null || doc.size() == 0)
+        if (doc == null || doc.length < 1 || s == null || s.length() < 1)
             return (0.0);
 
-        /* Rewind to the correct inital position in the array */
-        for (int i = 0; i < doc.size(); i++) {
-            if (doc.get(i).toString().charAt(0) == s.charAt(0)) {
-                spos = i;
-                while (i < doc.size() - 1 && doc.get(++i).toString().charAt(0) == s.charAt(0));
-                epos = i - 1;
-                if (epos < spos)
-                    epos = spos;
-                break;
-            }
-        }
-        /* Only count in words that equals with the parameter 's' */
-        for (int i = spos; i <= epos; i++) {
-            if (doc.get(i).equals(s)) {
-                spos = i;
-                while (i < doc.size() - 1 && doc.get(++i).equals(s));
-                epos = i - 1;
-                if (epos < spos)
-                    epos = spos;
-                break;
-            }
-        }
+        matchCount = spos = epos = 0;
+        searchArea = filterByInitials(doc, s);
+
+        if (searchArea == null)
+            return (0.0);
+
+        spos = searchArea[0];
+        epos = searchArea[1];
+
         /* The actual counting happens here */
         for (; spos <= epos; spos++) {
-            if (doc.get(spos).equals(s))
+            if (doc[spos].equals(s))
                 matchCount++;
         }
 
-        return (double)matchCount / (double)doc.size();
+        return (double)matchCount / (double)doc.length;
     }
 
 
@@ -71,7 +57,7 @@ public class TfIdf
         int matchCount, spos, epos;
         int[] searchArea;
 
-        if (doc == null || doc.length < 1 || s == null)
+        if (doc == null || doc.length < 1 || s == null || s.length() < 1)
             return (0.0);
 
         matchCount = 0;

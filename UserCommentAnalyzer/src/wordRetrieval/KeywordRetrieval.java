@@ -177,15 +177,16 @@ public class KeywordRetrieval {
                     }
                     /////tifidf code/////
                     /* Sort comments */
-                    ArrayList<String> comment_arr = new ArrayList<String>(thisComment.length());
+                    //ArrayList<String> comment_arr = new ArrayList<String>(thisComment.length());
                     String[] splitted_comment = thisComment.split(";");
-                    comment_arr.addAll(Arrays.asList(splitted_comment));
-                    Collections.sort(comment_arr);
+                    Arrays.sort(splitted_comment);
+                    //comment_arr.addAll(Arrays.asList(splitted_comment));
+                    //Collections.sort(comment_arr);
                     
                     for (int i = 0; i < curCommentWords.size(); i++) {
                         String iWord = curCommentWords.get(i).toString().substring(0, curCommentWords.get(i).toString().indexOf("|"));
 
-                        double tfVal = TfIdf.termFrequencyInComment(comment_arr, iWord);
+                        double tfVal = TfIdf.termFrequencyInComment(splitted_comment, iWord);
                         revWords.add(curCommentWords.get(i).toString() + ";" + tfVal);
                         if (i == 15)
                             tfVal = tfVal + 1;
