@@ -224,8 +224,8 @@ public class KeywordRetrieval
         TreeMap<String, Double> sortedSpells = new TreeMap<String, Double>(testspell);
         String searchThis;
 
-        searchThis = "as";
-        testspell = nearWords(allWords, searchThis);
+        searchThis = "button";
+        testspell = SpellCheckers.nearWords(allWords, searchThis, 2, 50);
         sortedSpells.putAll(testspell);
 
         System.out.println("<SPELLCHECK>");
@@ -305,25 +305,6 @@ public class KeywordRetrieval
         }
 
         return result;
-    }
-
-    public static HashMap nearWords(String[] doc, String s)
-    {
-        int levenst;
-        double dice;
-        HashMap tophits = new HashMap<String, Double>();
-
-        levenst = 0;
-        dice = 0.0;
-
-        for (int i=0; i < doc.length; i++) {
-            String cWord = doc[i].substring(0, doc[i].indexOf("|"));
-            dice = SpellCheckers.diceCoefficient(cWord, s);
-            if (SpellCheckers.combinedSpellcheck(cWord, s, 60) != 0.0)
-                tophits.put(cWord, new Double(dice));
-        }
-
-        return tophits;
     }
 
 
