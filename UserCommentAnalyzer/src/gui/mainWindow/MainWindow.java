@@ -351,7 +351,6 @@ public class MainWindow extends javax.swing.JFrame {
         setTitle("User Comment Analyzer");
         setBackground(new java.awt.Color(170, 185, 210));
         setExtendedState(1);
-        setResizable(false);
         setSize(new java.awt.Dimension(950, 768));
         getContentPane().setLayout(new java.awt.GridBagLayout());
 
@@ -460,7 +459,9 @@ public class MainWindow extends javax.swing.JFrame {
 
         _selectAllButton.setBackground(new java.awt.Color(170, 185, 210));
         _selectAllButton.setForeground(new java.awt.Color(80, 80, 100));
+        _selectAllButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/gui/resources/images/icons/selectAll.png"))); // NOI18N
         _selectAllButton.setText("Select All");
+        _selectAllButton.setToolTipText("Selects all the products in the list above");
         _selectAllButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 _selectAllButtonActionPerformed(evt);
@@ -470,7 +471,9 @@ public class MainWindow extends javax.swing.JFrame {
 
         _deselectAllButton.setBackground(new java.awt.Color(170, 185, 210));
         _deselectAllButton.setForeground(new java.awt.Color(80, 80, 100));
+        _deselectAllButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/gui/resources/images/icons/deselectAll.png"))); // NOI18N
         _deselectAllButton.setText("Deselect All");
+        _deselectAllButton.setToolTipText("Deselects all the products in the list above");
         _deselectAllButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 _deselectAllButtonActionPerformed(evt);
@@ -567,10 +570,12 @@ public class MainWindow extends javax.swing.JFrame {
         _fileMenu.setForeground(new java.awt.Color(80, 80, 100));
         _fileMenu.setText("File");
 
-        _exitMenuItem.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_E, java.awt.event.InputEvent.CTRL_MASK));
+        _exitMenuItem.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_Q, java.awt.event.InputEvent.CTRL_MASK));
         _exitMenuItem.setBackground(new java.awt.Color(170, 185, 210));
         _exitMenuItem.setForeground(new java.awt.Color(80, 80, 100));
+        _exitMenuItem.setIcon(new javax.swing.ImageIcon(getClass().getResource("/gui/resources/images/icons/exit.png"))); // NOI18N
         _exitMenuItem.setText("Exit");
+        _exitMenuItem.setToolTipText("Exits the program");
         _exitMenuItem.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 exitMenuItemActionPerformed(evt);
@@ -587,7 +592,9 @@ public class MainWindow extends javax.swing.JFrame {
         _aboutUsMenuItem.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_A, java.awt.event.InputEvent.CTRL_MASK));
         _aboutUsMenuItem.setBackground(new java.awt.Color(170, 185, 210));
         _aboutUsMenuItem.setForeground(new java.awt.Color(80, 80, 100));
+        _aboutUsMenuItem.setIcon(new javax.swing.ImageIcon(getClass().getResource("/gui/resources/images/icons/aboutUs.png"))); // NOI18N
         _aboutUsMenuItem.setText("About us...");
+        _aboutUsMenuItem.setToolTipText("Shows up the about us window");
         _aboutUsMenuItem.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 _aboutUsMenuItemActionPerformed(evt);
@@ -598,7 +605,9 @@ public class MainWindow extends javax.swing.JFrame {
         _helpMenuItem.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_H, java.awt.event.InputEvent.CTRL_MASK));
         _helpMenuItem.setBackground(new java.awt.Color(170, 185, 210));
         _helpMenuItem.setForeground(new java.awt.Color(80, 80, 100));
+        _helpMenuItem.setIcon(new javax.swing.ImageIcon(getClass().getResource("/gui/resources/images/icons/helpMenu.png"))); // NOI18N
         _helpMenuItem.setText("Help");
+        _helpMenuItem.setToolTipText("Shows up the help file");
         _helpMenuItem.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 _helpMenuItemActionPerformed(evt);
@@ -626,6 +635,9 @@ public class MainWindow extends javax.swing.JFrame {
         _menuBar.add(_machineLearningMenu);
 
         setJMenuBar(_menuBar);
+
+        java.awt.Dimension screenSize = java.awt.Toolkit.getDefaultToolkit().getScreenSize();
+        setBounds((screenSize.width-850)/2, (screenSize.height-768)/2, 850, 768);
     }// </editor-fold>//GEN-END:initComponents
 
     /**

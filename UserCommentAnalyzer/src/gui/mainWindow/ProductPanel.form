@@ -102,7 +102,7 @@
             <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="_showCommentButtonActionPerformed"/>
           </Events>
         </Component>
-        <Component class="javax.swing.JButton" name="_closeButton">
+        <Component class="javax.swing.JButton" name="_spellCheckButton">
           <Properties>
             <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
               <Color blue="d2" green="b9" red="aa" type="rgb"/>
@@ -111,15 +111,13 @@
               <Color blue="64" green="50" red="50" type="rgb"/>
             </Property>
             <Property name="icon" type="javax.swing.Icon" noResource="true" editor="org.netbeans.modules.form.editors2.IconEditor">
-              <Image iconType="3" name="/gui/resources/images/icons/Close.png"/>
+              <Image iconType="3" name="/gui/resources/images/icons/Pinion.png"/>
             </Property>
-            <Property name="text" type="java.lang.String" value="Close"/>
-            <Property name="toolTipText" type="java.lang.String" value="Closes the product panel list"/>
-            <Property name="enabled" type="boolean" value="false"/>
-            <Property name="name" type="java.lang.String" value="_closeButton" noResource="true"/>
+            <Property name="text" type="java.lang.String" value="Spellcheck"/>
+            <Property name="name" type="java.lang.String" value="_spellCheckButton" noResource="true"/>
           </Properties>
           <Events>
-            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="closeButtonActionPerformed"/>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="_spellCheckButtonActionPerformed"/>
           </Events>
         </Component>
       </SubComponents>

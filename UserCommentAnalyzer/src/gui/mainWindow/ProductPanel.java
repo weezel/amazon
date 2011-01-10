@@ -14,6 +14,7 @@ import gui.productCommentsWindow.ProductCommentsWindow;
 import javax.swing.JList;
 import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
+import spellcheck.SpellCheckersWindow;
 import wordRetrieval.WordInfo;
 
 /**
@@ -57,7 +58,7 @@ public class ProductPanel extends javax.swing.JPanel {
         _name = "Product " + (index + 1);
     }
 
-        /**
+    /**
      * Returns the product list which contains the keywords extracted from
      * the user product comments.
      *
@@ -73,7 +74,7 @@ public class ProductPanel extends javax.swing.JPanel {
      *  
      * @return the product panel name.
      */
-    public String getProductPanelName(){
+    public String getProductPanelName() {
         return _name;
     }
 
@@ -88,8 +89,9 @@ public class ProductPanel extends javax.swing.JPanel {
 
             public void run() {
 
-                if(keywordList != null && keywordList.length > 0)
+                if (keywordList != null && keywordList.length > 0) {
                     _productList.setListData(keywordList);
+                }
             }
         });
     }
@@ -102,6 +104,7 @@ public class ProductPanel extends javax.swing.JPanel {
     public void setSelectedKeyword(final String theWord) {
 
         SwingUtilities.invokeLater(new Runnable() {
+
             @Override
             public void run() {
 
@@ -125,14 +128,14 @@ public class ProductPanel extends javax.swing.JPanel {
                 }
 
                 // If the keyword wasn't found
-                if(!found){
+                if (!found) {
                     // Clears the selected index
                     _productList.clearSelection();
                 }
             }
         });
     }
-    
+
     /** This method is called from within the constructor to
      * initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is
@@ -147,7 +150,7 @@ public class ProductPanel extends javax.swing.JPanel {
         _productList = new javax.swing.JList();
         _buttonPanel = new javax.swing.JPanel();
         _showCommentButton = new javax.swing.JButton();
-        _closeButton = new javax.swing.JButton();
+        _spellCheckButton = new javax.swing.JButton();
 
         setBackground(new java.awt.Color(170, 185, 210));
         setForeground(new java.awt.Color(80, 80, 100));
@@ -199,19 +202,17 @@ public class ProductPanel extends javax.swing.JPanel {
         });
         _buttonPanel.add(_showCommentButton);
 
-        _closeButton.setBackground(new java.awt.Color(170, 185, 210));
-        _closeButton.setForeground(new java.awt.Color(80, 80, 100));
-        _closeButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/gui/resources/images/icons/Close.png"))); // NOI18N
-        _closeButton.setText("Close");
-        _closeButton.setToolTipText("Closes the product panel list");
-        _closeButton.setEnabled(false);
-        _closeButton.setName("_closeButton"); // NOI18N
-        _closeButton.addActionListener(new java.awt.event.ActionListener() {
+        _spellCheckButton.setBackground(new java.awt.Color(170, 185, 210));
+        _spellCheckButton.setForeground(new java.awt.Color(80, 80, 100));
+        _spellCheckButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/gui/resources/images/icons/Pinion.png"))); // NOI18N
+        _spellCheckButton.setText("Spellcheck");
+        _spellCheckButton.setName("_spellCheckButton"); // NOI18N
+        _spellCheckButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                closeButtonActionPerformed(evt);
+                _spellCheckButtonActionPerformed(evt);
             }
         });
-        _buttonPanel.add(_closeButton);
+        _buttonPanel.add(_spellCheckButton);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -227,18 +228,6 @@ public class ProductPanel extends javax.swing.JPanel {
      * 
      * @param evt action event.
      */
-    private void closeButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_closeButtonActionPerformed
-
-        // Removes the product keyword list from the main list
-        MainWindow.getInstance().getProductKeywordList().remove(_index);
-
-        if(MainWindow.getInstance().getProductKeywordList().isEmpty())
-            MainWindow.getInstance().getApplyFilterButton().setEnabled(false);
-
-        // Builds the results panel again
-        MainWindow.getInstance().buildResultsPanel();
-    }//GEN-LAST:event_closeButtonActionPerformed
-
     /**
      * Product list value changed action.
      *
@@ -252,9 +241,10 @@ public class ProductPanel extends javax.swing.JPanel {
         // Gets the keyword from the list
         WordInfo wordInfo = (WordInfo) _productList.getSelectedValue();
 
-        if(wordInfo != null)
-            // Selects the same keyword in the other lists
+        if (wordInfo != null) // Selects the same keyword in the other lists
+        {
             MainWindow.getInstance().selectKeywordInOtherLists(wordInfo.getTheWord());
+        }
     }//GEN-LAST:event__productListValueChanged
 
     /**
@@ -289,12 +279,39 @@ public class ProductPanel extends javax.swing.JPanel {
         }
     }//GEN-LAST:event__showCommentButtonActionPerformed
 
+    /**
+     * Spellcheck button action performed.
+     * 
+     * @param evt action event.
+     */
+    private void _spellCheckButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event__spellCheckButtonActionPerformed
+
+        if (_productList.getSelectedIndex() != -1) {
+
+            // Parses the element list into String[]
+            String[] wordList = new String[_productList.getModel().getSize()];
+            for (int i = 0; i < _productList.getModel().getSize(); i++) {
+
+                WordInfo wordInfo = (WordInfo) _productList.getModel().getElementAt(i);
+                wordList[i] = wordInfo.getTheWord();
+            }
+
+            // Gets the selected keyword in the list
+            WordInfo selectedWord = (WordInfo) _productList.getSelectedValue();
+
+            // Shows the spell checker window
+            SpellCheckersWindow.getInstance().showWindow(wordList, selectedWord.getTheWord());
+            
+        } else // Error message
+        {
+            JOptionPane.showMessageDialog(this, "You have to select an element in the list", "Error", JOptionPane.ERROR_MESSAGE);
+        }
+    }//GEN-LAST:event__spellCheckButtonActionPerformed
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel _buttonPanel;
-    private javax.swing.JButton _closeButton;
     private javax.swing.JList _productList;
     private javax.swing.JScrollPane _productScrollPane;
     private javax.swing.JButton _showCommentButton;
+    private javax.swing.JButton _spellCheckButton;
     // End of variables declaration//GEN-END:variables
-
 }
