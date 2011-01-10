@@ -8,7 +8,7 @@
  *
  * Created on Jan 10, 2011, 2:31:02 PM
  */
-package spellcheck;
+package spellChecker;
 
 import java.awt.Dimension;
 import java.awt.Toolkit;

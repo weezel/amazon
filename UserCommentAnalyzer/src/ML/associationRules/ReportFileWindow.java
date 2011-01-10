@@ -8,7 +8,7 @@
  *
  * Created on Jan 8, 2011, 3:24:07 PM
  */
-package associationRules;
+package ML.associationRules;
 
 import java.awt.Dimension;
 import java.awt.Toolkit;

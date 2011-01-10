@@ -9,7 +9,7 @@
  * Created on Jan 6, 2011, 6:59:54 PM
  */
 
-package gui.progressWindow;
+package gui.fetchingProgressWindow;
 
 import gui.mainWindow.MainWindow;
 import java.awt.Dimension;

@@ -10,17 +10,19 @@
  */
 package gui.mainWindow;
 
-import associationRules.AssociationRulesWindow;
+import ML.associationRules.AssociationRulesWindow;
 import process.ApplyFilterProcess;
 import process.KeywordRetrievalProcess;
 import gui.aboutUs.AboutUsWindow;
 import java.awt.Color;
+import java.awt.Desktop;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.Insets;
 import java.awt.Toolkit;
 import java.awt.event.KeyEvent;
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -696,7 +698,14 @@ public class MainWindow extends javax.swing.JFrame {
      * @param evt action event.
      */
     private void _helpMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event__helpMenuItemActionPerformed
+
         // Shows the help file of the application
+        try{
+        Desktop.getDesktop().open(new File("src/gui/help/help.pdf"));
+        }
+        catch(Exception ex){
+            Logger.getLogger(MainWindow.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }//GEN-LAST:event__helpMenuItemActionPerformed
 
     /**
@@ -742,7 +751,14 @@ public class MainWindow extends javax.swing.JFrame {
      * @param evt action event.
      */
     private void _helpButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event__helpButtonActionPerformed
-        // TODO ARJEN!!!!!!!!
+
+        // Shows the help file of the application
+        try{
+        Desktop.getDesktop().open(new File("src/gui/help/filterHelp.txt"));
+        }
+        catch(Exception ex){
+            Logger.getLogger(MainWindow.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }//GEN-LAST:event__helpButtonActionPerformed
 
     /**

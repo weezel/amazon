@@ -1,0 +1,17 @@
+Expressions of the following shape are used to filter the keyword list:
+
+[_] ( [_] ... [_] )
+
+Where “[_]” denotes a keyword of a certain type, and ( [_] ... [_] ) denotes an
+optional arbitrary amount of additional keywords to be matched.
+
+The following types of expressions are available:
+
+[*]         ->      This keyword can be of any kind. No filtering is applied.
+[+]         ->      This keyword can be of any kind, but the keywords are
+                    filtered by stop words.
+[a]         ->      This keyword must be an adjective.
+[c]         ->      This keyword must be a connection word.
+[;string]   ->      This keyword must be equal to the word given by string.
+                    This enables the user to make any kind of combination of
+                    keywords.

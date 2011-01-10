@@ -8,10 +8,10 @@
  *
  * Created on Jan 6, 2011, 4:01:45 PM
  */
-package associationRules;
+package ML.associationRules;
 
-import associationRules.logic.Mining;
-import associationRules.logic.Rule;
+import ML.associationRules.logic.Mining;
+import ML.associationRules.logic.Rule;
 import gui.waitingWindow.WaitingWindow;
 import java.awt.Dimension;
 import java.awt.Toolkit;

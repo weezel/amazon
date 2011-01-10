@@ -4,7 +4,7 @@ import java.io.*;
 import java.util.*;
 
 import ML.TfIdf;
-import spellcheck.SpellCheckers;
+import spellChecker.SpellCheckers;
 
 public class KeywordRetrieval
 {

@@ -5,7 +5,7 @@
 package process;
 
 import gui.mainWindow.MainWindow;
-import gui.progressWindow.FetchingProcessWindow;
+import gui.fetchingProgressWindow.FetchingProcessWindow;
 import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;

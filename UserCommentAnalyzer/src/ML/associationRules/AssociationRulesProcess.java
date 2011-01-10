@@ -2,7 +2,7 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package associationRules;
+package ML.associationRules;
 
 import gui.waitingWindow.WaitingWindow;
 import javax.swing.SwingUtilities;

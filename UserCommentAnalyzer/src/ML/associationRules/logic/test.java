@@ -2,9 +2,9 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package associationRules.logic;
+package ML.associationRules.logic;
 
-import associationRules.AssociationRulesWindow;
+import ML.associationRules.AssociationRulesWindow;
 
 /**
  *

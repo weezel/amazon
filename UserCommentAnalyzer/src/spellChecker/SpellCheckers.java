@@ -1,4 +1,4 @@
-package spellcheck;
+package spellChecker;
 
 import java.util.HashMap;
 import java.util.HashSet;

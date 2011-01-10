@@ -14,7 +14,7 @@ import gui.productCommentsWindow.ProductCommentsWindow;
 import javax.swing.JList;
 import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
-import spellcheck.SpellCheckersWindow;
+import spellChecker.SpellCheckersWindow;
 import wordRetrieval.WordInfo;
 
 /**
