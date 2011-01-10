@@ -125,9 +125,10 @@ public class ProductPanel extends javax.swing.JPanel {
                 }
 
                 // If the keyword wasn't found
-                if(!found)
+                if(!found){
                     // Clears the selected index
-                    _productList.setSelectedIndex(-1);
+                    _productList.clearSelection();
+                }
             }
         });
     }
@@ -148,14 +149,18 @@ public class ProductPanel extends javax.swing.JPanel {
         _showCommentButton = new javax.swing.JButton();
         _closeButton = new javax.swing.JButton();
 
-        setPreferredSize(new java.awt.Dimension(300, 425));
+        setBackground(new java.awt.Color(170, 185, 210));
+        setForeground(new java.awt.Color(80, 80, 100));
+        setPreferredSize(new java.awt.Dimension(100, 100));
         setLayout(new java.awt.GridBagLayout());
 
         _productScrollPane.setName("_productScrollPane"); // NOI18N
-        _productScrollPane.setPreferredSize(new java.awt.Dimension(300, 400));
+        _productScrollPane.setPreferredSize(new java.awt.Dimension(300, 350));
 
+        _productList.setForeground(new java.awt.Color(80, 80, 100));
         _productList.setLayoutOrientation(javax.swing.JList.HORIZONTAL_WRAP);
         _productList.setName("_productList"); // NOI18N
+        _productList.setSelectionBackground(new java.awt.Color(95, 115, 155));
         _productList.setVisibleRowCount(-1);
         _productList.addListSelectionListener(new javax.swing.event.ListSelectionListener() {
             public void valueChanged(javax.swing.event.ListSelectionEvent evt) {
@@ -176,9 +181,13 @@ public class ProductPanel extends javax.swing.JPanel {
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         add(_productScrollPane, gridBagConstraints);
 
+        _buttonPanel.setBackground(new java.awt.Color(170, 185, 210));
+        _buttonPanel.setForeground(new java.awt.Color(80, 80, 100));
         _buttonPanel.setName("_buttonPanel"); // NOI18N
         _buttonPanel.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.RIGHT));
 
+        _showCommentButton.setBackground(new java.awt.Color(170, 185, 210));
+        _showCommentButton.setForeground(new java.awt.Color(80, 80, 100));
         _showCommentButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/gui/resources/images/icons/Show.png"))); // NOI18N
         _showCommentButton.setText("Show Comment");
         _showCommentButton.setToolTipText("Shows the comments with the selected keyword highlighted in the comments");
@@ -190,6 +199,8 @@ public class ProductPanel extends javax.swing.JPanel {
         });
         _buttonPanel.add(_showCommentButton);
 
+        _closeButton.setBackground(new java.awt.Color(170, 185, 210));
+        _closeButton.setForeground(new java.awt.Color(80, 80, 100));
         _closeButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/gui/resources/images/icons/Close.png"))); // NOI18N
         _closeButton.setText("Close");
         _closeButton.setToolTipText("Closes the product panel list");
@@ -241,8 +252,9 @@ public class ProductPanel extends javax.swing.JPanel {
         // Gets the keyword from the list
         WordInfo wordInfo = (WordInfo) _productList.getSelectedValue();
 
-        // Selects the same keyword in the other lists
-        MainWindow.getInstance().selectKeywordInOtherLists(wordInfo.getTheWord());
+        if(wordInfo != null)
+            // Selects the same keyword in the other lists
+            MainWindow.getInstance().selectKeywordInOtherLists(wordInfo.getTheWord());
     }//GEN-LAST:event__productListValueChanged
 
     /**
@@ -276,6 +288,7 @@ public class ProductPanel extends javax.swing.JPanel {
             JOptionPane.showMessageDialog(null, "You must select a keyword in the list first", "Error", JOptionPane.ERROR_MESSAGE);
         }
     }//GEN-LAST:event__showCommentButtonActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel _buttonPanel;
     private javax.swing.JButton _closeButton;

@@ -80,13 +80,14 @@ public class WaitingWindow extends JWindow{
         // Sets the layout
         content.setLayout(new GridBagLayout());
         content.setBackground(Color.WHITE);
-        content.setBorder(BorderFactory.createLineBorder(Color.BLACK, 2));
+        content.setBorder(BorderFactory.createLineBorder(new Color(80,80,100), 2));
 
         // IMAGE
         _image = new JLabel(new ImageIcon("src/gui/resources/images/icons/hourglass.gif"));
         
         // MESSAGE
         _message = new JLabel("Wait a few seconds until the process is finished...");
+        _message.setForeground(new Color(80,80,100));
 
         // Adds the components to the window with the layout
         GridBagConstraints constraints = new GridBagConstraints();

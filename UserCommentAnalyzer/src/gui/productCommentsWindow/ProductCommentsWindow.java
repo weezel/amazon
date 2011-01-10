@@ -53,10 +53,14 @@ public class ProductCommentsWindow extends JFrame {
 
         super("Product" + index + " user comments");
 
+        // Sets the background color
+        setBackground(new Color(170,185,210));
+
         // Gets the keyword to highlight
         _keyword = keyword;
 
         _textPane = new JTextPane();
+        _textPane.setForeground(new Color(80,80,100));
         _textPane.setHighlighter(_highlighter);
         getContentPane().add(new JScrollPane(_textPane), "Center");
 

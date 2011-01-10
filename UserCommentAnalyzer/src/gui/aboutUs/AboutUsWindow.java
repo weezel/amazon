@@ -57,22 +57,26 @@ public class AboutUsWindow extends javax.swing.JFrame {
         _arjenLabel = new javax.swing.JLabel();
         _javierLabel = new javax.swing.JLabel();
         _homeSiteLabel = new javax.swing.JLabel();
-        jLabel1 = new javax.swing.JLabel();
+        _wwwLabel = new javax.swing.JLabel();
         _buttonPanel = new javax.swing.JPanel();
         _okButton = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("About Us");
+        setPreferredSize(new java.awt.Dimension(550, 248));
 
-        _imageLabel.setIcon(new javax.swing.ImageIcon(getClass().getResource("/gui/resources/images/aboutUs/userCommentAnalyzer.png"))); // NOI18N
+        _imageLabel.setIcon(new javax.swing.ImageIcon(getClass().getResource("/gui/resources/images/UCALogo.png"))); // NOI18N
         _imageLabel.setName("_imageLabel"); // NOI18N
         getContentPane().add(_imageLabel, java.awt.BorderLayout.NORTH);
 
+        _infoPanel.setBackground(new java.awt.Color(170, 185, 210));
         _infoPanel.setBorder(javax.swing.BorderFactory.createEtchedBorder());
         _infoPanel.setName("_infoPanel"); // NOI18N
         _infoPanel.setLayout(new java.awt.GridBagLayout());
 
-        _authorsLabel.setFont(new java.awt.Font("Lucida Grande", 1, 14));
+        _authorsLabel.setBackground(new java.awt.Color(170, 185, 210));
+        _authorsLabel.setFont(new java.awt.Font("Lucida Grande", 1, 14)); // NOI18N
+        _authorsLabel.setForeground(new java.awt.Color(80, 80, 100));
         _authorsLabel.setText("Authors:");
         _authorsLabel.setName("_authorsLabel"); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -80,6 +84,8 @@ public class AboutUsWindow extends javax.swing.JFrame {
         gridBagConstraints.insets = new java.awt.Insets(5, 0, 5, 0);
         _infoPanel.add(_authorsLabel, gridBagConstraints);
 
+        _villeLabel.setBackground(new java.awt.Color(170, 185, 210));
+        _villeLabel.setForeground(new java.awt.Color(80, 80, 100));
         _villeLabel.setText("- Ville Valkonen");
         _villeLabel.setName("_villeLabel"); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -89,6 +95,8 @@ public class AboutUsWindow extends javax.swing.JFrame {
         gridBagConstraints.insets = new java.awt.Insets(0, 17, 0, 17);
         _infoPanel.add(_villeLabel, gridBagConstraints);
 
+        _arjenLabel.setBackground(new java.awt.Color(170, 185, 210));
+        _arjenLabel.setForeground(new java.awt.Color(80, 80, 100));
         _arjenLabel.setText("- Arjen Meurers");
         _arjenLabel.setName("_arjenLabel"); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -98,6 +106,8 @@ public class AboutUsWindow extends javax.swing.JFrame {
         gridBagConstraints.insets = new java.awt.Insets(0, 18, 0, 18);
         _infoPanel.add(_arjenLabel, gridBagConstraints);
 
+        _javierLabel.setBackground(new java.awt.Color(170, 185, 210));
+        _javierLabel.setForeground(new java.awt.Color(80, 80, 100));
         _javierLabel.setText("- Javier Salcedo");
         _javierLabel.setName("_javierLabel"); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -107,7 +117,9 @@ public class AboutUsWindow extends javax.swing.JFrame {
         gridBagConstraints.insets = new java.awt.Insets(0, 18, 0, 18);
         _infoPanel.add(_javierLabel, gridBagConstraints);
 
-        _homeSiteLabel.setFont(new java.awt.Font("Lucida Grande", 1, 14));
+        _homeSiteLabel.setBackground(new java.awt.Color(170, 185, 210));
+        _homeSiteLabel.setFont(new java.awt.Font("Lucida Grande", 1, 14)); // NOI18N
+        _homeSiteLabel.setForeground(new java.awt.Color(80, 80, 100));
         _homeSiteLabel.setText("Home Site:");
         _homeSiteLabel.setName("_homeSiteLabel"); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -117,18 +129,23 @@ public class AboutUsWindow extends javax.swing.JFrame {
         gridBagConstraints.insets = new java.awt.Insets(6, 0, 6, 0);
         _infoPanel.add(_homeSiteLabel, gridBagConstraints);
 
-        jLabel1.setText("http://github.com/2ID25work/amazon");
-        jLabel1.setName("jLabel1"); // NOI18N
+        _wwwLabel.setBackground(new java.awt.Color(170, 185, 210));
+        _wwwLabel.setForeground(new java.awt.Color(80, 80, 100));
+        _wwwLabel.setText("http://github.com/2ID25work/amazon");
+        _wwwLabel.setName("_wwwLabel"); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 4;
-        _infoPanel.add(jLabel1, gridBagConstraints);
+        _infoPanel.add(_wwwLabel, gridBagConstraints);
 
         getContentPane().add(_infoPanel, java.awt.BorderLayout.CENTER);
 
+        _buttonPanel.setBackground(new java.awt.Color(170, 185, 210));
         _buttonPanel.setName("_buttonPanel"); // NOI18N
         _buttonPanel.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.RIGHT));
 
+        _okButton.setBackground(new java.awt.Color(170, 185, 210));
+        _okButton.setForeground(new java.awt.Color(80, 80, 100));
         _okButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/gui/resources/images/icons/ok.png"))); // NOI18N
         _okButton.setText("Ok");
         _okButton.setToolTipText("Closes the about us window");
@@ -177,7 +194,7 @@ public class AboutUsWindow extends javax.swing.JFrame {
     private javax.swing.JLabel _javierLabel;
     private javax.swing.JButton _okButton;
     private javax.swing.JLabel _villeLabel;
-    private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel _wwwLabel;
     // End of variables declaration//GEN-END:variables
 
 }
