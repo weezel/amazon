@@ -36,7 +36,7 @@ Icon?
 Thumbs.db
 tags
 cscope*
-#nbproject
+report*.txt
 build
 
 *.html
