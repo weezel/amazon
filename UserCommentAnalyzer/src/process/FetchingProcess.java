@@ -5,7 +5,7 @@
 package process;
 
 import gui.mainWindow.MainWindow;
-import gui.progressWindow.ProgressWindow;
+import gui.progressWindow.FetchingProcessWindow;
 import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -49,10 +49,10 @@ public class FetchingProcess extends Thread {
         StringBuffer message = new StringBuffer();
 
         // Updates the progress window
-        ProgressWindow.getInstance().updateProgressWindow("Initializing the fetching process...\n");
+        FetchingProcessWindow.getInstance().updateProgressWindow("Initializing the fetching process...\n");
 
         // Clears the text pane content
-        ProgressWindow.getInstance().clearTextPaneContent();
+        FetchingProcessWindow.getInstance().clearTextAreaContent();
 
         // Calls the python program to obtain the input data
         try {
@@ -72,14 +72,14 @@ public class FetchingProcess extends Thread {
             BufferedReader bufferedError = new BufferedReader(new InputStreamReader(errorStream));
 
             // Shows the progress window
-            ProgressWindow.getInstance().showProgressWindow();
+            FetchingProcessWindow.getInstance().showProgressWindow();
 
             while (true) {
                 if (inputStream.available() > 0) {
                     String lineIn;
                     while ((lineIn = bufferedInput.readLine()) != null) {
                         // Updates the progress window
-                        ProgressWindow.getInstance().updateProgressWindow(lineIn);
+                        FetchingProcessWindow.getInstance().updateProgressWindow(lineIn);
                         message.append(lineIn);
                         message.append(System.getProperty("line.separator"));
                     }
@@ -88,7 +88,7 @@ public class FetchingProcess extends Thread {
                     String lineIn;
                     while ((lineIn = bufferedError.readLine()) != null) {
                         // Updates the progress window
-                        ProgressWindow.getInstance().updateProgressWindow(lineIn);
+                        FetchingProcessWindow.getInstance().updateProgressWindow(lineIn);
                         message.append("ERROR: ");
                         message.append(lineIn);
                         message.append(System.getProperty("line.separator"));
@@ -106,7 +106,7 @@ public class FetchingProcess extends Thread {
             bufferedError.close();
 
             // Enables the close button in the progress window
-            ProgressWindow.getInstance().enableCloseButton();
+            FetchingProcessWindow.getInstance().enableCloseButton();
 
         } catch (Throwable throwable) {
             // Updates the log
