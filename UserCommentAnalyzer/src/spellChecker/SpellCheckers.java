@@ -1,7 +1,9 @@
 package spellChecker;
 
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
 
@@ -228,6 +230,26 @@ public class SpellCheckers {
 
         return tophits;
     }
+
+
+    /* @Override Treemap comparator */
+    class ValueComparator implements Comparator
+    {
+        Map base;
+
+        public ValueComparator(Map b) { base = b; }
+
+        public int compare(Object a, Object b) {
+            if ((Double) base.get(a) < (Double) base.get(b))
+                return 1;
+            else if (Math.abs((Double)base.get(a) - (Double)base.get(b)) <= 1.0E-8)
+                return 0;
+            else
+                return -1;
+        }
+    }
+
+
     /*
     public static void main(String[] args)
     {

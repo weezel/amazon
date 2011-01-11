@@ -213,26 +213,11 @@ public class KeywordRetrieval
             String word = revWords.get(i).toString().substring(0, revWords.get(i).toString().indexOf("|"));
             String[] termfreq = revWords.get(i).toString().split(";");
 
-            double invFreq = TfIdf.inverseDocumentFrequency(allWords, word);
+            double invFreq = TfIdf.documentFrequency(allWords, word);
             double tfscore = TfIdf.tfidf_score(Double.parseDouble(termfreq[1]), invFreq);
             revWords.set(i, termfreq[0] + ";" + tfscore);
         }
         /////end tifidf code/////
-        // XXX TEST SPELLCHECK
-        HashMap testspell = new HashMap<String, Double>();
-        ValueComparator vc = new ValueComparator(testspell);
-        TreeMap<String, Double> sortedSpells = new TreeMap<String, Double>(testspell);
-        String searchThis;
-
-        searchThis = "button";
-        testspell = SpellCheckers.nearWords(allWords, searchThis, 2, 50);
-        sortedSpells.putAll(testspell);
-
-        System.out.println("<SPELLCHECK>");
-        for (String key : sortedSpells.keySet())
-            System.out.println(String.format("\t%s: %.2f", key, sortedSpells.get(key)));
-        System.out.println("</SPELLCHECK>");
-
 
         System.out.println("number of reviews:" + rNum);
 
@@ -297,12 +282,8 @@ public class KeywordRetrieval
         }
 
         Arrays.sort(result);
-        for (int i = 0; i < numWords; i++) {
-            System.out.println(result[i].getCount() + " " + result[i].getTheWord() + " " + result[i].getRating() / result[i].getCount() + " " + result[i].getTFRating());
-            //System.out.println(result[i].rating/result[i].count);
-            //System.out.println(result[i].count + ",'" + result[i].theWord + "'," + result[i].rating/result[i].count);
-
-        }
+        for (int i = 0; i < numWords; i++)
+            System.out.println(result[i]);
 
         return result;
     }
@@ -353,20 +334,5 @@ public class KeywordRetrieval
         return wordList;
     }
 
-    /* @Override Treemap comparator */
-    class ValueComparator implements Comparator
-    {
-        Map base;
 
-        public ValueComparator(Map b) { base = b; }
-
-        public int compare(Object a, Object b) {
-            if ((Double) base.get(a) < (Double) base.get(b))
-                return 1;
-            else if (Math.abs((Double)base.get(a) - (Double)base.get(b)) <= 1.0E-8)
-                return 0;
-            else
-                return -1;
-        }
-    }
 }

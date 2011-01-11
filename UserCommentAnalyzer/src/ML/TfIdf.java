@@ -43,13 +43,15 @@ public class TfIdf
     }
 
 
-    /*
+    /**
      * Count how many times searhcable word appears in all comments and
-     * calculate the inverse frequency.
+     * calculate frequency.
+     * @param doc all comments. Must be sorted!
      * @return inverse term frequency in document
      */
-    public static double inverseDocumentFrequency(String[] doc, String s)
+    public static double documentFrequency(String[] doc, String s)
     {
+        /* Count how many comments this term occurs */
         int matchCount, spos, epos;
         int[] searchArea;
 
@@ -66,22 +68,29 @@ public class TfIdf
         epos = searchArea[1];
 
         /* Count matches in all comments */
+        int cmntNmbr = 0, prevIdx = -1;
         for (; spos <= epos; spos++) {
             String tmp[] = doc[spos].split("\\|");
-            if (tmp.length > 0 && tmp[0].equals(s))
-                matchCount++;
+            if (tmp.length > 0) {
+                cmntNmbr = Integer.parseInt(tmp[1].substring(0, tmp[1].indexOf(":")));
+                assert (cmntNmbr != -1) : "cmntNmbr cannot be -1";
+                if (tmp[0].equals(s) && cmntNmbr != prevIdx) {
+                    prevIdx = cmntNmbr;
+                    matchCount++;
+                }
+            }
         }
 
         if (matchCount <= 0)
             return 0.0;
 
-        return Math.log10((double) doc.length / (double) matchCount);
+        return (double)matchCount / doc.length;
     }
 
 
     /*
      * Reduce search area to the same initial and afterwards, only to words
-     * that equals "s".
+     * that equals "s". Cheaper than compare immediately against the word.
      * @return start and ending position for the same word
      */
     public static int[] filterByInitials(String[] doc, String s)
@@ -128,10 +137,17 @@ public class TfIdf
         return r;
     }
 
-    public static double tfidf_score(double a, double b)
+    /**
+     * Calculate Term Frequency-Inverse document frequency
+     * @param termfreq term frequency
+     * @param docfreq document frequency
+     * @return tf-idf score
+     */
+    public static double tfidf_score(double termfreq, double docfreq)
     {
-        return a * b;
+        return termfreq * Math.log(1.0 / docfreq);
     }
+
 
     public void runTests(String[] args) {
         double termfreq, invfreq;
