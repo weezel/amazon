@@ -21,7 +21,7 @@ public class Mining {
     /**
      * String which defines the association rules report file path.
      */
-    private static String _fileReport = "src/associationRules/report.txt";
+    private static String _fileReport = "src/ML/associationRules/report.txt";
     /**
      * Writes the report in the report file.
      */

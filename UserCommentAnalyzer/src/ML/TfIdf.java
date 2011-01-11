@@ -11,31 +11,25 @@ these. Then, the inverse document frequency is calculated as log(10 000 000 /
  */
 public class TfIdf
 {
-    /*
+    /**
      * Count how many times searhcable word appears in a comment and divide by
      * the total count of the words in the comment.
+     * @param doc comment
+     * @param s searchable string
      * @return term frequency in comment
      */
     public static double termFrequencyInComment(String[] doc, String s)
     {
-        int matchCount, spos, epos;
-        int[] searchArea;
+        int matchCount;
 
         if (doc == null || doc.length < 1 || s == null || s.length() < 1)
             return (0.0);
 
-        matchCount = spos = epos = 0;
-        searchArea = filterByInitials(doc, s);
-
-        if (searchArea == null)
-            return (0.0);
-
-        spos = searchArea[0];
-        epos = searchArea[1];
+        matchCount = 0;
 
         /* The actual counting happens here */
-        for (; spos <= epos; spos++) {
-            if (doc[spos].equals(s))
+        for (int i=0; i < doc.length; i++) {
+            if (doc[i].equals(s))
                 matchCount++;
         }
 
@@ -84,7 +78,7 @@ public class TfIdf
         if (matchCount <= 0)
             return 0.0;
 
-        return (double)matchCount / doc.length;
+        return (double)matchCount / (double)doc.length;
     }
 
 
@@ -145,48 +139,50 @@ public class TfIdf
      */
     public static double tfidf_score(double termfreq, double docfreq)
     {
-        return termfreq * Math.log(1.0 / docfreq);
+        return termfreq * (Math.log10(1.0 / docfreq));
     }
 
 
-    public void runTests(String[] args) {
-        double termfreq, invfreq;
+    public static void runTests() {
+        double termfreq, invfreq, tfscore;
         String boo = "boo";
+        String comment[] = {
+            "amiraali",
+            "anjovis",
+            "boo",
+            "boo",
+            "jee",
+            "korn"
+        };
         String[] documents1 = {
             "14sia|1:50",
             "auto|1:50",
             "amiraali|3:40",
             "anjovis|3:10",
-            "boredom|4:55",
             "boo|5:10",
             "boo|5:60",
             "boo|6:20",
+            "boredom|4:55",
             "burzum|12:80",
-            "klonkku|15:12",
-            "jee|18:30"
-        };
-        String singlecomment = "14sia:boo:boo:boo:banjovis:auto:urzum:klonkku:bamiraali:oredom:jee:";
-        String[] documents2 = {
-            "bono:boo:hanjovis:kissa:koira:",
-            "14sia:boo:boo:boo:banjovis:auto:urzum:klonkku:bamiraali:oredom:jee:",
-            "jerkku:hekkku:takki:pakki:",
-            "joona:erkki:merkki:",
-            "cat:sack:hack:track:back:"
+            "jee|18:30",
+            "klonkku|15:12"
         };
 
-     /*
-        Collenctions.sort(singlecomment);
-        termfreq = termFrequencyInComment(singlecomment, "boo");
-        assert (Math.abs(termfreq - 0.2727272727272727) < 1.0E-8) : "termfreq should be: 0.2727272727272727, current value: " + termfreq;
-        invfreq = inverseDocumentFrequency(documents1, "boo");
-        assert (Math.abs(invfreq - 0.5642714304385625) < 1.0E-8) : "invfreq should be: 0.5642714304385625, current value: " + invfreq;
+        termfreq = termFrequencyInComment(comment, "boo");
+        assert (Math.abs(termfreq - 0.3333333333333333) < 1.0E-8) : "termfreq should be: 0.3333333333333333, current value: " + termfreq;
+        invfreq = documentFrequency(documents1, "boo");
+        assert (Math.abs(invfreq - 0.18181818181818182) < 1.0E-8) : "invfreq should be: 0.18181818181818182, current value: " + invfreq;
+        tfscore = tfidf_score(termfreq, invfreq);
+        assert (Math.abs(invfreq - 0.24678756316474795) < 1.0E-8) : "tfscore should be: 0.24678756316474795, current value: " + tfscore;
         System.out.println("'" + boo + "'" + " comment frequenzy: " + termfreq);
         System.out.println("'" + boo + "'" + " inverse frequenzy: " + invfreq);
-        System.out.println("'" + boo + "'" + " tf-idf score     : " + tfidf_score(termfreq, invfreq));
-         */
+        System.out.println("'" + boo + "'" + " tf-idf score     : " + tfscore);
     }
-//	public static void main (String[] args)
-//	{
-//		runTests(args);
-//	}
+
+/*
+	public static void main (String[] args)
+	{
+		runTests();
+	}
+*/
 }

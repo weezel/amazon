@@ -4,7 +4,6 @@ import java.io.*;
 import java.util.*;
 
 import ML.TfIdf;
-import spellChecker.SpellCheckers;
 
 public class KeywordRetrieval
 {
@@ -180,7 +179,7 @@ public class KeywordRetrieval
                     /* Sort comments */
                     //ArrayList<String> comment_arr = new ArrayList<String>(thisComment.length());
                     String[] splitted_comment = thisComment.split(";");
-                    Arrays.sort(splitted_comment);
+                    //Arrays.sort(splitted_comment);
                     //comment_arr.addAll(Arrays.asList(splitted_comment));
                     //Collections.sort(comment_arr);
                     
@@ -209,25 +208,52 @@ public class KeywordRetrieval
             allWords[i] = revWords.get(i).toString();
 
         Arrays.sort(allWords);
+        Collections.sort(revWords);
+        int commIdx = 0, prevCommIdx = -1;
+        double invFreq = 0.0, tfscore = 0.0;
+        String prevWord = "";
         for (int i = 0; i < revWords.size(); i++) {
-            String word = revWords.get(i).toString().substring(0, revWords.get(i).toString().indexOf("|"));
-            String[] termfreq = revWords.get(i).toString().split(";");
+            String idxStr = revWords.get(i).toString(); // ease the pain
+            String word = idxStr.substring(0, idxStr.indexOf("|"));
+            String[] termfreq = idxStr.split(";");
+            commIdx = Integer.parseInt(idxStr.substring(idxStr.indexOf("|") + 1,
+                    idxStr.indexOf(":")));
 
-            double invFreq = TfIdf.documentFrequency(allWords, word);
-            double tfscore = TfIdf.tfidf_score(Double.parseDouble(termfreq[1]), invFreq);
-            revWords.set(i, termfreq[0] + ";" + tfscore);
-        }
+            // We only want to count tfidf for the word once
+            if (i == 0) {
+                invFreq = TfIdf.documentFrequency(allWords, word);
+                tfscore = TfIdf.tfidf_score(Double.parseDouble(termfreq[1]), invFreq);
+                prevCommIdx = commIdx;
+                prevWord = word;
+            } else {
+                // Words equal and are located in the same comment
+                // -> set same value for each comment
+                if (word.equals(prevWord) && commIdx == prevCommIdx)
+                    revWords.set(i, termfreq[0] + ";" + tfscore);
+                // Word or comment index differs, count a new tf-idf
+                else {
+                    invFreq = TfIdf.documentFrequency(allWords, word);
+                    tfscore = TfIdf.tfidf_score(Double.parseDouble(termfreq[1]), invFreq);
+                    if (tfscore > 1.0) {
+                        int asdf = 123; }
+                    revWords.set(i, termfreq[0] + ";" + tfscore);
+                }
+            }
+        } // for
         /////end tifidf code/////
+        System.out.println("--TF TEST--");
+        TfIdf.runTests();
+        System.out.println("--/TF TEST--");
 
         System.out.println("number of reviews:" + rNum);
 
-        Collections.sort(revWords);
+
         String curWord = "";
         WordInfo[] countedWords = new WordInfo[k];
         int j = -1;
         k = 0;
 
-        String prevWord = "";
+        prevWord = "";
         int prevNum = 0;
         int len;
         
