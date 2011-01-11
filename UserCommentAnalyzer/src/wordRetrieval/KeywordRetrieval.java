@@ -219,7 +219,8 @@ public class KeywordRetrieval
             commIdx = Integer.parseInt(idxStr.substring(idxStr.indexOf("|") + 1,
                     idxStr.indexOf(":")));
 
-            // We only want to count tfidf for the word once
+            // We only want to count tfidf for the same word in
+            // the same comment once
             if (i == 0) {
                 invFreq = TfIdf.documentFrequency(allWords, word);
                 tfscore = TfIdf.tfidf_score(Double.parseDouble(termfreq[1]), invFreq);
@@ -234,17 +235,11 @@ public class KeywordRetrieval
                 else {
                     invFreq = TfIdf.documentFrequency(allWords, word);
                     tfscore = TfIdf.tfidf_score(Double.parseDouble(termfreq[1]), invFreq);
-                    if (tfscore > 1.0) {
-                        int asdf = 123; }
                     revWords.set(i, termfreq[0] + ";" + tfscore);
                 }
             }
         } // for
         /////end tifidf code/////
-        System.out.println("--TF TEST--");
-        TfIdf.runTests();
-        System.out.println("--/TF TEST--");
-
         System.out.println("number of reviews:" + rNum);
 
 
