@@ -89,6 +89,8 @@ public class ProductPanel extends javax.swing.JPanel {
 
             public void run() {
 
+                _productList.setCellRenderer(new ColorListBox());
+
                 if (keywordList != null && keywordList.length > 0) {
                     _productList.setListData(keywordList);
                 }
