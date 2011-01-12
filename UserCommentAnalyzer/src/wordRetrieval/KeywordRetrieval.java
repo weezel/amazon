@@ -244,7 +244,13 @@ public class KeywordRetrieval
             SpellCheckers.nearWords(allWords, "battery", 3, 50); // XXX
         double invFreq = 0.0, tfscore = 0.0;
         String prevWord = "";
-        for (int i=0; i < revWords.size(); i++) {
+        int rLen = 0;
+        if(revWords.size() > 50)
+            rLen = 50;
+        else
+            rLen = revWords.size();
+
+        for (int i=0; i < rLen; i++) {
             String idxStr = revWords.get(i).toString(); // ease the pain
             String word = idxStr.substring(0, idxStr.indexOf("|"));
             String[] termfreq = idxStr.split(";");

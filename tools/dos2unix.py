@@ -16,6 +16,7 @@ mimetypes.init()
 # These extensions will be fixed too
 mimetypes.add_type("text/properties", ".properties")
 mimetypes.add_type("text/swp", ".swp")
+mimetypes.add_type("text/form", ".form")
 mimetypes.add_type("text/mf", ".mf")
 
 

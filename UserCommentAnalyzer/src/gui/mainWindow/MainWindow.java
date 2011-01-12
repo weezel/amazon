@@ -343,13 +343,13 @@ public class MainWindow extends javax.swing.JFrame {
         _applyFilterButton = new javax.swing.JButton();
         jButton1 = new javax.swing.JButton();
         _menuBar = new javax.swing.JMenuBar();
+        _fileMenu = new javax.swing.JMenu();
+        _exitMenuItem = new javax.swing.JMenuItem();
+        _machineLearningMenu = new javax.swing.JMenu();
+        _associationRulesMenuItem = new javax.swing.JMenuItem();
         _helpMenu = new javax.swing.JMenu();
         _aboutUsMenuItem = new javax.swing.JMenuItem();
         _helpMenuItem = new javax.swing.JMenuItem();
-        _machineLearningMenu = new javax.swing.JMenu();
-        _associationRulesMenuItem = new javax.swing.JMenuItem();
-        _fileMenu = new javax.swing.JMenu();
-        _exitMenuItem = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("User Comment Analyzer");
@@ -556,6 +556,8 @@ public class MainWindow extends javax.swing.JFrame {
         gridBagConstraints.gridy = 0;
         _filterPanel.add(_applyFilterButton, gridBagConstraints);
 
+        jButton1.setBackground(new java.awt.Color(170, 185, 210));
+        jButton1.setForeground(new java.awt.Color(80, 80, 100));
         jButton1.setText("Rate Keywords");
         jButton1.setEnabled(false);
         jButton1.addActionListener(new java.awt.event.ActionListener() {
@@ -579,6 +581,42 @@ public class MainWindow extends javax.swing.JFrame {
         getContentPane().add(_resultsPanel, gridBagConstraints);
 
         _menuBar.setBackground(new java.awt.Color(170, 185, 210));
+
+        _fileMenu.setBackground(new java.awt.Color(142, 160, 193));
+        _fileMenu.setForeground(new java.awt.Color(80, 80, 100));
+        _fileMenu.setText("File");
+
+        _exitMenuItem.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_Q, java.awt.event.InputEvent.CTRL_MASK));
+        _exitMenuItem.setBackground(new java.awt.Color(170, 185, 210));
+        _exitMenuItem.setForeground(new java.awt.Color(80, 80, 100));
+        _exitMenuItem.setIcon(new javax.swing.ImageIcon(getClass().getResource("/gui/resources/images/icons/exit.png"))); // NOI18N
+        _exitMenuItem.setText("Exit");
+        _exitMenuItem.setToolTipText("Exits the program");
+        _exitMenuItem.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                exitMenuItemActionPerformed(evt);
+            }
+        });
+        _fileMenu.add(_exitMenuItem);
+
+        _menuBar.add(_fileMenu);
+
+        _machineLearningMenu.setBackground(new java.awt.Color(170, 185, 210));
+        _machineLearningMenu.setForeground(new java.awt.Color(80, 80, 100));
+        _machineLearningMenu.setText("Machine Learning Tools");
+
+        _associationRulesMenuItem.setBackground(new java.awt.Color(170, 185, 210));
+        _associationRulesMenuItem.setForeground(new java.awt.Color(80, 80, 100));
+        _associationRulesMenuItem.setIcon(new javax.swing.ImageIcon(getClass().getResource("/gui/resources/images/icons/rules.png"))); // NOI18N
+        _associationRulesMenuItem.setText("Association Rules Generator");
+        _associationRulesMenuItem.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                _associationRulesMenuItemActionPerformed(evt);
+            }
+        });
+        _machineLearningMenu.add(_associationRulesMenuItem);
+
+        _menuBar.add(_machineLearningMenu);
 
         _helpMenu.setBackground(new java.awt.Color(142, 160, 193));
         _helpMenu.setForeground(new java.awt.Color(80, 80, 100));
@@ -611,42 +649,6 @@ public class MainWindow extends javax.swing.JFrame {
         _helpMenu.add(_helpMenuItem);
 
         _menuBar.add(_helpMenu);
-
-        _machineLearningMenu.setBackground(new java.awt.Color(170, 185, 210));
-        _machineLearningMenu.setForeground(new java.awt.Color(80, 80, 100));
-        _machineLearningMenu.setText("Machine Learning Tools");
-
-        _associationRulesMenuItem.setBackground(new java.awt.Color(170, 185, 210));
-        _associationRulesMenuItem.setForeground(new java.awt.Color(80, 80, 100));
-        _associationRulesMenuItem.setIcon(new javax.swing.ImageIcon(getClass().getResource("/gui/resources/images/icons/rules.png"))); // NOI18N
-        _associationRulesMenuItem.setText("Association Rules Generator");
-        _associationRulesMenuItem.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                _associationRulesMenuItemActionPerformed(evt);
-            }
-        });
-        _machineLearningMenu.add(_associationRulesMenuItem);
-
-        _menuBar.add(_machineLearningMenu);
-
-        _fileMenu.setBackground(new java.awt.Color(142, 160, 193));
-        _fileMenu.setForeground(new java.awt.Color(80, 80, 100));
-        _fileMenu.setText("File");
-
-        _exitMenuItem.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_Q, java.awt.event.InputEvent.CTRL_MASK));
-        _exitMenuItem.setBackground(new java.awt.Color(170, 185, 210));
-        _exitMenuItem.setForeground(new java.awt.Color(80, 80, 100));
-        _exitMenuItem.setIcon(new javax.swing.ImageIcon(getClass().getResource("/gui/resources/images/icons/exit.png"))); // NOI18N
-        _exitMenuItem.setText("Exit");
-        _exitMenuItem.setToolTipText("Exits the program");
-        _exitMenuItem.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                exitMenuItemActionPerformed(evt);
-            }
-        });
-        _fileMenu.add(_exitMenuItem);
-
-        _menuBar.add(_fileMenu);
 
         setJMenuBar(_menuBar);
 
