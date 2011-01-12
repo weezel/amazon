@@ -24,9 +24,9 @@ public class determineQuality
      * @param comments list of comments
      * @return index list of important good words
      */
-    public static ArrayList quality(ArrayList comments)
+    public static ArrayList quality()
     {
-        final int TFBOUNDARY = 20;
+        final double TFBOUNDARY = 0.2;
         final int GOODNESS = 50;
         ArrayList<Integer> returnIndexes;
         Set goodSet = new HashSet();
@@ -34,17 +34,16 @@ public class determineQuality
         Set intersect  = null;
 
         for (int i=0; i< 10; i++) {
-            String word = comments.get(i).toString();
-            int p = word.indexOf("|");
-            int sc = word.indexOf(";");
-            double tfidf_score = Double.parseDouble(word.substring(sc, word.length()-1));
-            double goodnesspercentage = KeywordRetrieval.negScoresArray[i] / KeywordRetrieval.posScoresArray[i];
+            double tfidf_score = KeywordRetrieval.result[i].getTFRating();
 
-            if (tfidf_score >= TFBOUNDARY)
+            double goodnesspercentage = 0.0;
+            if (KeywordRetrieval.posScoresArray[i] > 0 || KeywordRetrieval.negScoresArray[i] > 0) {
+                goodnesspercentage = ((double) KeywordRetrieval.posScoresArray[i] / ((double) KeywordRetrieval.posScoresArray[i] + (double) KeywordRetrieval.negScoresArray[i])) * 100;
+            } 
+
+            if (Double.compare(tfidf_score, TFBOUNDARY) >= 0)
                 tfidfSet.add(i);
-            if (KeywordRetrieval.posScoresArray[i] > 1 &&
-                    KeywordRetrieval.posScoresArray[i] > 1 &&
-                    goodnesspercentage >= GOODNESS)
+            if (goodnesspercentage >= GOODNESS)
                 goodSet.add(i);
         }
 
@@ -53,9 +52,15 @@ public class determineQuality
         intersect.retainAll(goodSet);
         
         returnIndexes = new ArrayList<Integer>(intersect);
+
+        ArrayList output = new ArrayList();
+
+        for (int i=0; i < returnIndexes.size(); i++) {
+            output.add(String.format("%s %d", KeywordRetrieval.result[returnIndexes.get(i)].getTheWord(), i));
+        }
         //for (int i=0; i < tmp.length; i++) {
         //    Object tmpint = tmp[i];
 
-        return returnIndexes;
+        return output;
     }
 }

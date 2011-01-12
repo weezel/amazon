@@ -11,6 +11,7 @@ public class KeywordRetrieval
 {
     public static int[] posScoresArray;
     public static int[] negScoresArray;
+    public static WordInfo[] result;
     /**
      * @param filter filter to apply to the keyword retrieval part.
      * @param index index for the comments file.
@@ -146,19 +147,19 @@ public class KeywordRetrieval
                             switch (curToken) {
                                 case '+':
                                     int stopLoc = Collections.binarySearch(stopWords, tokenArray[i]);
-                                    if (stopLoc >= 0 || tokenArray[i].equals(""))
+                                    if (stopLoc >= 0 || tokenArray[i].equals("") || tokenArray[i].equals(" "))
                                         match = false;
                                     break;
                                 case '*':
                                     break;
                                 case 'a':
                                     int adjLoc = Collections.binarySearch(adjectives, tokenArray[i]);
-                                    if (adjLoc < 0 || tokenArray[i].equals(""))
+                                    if (adjLoc < 0 || tokenArray[i].equals("") || tokenArray[i].equals(" "))
                                         match = false;
                                     break;
                                 case 'c':
                                     int connLoc = Collections.binarySearch(connectionWords, tokenArray[i]);
-                                    if (connLoc < 0 || tokenArray[i].equals(""))
+                                    if (connLoc < 0 || tokenArray[i].equals("") || tokenArray[i].equals(" "))
                                         match = false;
                                     break;
                                 case ';':
@@ -302,7 +303,7 @@ public class KeywordRetrieval
             if(!curWord.equals("")) {
                 if (!curWord.equals(prevWord)) {
                     j++;
-                    countedWords[j] = new WordInfo("", 0, "", 0.0);
+                    countedWords[j] = new WordInfo("", 0, "", 0.0, 0);
                     countedWords[j].setTheWord(curWord);
                     countedWords[j].setCount(1);
                     countedWords[j].setRating("");
@@ -324,16 +325,29 @@ public class KeywordRetrieval
         }
         k = 0;
 
-        WordInfo[] result = new WordInfo[numWords];
+        result = new WordInfo[numWords];
         for (int i = 0; i < numWords; i++) {
 
-            result[i] = new WordInfo("", 0, "0/0: ", 0.0);
+            result[i] = new WordInfo("", 0, "0/0: ", 0.0, 0);
             if(countedWords[i].getTheWord().toString().equals("a"))
                 result[i].setCount(1);
             else
                 result[i].setCount(countedWords[i].getCount());
             result[i].setTheWord(countedWords[i].getTheWord());
             result[i].setTFScore(countedWords[i].getTFRating());
+            int foundW = -1;
+            for (int z = 0; z < productWords.size(); z++) {
+                if (productWords.get(z).toString().substring(0, productWords.get(z).toString().indexOf(":")).equals(countedWords[i].getTheWord()))
+                    foundW = z;
+            }
+            if(foundW >= 0)
+            {
+                if(productWords.get(foundW).toString().substring(productWords.get(foundW).toString().indexOf(":") + 1).equals("+"))
+                    result[i].setinProductList(1);
+                else
+                    result[i].setinProductList(2);
+            }
+
         }
         Arrays.sort(result);
         ///////////////keyword rating code/////////////////
