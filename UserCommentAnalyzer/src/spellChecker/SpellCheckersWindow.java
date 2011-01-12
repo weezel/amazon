@@ -14,8 +14,7 @@ import java.awt.Dimension;
 import java.awt.Toolkit;
 import java.util.ArrayList;
 import java.util.Collections;
-import javax.swing.JList;
-
+import javax.swing.SwingUtilities;
 
 /**
  * Spell checkers window.
@@ -34,6 +33,7 @@ public class SpellCheckersWindow extends javax.swing.JFrame {
      * Keyword list.
      */
     private String[] _wordList;
+    private ArrayList<String> missSpelled;
     /**
      * Selected word in the product list.
      */
@@ -74,15 +74,6 @@ public class SpellCheckersWindow extends javax.swing.JFrame {
         setVisible(true);
     }
 
-    /**
-     * Updates the text to display in the text pane.
-     *
-     * @param text new tezt to set.
-     */
-    public void setText(String text) {
-         jList1 = new JList(_wordList);
-    }
-
     /** This method is called from within the constructor to
      * initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is
@@ -94,8 +85,8 @@ public class SpellCheckersWindow extends javax.swing.JFrame {
         java.awt.GridBagConstraints gridBagConstraints;
 
         _mainPanel = new javax.swing.JPanel();
-        jScrollPane1 = new javax.swing.JScrollPane();
-        jList1 = new javax.swing.JList();
+        _scrollPane1 = new javax.swing.JScrollPane();
+        _misspelledWorList = new javax.swing.JList();
         _buttonPanel = new javax.swing.JPanel();
         _closeButton = new javax.swing.JButton();
         _commandPanel = new javax.swing.JPanel();
@@ -115,19 +106,20 @@ public class SpellCheckersWindow extends javax.swing.JFrame {
         _mainPanel.setName("_mainPanel"); // NOI18N
         _mainPanel.setLayout(new java.awt.GridBagLayout());
 
-        jScrollPane1.setMinimumSize(new java.awt.Dimension(120, 40));
-        jScrollPane1.setName("jScrollPane1"); // NOI18N
+        _scrollPane1.setMinimumSize(new java.awt.Dimension(120, 40));
+        _scrollPane1.setName("_scrollPane1"); // NOI18N
 
-        jList1.setModel(new javax.swing.AbstractListModel() {
-            String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
-            public int getSize() { return strings.length; }
-            public Object getElementAt(int i) { return strings[i]; }
-        });
-        jList1.setLayoutOrientation(javax.swing.JList.HORIZONTAL_WRAP);
-        jScrollPane1.setViewportView(jList1);
-        jList1.getAccessibleContext().setAccessibleParent(jList1);
+        _scrollPane1.setViewportView(_misspelledWorList);
+        _misspelledWorList.getAccessibleContext().setAccessibleParent(_misspelledWorList);
 
-        _mainPanel.add(jScrollPane1, new java.awt.GridBagConstraints());
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.ipadx = 300;
+        gridBagConstraints.ipady = 200;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.weighty = 1.0;
+        gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
+        _mainPanel.add(_scrollPane1, gridBagConstraints);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -243,23 +235,25 @@ public class SpellCheckersWindow extends javax.swing.JFrame {
      */
     private void _showMisspelledWordsButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event__showMisspelledWordsButtonActionPerformed
 
-        // Gets the levenstein boundary from the text field
-        int levensteinBoundary = Integer.parseInt(_levensteinBoundaryTextField.getText());
+        SwingUtilities.invokeLater(new Runnable() {
 
-        // Gets the dice coefficient from the text field
-        int diceCoefficient = Integer.parseInt(_diceCoefficientTextField.getText());
+            @Override
+            public void run() {
+                // Gets the levenstein boundary from the text field
+                int levensteinBoundary = Integer.parseInt(_levensteinBoundaryTextField.getText());
 
-        ArrayList<String> missSpelled = SpellCheckers.nearWords(_wordList, _selectedWord, levensteinBoundary, diceCoefficient);
-        Collections.sort(missSpelled);
-       
-        // Updates the text in the spell checkers window
-        //for (String s : missSpelled)
-            //_textArea = (missSpelled);
-        for (int i=0; i < missSpelled.size(); i++)
-            _wordList[i] = missSpelled.get(i);
-        SpellCheckersWindow.getInstance().jList1 = new JList(_wordList);
+                // Gets the dice coefficient from the text field
+                int diceCoefficient = Integer.parseInt(_diceCoefficientTextField.getText());
+
+                missSpelled = SpellCheckers.nearWords(_wordList, _selectedWord, levensteinBoundary, diceCoefficient);
+                Collections.sort(missSpelled);
+
+                // Sets the word list
+                _misspelledWorList.setListData(missSpelled.toArray());
+            }
+        });
+
     }//GEN-LAST:event__showMisspelledWordsButtonActionPerformed
-
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel _buttonPanel;
     private javax.swing.JButton _closeButton;
@@ -269,9 +263,9 @@ public class SpellCheckersWindow extends javax.swing.JFrame {
     private javax.swing.JLabel _levensteinBoundaryLabel;
     private javax.swing.JTextField _levensteinBoundaryTextField;
     private javax.swing.JPanel _mainPanel;
+    private javax.swing.JList _misspelledWorList;
+    private javax.swing.JScrollPane _scrollPane1;
     private javax.swing.JButton _showMisspelledWordsButton;
-    private javax.swing.JList jList1;
-    private javax.swing.JScrollPane jScrollPane1;
     // End of variables declaration//GEN-END:variables
 
     /**
@@ -281,9 +275,11 @@ public class SpellCheckersWindow extends javax.swing.JFrame {
 
         // Gets the selected word from the list
         _selectedWord = selectedWord;
-        SpellCheckersWindow.getInstance().jList1 = new JList(wordList);
 
-        // Sets the window visible
+        // Gets the keyword list
+        _wordList = wordList;
+
+        // Displays the window
         setVisible(true);
     }
 }

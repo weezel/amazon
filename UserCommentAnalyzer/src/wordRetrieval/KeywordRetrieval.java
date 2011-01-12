@@ -5,7 +5,7 @@ import java.util.*;
 import java.text.*;
 
 import ML.TfIdf;
-import spellChecker.SpellCheckers;
+
 
 public class KeywordRetrieval
 {
@@ -225,16 +225,9 @@ public class KeywordRetrieval
 
         int numWords = 0;
         /////tifidf code/////
-        String[] allWords;              // XXX declares an array of integers
-        allWords = new String[revWords.size()];      //XXX allocates memory for 10 integers
-        for (int i = 0; i < revWords.size(); i++) //XXX
-            allWords[i] = revWords.get(i).toString(); //XXX
-
-        Arrays.sort(allWords); // XXX
         Collections.sort(revWords);
         int commIdx = 0, prevCommIdx = -1;
-        if (prevCommIdx == -1) // XXX
-            SpellCheckers.nearWords(allWords, "battery", 3, 50); // XXX
+
         double invFreq = 0.0, tfscore = 0.0;
         String prevWord = "";
         for (int i=0; i < revWords.size(); i++) {

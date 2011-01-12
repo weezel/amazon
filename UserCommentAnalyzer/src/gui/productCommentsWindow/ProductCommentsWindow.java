@@ -66,7 +66,7 @@ public class ProductCommentsWindow extends JFrame {
 
         // Loads the comments file content
         try {
-            _textPane.read(new FileReader("Comments" + index + ".txt"), null);
+            _textPane.read(new FileReader("comments" + index + ".txt"), null);
         } catch (Exception e) {
             System.out.println("Failed to load file " + index);
             System.out.println(e);
