@@ -5,7 +5,7 @@ import javax.swing.JLabel;
 import javax.swing.ListCellRenderer;
 import java.awt.Component;
 import java.awt.Color;
-
+import wordRetrieval.WordInfo;
 
 public class ColorListBox extends JLabel implements ListCellRenderer {
 
@@ -20,27 +20,31 @@ public class ColorListBox extends JLabel implements ListCellRenderer {
         Color lightRed = new Color(255,192,192);
         Color lightGreen = new Color(192,255,192);
 
+        //WordInfo curWord = (WordInfo) value;
+
         String ratingLoc = value.toString().substring(value.toString().indexOf(":")+1);
         double rating = 0;
         //if(!ratingLoc.equals(" "))
         ratingLoc = ratingLoc.substring(ratingLoc.indexOf(":")+2);
         ratingLoc = ratingLoc.substring(0, ratingLoc.indexOf("[") - 1);
 
-        if(!ratingLoc.equals(""))
-        {
+        if (!ratingLoc.equals("")) {
             rating = Double.valueOf(ratingLoc);
+            if (rating > 50) {
+                setBackground(lightGreen);
+            }
+
+            if (rating <= 50) {
+                setBackground(lightRed);
+            }
+
+        } else {
+            setBackground(Color.WHITE);
         }
 
 
 
-        if(rating > 50)
-            setBackground(lightGreen);
 
-        if(rating <= 50)
-            setBackground(lightRed);
-
-        if(rating == 0)
-            setBackground(Color.WHITE);
 
         // based on the index you set the color.  This produces the every other effect.
 

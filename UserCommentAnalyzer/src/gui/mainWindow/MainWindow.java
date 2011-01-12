@@ -341,19 +341,18 @@ public class MainWindow extends javax.swing.JFrame {
         _helpButton = new javax.swing.JButton();
         _applyFilterButton = new javax.swing.JButton();
         _menuBar = new javax.swing.JMenuBar();
-        _fileMenu = new javax.swing.JMenu();
-        _exitMenuItem = new javax.swing.JMenuItem();
         _helpMenu = new javax.swing.JMenu();
         _aboutUsMenuItem = new javax.swing.JMenuItem();
         _helpMenuItem = new javax.swing.JMenuItem();
         _machineLearningMenu = new javax.swing.JMenu();
         _associationRulesMenuItem = new javax.swing.JMenuItem();
+        _fileMenu = new javax.swing.JMenu();
+        _exitMenuItem = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("User Comment Analyzer");
         setBackground(new java.awt.Color(170, 185, 210));
         setExtendedState(1);
-        setSize(new java.awt.Dimension(950, 768));
         getContentPane().setLayout(new java.awt.GridBagLayout());
 
         _logoPanel.setBackground(new java.awt.Color(255, 255, 255));
@@ -368,12 +367,12 @@ public class MainWindow extends javax.swing.JFrame {
         getContentPane().add(_logoPanel, gridBagConstraints);
 
         _searchPanel.setBackground(new java.awt.Color(170, 185, 210));
-        _searchPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Search Configuration", javax.swing.border.TitledBorder.CENTER, javax.swing.border.TitledBorder.TOP, new java.awt.Font("Lucida Grande", 0, 13), new java.awt.Color(80, 80, 100))); // NOI18N
+        _searchPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Search Configuration", javax.swing.border.TitledBorder.CENTER, javax.swing.border.TitledBorder.TOP, new java.awt.Font("Tahoma", 0, 11), new java.awt.Color(80, 80, 100))); // NOI18N
         _searchPanel.setForeground(new java.awt.Color(80, 80, 100));
         _searchPanel.setLayout(new java.awt.BorderLayout());
 
         _URLProductPanel.setBackground(new java.awt.Color(170, 185, 210));
-        _URLProductPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "URL Product Configuration", javax.swing.border.TitledBorder.LEFT, javax.swing.border.TitledBorder.TOP, new java.awt.Font("Lucida Grande", 0, 13), new java.awt.Color(80, 80, 100))); // NOI18N
+        _URLProductPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "URL Product Configuration", javax.swing.border.TitledBorder.LEFT, javax.swing.border.TitledBorder.TOP, new java.awt.Font("Tahoma", 0, 11), new java.awt.Color(80, 80, 100))); // NOI18N
         _URLProductPanel.setForeground(new java.awt.Color(80, 80, 100));
         _URLProductPanel.setLayout(new java.awt.GridBagLayout());
 
@@ -433,13 +432,13 @@ public class MainWindow extends javax.swing.JFrame {
         getContentPane().add(_searchPanel, gridBagConstraints);
 
         _resultsPanel.setBackground(new java.awt.Color(170, 185, 210));
-        _resultsPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Results panel", javax.swing.border.TitledBorder.CENTER, javax.swing.border.TitledBorder.TOP, new java.awt.Font("Lucida Grande", 0, 13), new java.awt.Color(80, 80, 100))); // NOI18N
+        _resultsPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Results panel", javax.swing.border.TitledBorder.CENTER, javax.swing.border.TitledBorder.TOP, new java.awt.Font("Tahoma", 0, 11), new java.awt.Color(80, 80, 100))); // NOI18N
         _resultsPanel.setForeground(new java.awt.Color(80, 80, 100));
         _resultsPanel.setPreferredSize(new java.awt.Dimension(438, 207));
         _resultsPanel.setLayout(new java.awt.BorderLayout());
 
         _selectionPanel.setBackground(new java.awt.Color(170, 185, 210));
-        _selectionPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Selection Panel", javax.swing.border.TitledBorder.CENTER, javax.swing.border.TitledBorder.TOP, new java.awt.Font("Lucida Grande", 0, 13), new java.awt.Color(80, 80, 100))); // NOI18N
+        _selectionPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Selection Panel", javax.swing.border.TitledBorder.CENTER, javax.swing.border.TitledBorder.TOP, new java.awt.Font("Tahoma", 0, 11), new java.awt.Color(80, 80, 100))); // NOI18N
         _selectionPanel.setForeground(new java.awt.Color(80, 80, 100));
         _selectionPanel.setLayout(new java.awt.BorderLayout(0, 10));
 
@@ -495,7 +494,7 @@ public class MainWindow extends javax.swing.JFrame {
         _resultsPanel.add(_productsPanelScrollPane, java.awt.BorderLayout.CENTER);
 
         _filterPanel.setBackground(new java.awt.Color(170, 185, 210));
-        _filterPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "keyword Retrieval Filters ", javax.swing.border.TitledBorder.LEFT, javax.swing.border.TitledBorder.TOP, new java.awt.Font("Lucida Grande", 0, 13), new java.awt.Color(80, 80, 100))); // NOI18N
+        _filterPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "keyword Retrieval Filters ", javax.swing.border.TitledBorder.LEFT, javax.swing.border.TitledBorder.TOP, new java.awt.Font("Tahoma", 0, 11), new java.awt.Color(80, 80, 100))); // NOI18N
         _filterPanel.setForeground(new java.awt.Color(80, 80, 100));
         _filterPanel.setLayout(new java.awt.GridBagLayout());
 
@@ -526,7 +525,6 @@ public class MainWindow extends javax.swing.JFrame {
         _helpButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/gui/resources/images/icons/help.png"))); // NOI18N
         _helpButton.setToolTipText("Displays a help file with the filter usage");
         _helpButton.setContentAreaFilled(false);
-        _helpButton.setOpaque(true);
         _helpButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 _helpButtonActionPerformed(evt);
@@ -567,25 +565,6 @@ public class MainWindow extends javax.swing.JFrame {
         getContentPane().add(_resultsPanel, gridBagConstraints);
 
         _menuBar.setBackground(new java.awt.Color(170, 185, 210));
-
-        _fileMenu.setBackground(new java.awt.Color(142, 160, 193));
-        _fileMenu.setForeground(new java.awt.Color(80, 80, 100));
-        _fileMenu.setText("File");
-
-        _exitMenuItem.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_Q, java.awt.event.InputEvent.CTRL_MASK));
-        _exitMenuItem.setBackground(new java.awt.Color(170, 185, 210));
-        _exitMenuItem.setForeground(new java.awt.Color(80, 80, 100));
-        _exitMenuItem.setIcon(new javax.swing.ImageIcon(getClass().getResource("/gui/resources/images/icons/exit.png"))); // NOI18N
-        _exitMenuItem.setText("Exit");
-        _exitMenuItem.setToolTipText("Exits the program");
-        _exitMenuItem.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                exitMenuItemActionPerformed(evt);
-            }
-        });
-        _fileMenu.add(_exitMenuItem);
-
-        _menuBar.add(_fileMenu);
 
         _helpMenu.setBackground(new java.awt.Color(142, 160, 193));
         _helpMenu.setForeground(new java.awt.Color(80, 80, 100));
@@ -635,6 +614,25 @@ public class MainWindow extends javax.swing.JFrame {
         _machineLearningMenu.add(_associationRulesMenuItem);
 
         _menuBar.add(_machineLearningMenu);
+
+        _fileMenu.setBackground(new java.awt.Color(142, 160, 193));
+        _fileMenu.setForeground(new java.awt.Color(80, 80, 100));
+        _fileMenu.setText("File");
+
+        _exitMenuItem.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_Q, java.awt.event.InputEvent.CTRL_MASK));
+        _exitMenuItem.setBackground(new java.awt.Color(170, 185, 210));
+        _exitMenuItem.setForeground(new java.awt.Color(80, 80, 100));
+        _exitMenuItem.setIcon(new javax.swing.ImageIcon(getClass().getResource("/gui/resources/images/icons/exit.png"))); // NOI18N
+        _exitMenuItem.setText("Exit");
+        _exitMenuItem.setToolTipText("Exits the program");
+        _exitMenuItem.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                exitMenuItemActionPerformed(evt);
+            }
+        });
+        _fileMenu.add(_exitMenuItem);
+
+        _menuBar.add(_fileMenu);
 
         setJMenuBar(_menuBar);
 
