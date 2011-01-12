@@ -1,1 +1,47 @@
 This is groupwork for the course 2ID25.
+
+# Lines Of Code
+find . -type f \( -iname \*.java -or -iname \*.py \) -exec wc -l '{}' \; |awk '{ s+=$1 } END { print s }'
+6600
+
+
+# Sloccount statistics
+sloccount .
+Have a non-directory at the top, so creating directory top_dir
+Creating filelist for UserCommentAnalyzer
+Creating filelist for report
+Creating filelist for tools
+Categorizing files.
+Finding a working MD5 command....
+Found a working MD5 command.
+Computing results.
+
+
+SLOC    Directory       SLOC-by-Language (Sorted)
+4304    UserCommentAnalyzer java=3173,xml=810,python=321
+42      tools           python=42
+
+
+Totals grouped by language (dominant language first):
+java:          3173 (73.01%)
+xml:            810 (18.64%)
+python:         363 (8.35%)
+
+
+
+
+Total Physical Source Lines of Code (SLOC)                = 4,346
+Development Effort Estimate, Person-Years (Person-Months) = 0.94 (11.23)
+ (Basic COCOMO model, Person-Months = 2.4 * (KSLOC**1.05))
+Schedule Estimate, Years (Months)                         = 0.52 (6.27)
+ (Basic COCOMO model, Months = 2.5 * (person-months**0.38))
+Estimated Average Number of Developers (Effort/Schedule)  = 1.79
+Total Estimated Cost to Develop                           = $ 126,368
+ (average salary = $56,286/year, overhead = 2.40).
+SLOCCount, Copyright (C) 2001-2004 David A. Wheeler
+SLOCCount is Open Source Software/Free Software, licensed under the GNU GPL.
+SLOCCount comes with ABSOLUTELY NO WARRANTY, and you are welcome to
+redistribute it under certain conditions as specified by the GNU GPL license;
+see the documentation for details.
+Please credit this data as "generated using David A. Wheeler's 'SLOCCount'."
+
