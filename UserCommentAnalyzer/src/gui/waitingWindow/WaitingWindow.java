@@ -110,7 +110,7 @@ public class WaitingWindow extends JWindow{
     /**
      * Shows the waiting window.
      */
-    public void showWaitingWindow(){      
+    public void showWaitingWindow(){
         setVisible(true);
     }
 

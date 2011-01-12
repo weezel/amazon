@@ -16,13 +16,10 @@ import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
 import spellChecker.SpellCheckersWindow;
 import wordRetrieval.WordInfo;
-import javax.swing.JPopupMenu;
-import javax.swing.JMenuItem;
 
 import wordRetrieval.KeywordRetrieval;
 import java.util.ArrayList;
 import java.io.*;
-import java.awt.Component;
 
 
 

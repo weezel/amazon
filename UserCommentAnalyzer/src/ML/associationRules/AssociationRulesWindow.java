@@ -50,7 +50,7 @@ public class AssociationRulesWindow extends javax.swing.JFrame {
      * Represents the keyword labels to display in the rules panel which translates
      * the indexes generated in the algorithm.
      */
-    private ArrayList<String> _keywordName;
+    private ArrayList<String> _labels;
 
     /**
      * Returns the association rules window unique class instance.
@@ -71,7 +71,7 @@ public class AssociationRulesWindow extends javax.swing.JFrame {
     public AssociationRulesWindow() {
 
         // Creates the keyword names to display the rules
-        _keywordName = new ArrayList<String>();
+        _labels = new ArrayList<String>();
 
         initComponents();
 
@@ -153,14 +153,14 @@ public class AssociationRulesWindow extends javax.swing.JFrame {
                 cad += "\n- If appears:[ ";
 
                 for (i = 0; i < leftSide.size() - 1; i++) {
-                    cad += _keywordName.get(leftSide.get(i)) + " AND ";
+                    cad += _labels.get(leftSide.get(i)) + " AND ";
                 }
-                cad += _keywordName.get(leftSide.get(i)) + " ]";
+                cad += _labels.get(leftSide.get(i)) + " ]";
                 cad += "\n\tAlso appears: [ ";
                 for (i = 0; i < rightSide.size() - 1; i++) {
-                    cad += _keywordName.get(rightSide.get(i)) + " AND ";
+                    cad += _labels.get(rightSide.get(i)) + " AND ";
                 }
-                cad += _keywordName.get(rightSide.get(i)) + " ]";
+                cad += _labels.get(rightSide.get(i)) + " ]";
             }
 
             // Sets the text with the rules
@@ -363,17 +363,6 @@ public class AssociationRulesWindow extends javax.swing.JFrame {
         }
     }//GEN-LAST:event__showReportButtonActionPerformed
 
-    /**
-     * @param args the command line arguments
-     */
-    public static void main(String args[]) {
-        java.awt.EventQueue.invokeLater(new Runnable() {
-
-            public void run() {
-                new AssociationRulesWindow().setVisible(true);
-            }
-        });
-    }
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel _controlPanel;
     private javax.swing.JPanel _displayPanel;
@@ -391,113 +380,90 @@ public class AssociationRulesWindow extends javax.swing.JFrame {
     // End of variables declaration//GEN-END:variables
 
     /**
-     * Generates the boolean matrix from a keyword list given as a parameter.
+     * Generates the boolean _matrix from the product keyword list given as a parameter.
      * 
-     * The list contains productList.size() components and each one of the
-     * components contains the 10 best words for that product.
+     * Example:
+     * With this productKeywordLists given as a parameter: <<beyonce, dvd,concert,cd,tour>,<celine,concert,dvd,cd,love>>
+     *
+     * First, we build the labels array list.
+     * This array contains all the different elements in all the product keyword lists
+     * in the matrix given as a parameter.
+     * The _labels array is: <beyonce, dvd, concertm cd, tour, celine, love>
+     *
+     * The next step is to build the boolean matrix itself.
+     * It is like _matrix[productKeywordLists.size()][_labels.size()];
+     *
+     * And after all the process the result _matrix is:
+     * [1,1,1,1,1,0,0
+     *  0,1,1,1,0,1,1]
+     *
+     * Each row represents the product, and each column the keyword. In the
+     * example above, for instance, "beyonce" (the first word in the _labels) appears in the first product and
+     * it does not appear in the second product.
      * 
-     * In order to generate the matrix, we go throught all the keywords in each 
-     * component generating at the end a matrix like:
-     * 
-     *                  -- productList.size() --
-     *              [                           
-     *                                              |
-     *                                              |
-     *                                              ∑productList.size()
-     *                                              |
-     *                                              |
-     * 
-     *                                          ]
-     * Each value contains 1 (if the element appears in this product) or 
-     * 
-     * 
-     * @param matrix
+     * @param productKeywordLists
      */
-    private void generateBooleanMatrix(ArrayList<ArrayList<WordInfo>> matrix) {
+    private void generateBooleanMatrix(ArrayList<ArrayList<WordInfo>> productKeywordLists) {
 
-        int currentList = 0;
-        boolean found = false;
+        // Creates the labels
+        for (int i = 0; i < productKeywordLists.size(); i++) {
+            for (int j = 0; j < productKeywordLists.get(i).size(); j++) {
 
-        // Creates the columns
-        ArrayList<ArrayList<Integer>> resultMatrix = new ArrayList<ArrayList<Integer>>();
-
-        for (int i = 0; i < matrix.size(); i++) {
-
-            // Creates the rows
-            ArrayList<Integer> row = new ArrayList<Integer>();
-
-            for (int j = 0; j < matrix.get(i).size(); j++) {
-
-                // Gets the word to look for
-                String word = matrix.get(i).get(j).getTheWord();
-
-                currentList = 0;
-
-                // Looks for it in the other products
-                while (currentList < matrix.size()) {
-
-                    // If the current list is
-                    if (currentList == i) {
-
-                        // Put 1 in the boolean matrix
-                        row.add(1);
-
-                        currentList++;
-                    } else {
-
-                        found = false;
-
-                        // Look for the keyword in the other lists
-                        for (int k = 0; k < matrix.get(currentList).size(); k++) {
-
-                            // If the product contains the word
-                            if (matrix.get(currentList).get(k).getTheWord().matches(word)) {
-                                found = true;
-                            }
-                        }
-
-
-                        if (found) {
-                            // Put 1 in the boolean matrix
-                            row.add(1);
-                        } else {
-                            // Put 0 in the boolean matrix
-                            row.add(0);
-                        }
-
-                        currentList++;
-                    }
-                }
+                // Without repetitions
+                if(!_labels.contains(productKeywordLists.get(i).get(j).getTheWord()))
+                    _labels.add(productKeywordLists.get(i).get(j).getTheWord());
             }
-
-            // Adds the rows
-            resultMatrix.add(row);
         }
 
-        System.out.print("-----\nThe boolean matrix");
+        // DEBUG
+        System.out.println("-------------------");
+        System.out.print("\nList of labels: ");
+        for (int i = 0; i < _labels.size(); i++)
+            System.out.print(_labels.get(i) + ", ");
+        System.out.println();
 
-        for (int i = 0; i < resultMatrix.size(); i++) {
+        // Create the matrix with the correct size
+        _matrix = new Integer[productKeywordLists.size()][_labels.size()];
+        boolean found = false;
 
-            System.out.println("Product " + i);
-            for (int j = 0; j < resultMatrix.get(i).size(); j++) {
-                System.out.println(resultMatrix.get(i).get(j) + ", ");
+        // Builds the boolean matrix
+        for (int labelIndex = 0; labelIndex < _labels.size(); labelIndex++) {
+            
+            for (int keywordsIndex = 0; keywordsIndex < productKeywordLists.size(); keywordsIndex++) {
+
+                found = false;
+
+                // Looks for the word in the product list
+                for(int index = 0; index < productKeywordLists.get(keywordsIndex).size(); index++){
+                    if(productKeywordLists.get(keywordsIndex).get(index).getTheWord().matches(_labels.get(labelIndex)))
+                        found = true;
+                }
+
+                // If exists
+                if(found)
+                    // Put 1
+                    _matrix[keywordsIndex][labelIndex] = 1;
+                else
+                    // Put 0
+                    _matrix[keywordsIndex][labelIndex] = 0;
+            }
+        }
+
+        // DEBUG
+        System.out.println("-------------------");
+        System.out.println("\nBoolean matrix: ");
+        System.out.print("[ ");
+        for (int i = 0; i < _matrix.length; i++) {
+
+            for (int j = 0; j < _matrix[i].length; j++) {
+
+                if((i == _matrix.length - 1) && (j == _matrix[i].length - 1))
+                    System.out.print(_matrix[i][j]);
+                else
+                    System.out.print(_matrix[i][j] + ", ");
             }
             System.out.println();
         }
-
-        // Builds the boolean matrix
-        _matrix = new Integer[resultMatrix.size()][resultMatrix.get(0).size()];
-        for (int i = 0; i < _matrix.length; i++) {
-            for (int j = 0; j < _matrix[i].length; j++) {
-                _matrix[i][j] = resultMatrix.get(i).get(j);
-            }
-        }
-
-        // Builds the keyword names to display in the rules
-        for (int i = 0; i < matrix.size(); i++) {
-            for (int j = 0; j < matrix.get(i).size(); j++) {
-                _keywordName.add(matrix.get(i).get(j).getTheWord());
-            }
-        }
+        System.out.print(" ]");
     }
 }

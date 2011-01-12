@@ -161,7 +161,7 @@ public class MainWindow extends javax.swing.JFrame {
 
             // Adds the product panel to the results panel
             GridBagConstraints constraints = new GridBagConstraints();
-            constraints.insets = new Insets(5,5,5,5);
+            constraints.insets = new Insets(5, 5, 5, 5);
             constraints.fill = GridBagConstraints.VERTICAL;
             constraints.anchor = GridBagConstraints.CENTER;
             constraints.ipadx = 225;
@@ -205,9 +205,16 @@ public class MainWindow extends javax.swing.JFrame {
             try {
 
                 // If the product is selected in the list
+<<<<<<< HEAD
                 if (_selectionKeywordList.isSelectedIndex(index)) 
                     // Rebuilds the keywordlist
                     _productKeywordList.set(index, _wordRetrieval.run(_keywordRetrievalFilterTextField.getText(), index + 1)); 
+=======
+                if (_selectionKeywordList.isSelectedIndex(index)) // Rebuilds the keywordlist
+                {
+                    _productKeywordList.set(index, _wordRetrieval.run(_keywordRetrievalFilterTextField.getText(), index + 1));
+                }
+>>>>>>> origin/master
 
             } catch (IOException ex) {
                 Logger.getLogger(MainWindow.class.getName()).log(Level.SEVERE, null, ex);
@@ -369,12 +376,20 @@ public class MainWindow extends javax.swing.JFrame {
         getContentPane().add(_logoPanel, gridBagConstraints);
 
         _searchPanel.setBackground(new java.awt.Color(170, 185, 210));
+<<<<<<< HEAD
         _searchPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Search Configuration", javax.swing.border.TitledBorder.CENTER, javax.swing.border.TitledBorder.TOP, new java.awt.Font("Segoe UI", 0, 11), new java.awt.Color(80, 80, 100))); // NOI18N
+=======
+        _searchPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Search Configuration", javax.swing.border.TitledBorder.CENTER, javax.swing.border.TitledBorder.TOP, new java.awt.Font("Dialog", 1, 12), new java.awt.Color(80, 80, 100))); // NOI18N
+>>>>>>> origin/master
         _searchPanel.setForeground(new java.awt.Color(80, 80, 100));
         _searchPanel.setLayout(new java.awt.BorderLayout());
 
         _URLProductPanel.setBackground(new java.awt.Color(170, 185, 210));
+<<<<<<< HEAD
         _URLProductPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "URL Product Configuration", javax.swing.border.TitledBorder.LEFT, javax.swing.border.TitledBorder.TOP, new java.awt.Font("Segoe UI", 0, 11), new java.awt.Color(80, 80, 100))); // NOI18N
+=======
+        _URLProductPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "URL Product Configuration", javax.swing.border.TitledBorder.LEFT, javax.swing.border.TitledBorder.TOP, new java.awt.Font("Dialog", 1, 12), new java.awt.Color(80, 80, 100))); // NOI18N
+>>>>>>> origin/master
         _URLProductPanel.setForeground(new java.awt.Color(80, 80, 100));
         _URLProductPanel.setLayout(new java.awt.GridBagLayout());
 
@@ -412,12 +427,21 @@ public class MainWindow extends javax.swing.JFrame {
         _buttonPanel.setForeground(new java.awt.Color(80, 80, 100));
         _buttonPanel.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.RIGHT));
 
+<<<<<<< HEAD
         _generateResultsButton.setBackground(new java.awt.Color(170, 185, 210));
         _generateResultsButton.setForeground(new java.awt.Color(80, 80, 100));
         _generateResultsButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/gui/resources/images/icons/Script.png"))); // NOI18N
         _generateResultsButton.setText("Generate product results");
         _generateResultsButton.setToolTipText("Generates the product keyword list associated to the typed URL");
         _generateResultsButton.setPreferredSize(new java.awt.Dimension(193, 30));
+=======
+        _generateResultsButton.setBackground(new java.awt.Color(195, 210, 235));
+        _generateResultsButton.setForeground(new java.awt.Color(100, 100, 120));
+        _generateResultsButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/gui/resources/images/icons/Script.png"))); // NOI18N
+        _generateResultsButton.setText("Generate product results");
+        _generateResultsButton.setToolTipText("Generates the product keyword list associated to the typed URL");
+        _generateResultsButton.setPreferredSize(new java.awt.Dimension(250, 30));
+>>>>>>> origin/master
         _generateResultsButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 generateResultsButtonActionPerformed(evt);
@@ -434,13 +458,21 @@ public class MainWindow extends javax.swing.JFrame {
         getContentPane().add(_searchPanel, gridBagConstraints);
 
         _resultsPanel.setBackground(new java.awt.Color(170, 185, 210));
+<<<<<<< HEAD
         _resultsPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Results panel", javax.swing.border.TitledBorder.CENTER, javax.swing.border.TitledBorder.TOP, new java.awt.Font("Segoe UI", 0, 11), new java.awt.Color(80, 80, 100))); // NOI18N
+=======
+        _resultsPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Results panel", javax.swing.border.TitledBorder.CENTER, javax.swing.border.TitledBorder.TOP, new java.awt.Font("Dialog", 1, 12), new java.awt.Color(80, 80, 100))); // NOI18N
+>>>>>>> origin/master
         _resultsPanel.setForeground(new java.awt.Color(80, 80, 100));
         _resultsPanel.setPreferredSize(new java.awt.Dimension(438, 207));
         _resultsPanel.setLayout(new java.awt.BorderLayout());
 
         _selectionPanel.setBackground(new java.awt.Color(170, 185, 210));
+<<<<<<< HEAD
         _selectionPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Selection Panel", javax.swing.border.TitledBorder.CENTER, javax.swing.border.TitledBorder.TOP, new java.awt.Font("Segoe UI", 0, 11), new java.awt.Color(80, 80, 100))); // NOI18N
+=======
+        _selectionPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Selection Panel", javax.swing.border.TitledBorder.CENTER, javax.swing.border.TitledBorder.TOP, new java.awt.Font("Dialog", 1, 12), new java.awt.Color(80, 80, 100))); // NOI18N
+>>>>>>> origin/master
         _selectionPanel.setForeground(new java.awt.Color(80, 80, 100));
         _selectionPanel.setLayout(new java.awt.BorderLayout(0, 10));
 
@@ -496,7 +528,11 @@ public class MainWindow extends javax.swing.JFrame {
         _resultsPanel.add(_productsPanelScrollPane, java.awt.BorderLayout.CENTER);
 
         _filterPanel.setBackground(new java.awt.Color(170, 185, 210));
+<<<<<<< HEAD
         _filterPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "keyword Retrieval Filters ", javax.swing.border.TitledBorder.LEFT, javax.swing.border.TitledBorder.TOP, new java.awt.Font("Segoe UI", 0, 11), new java.awt.Color(80, 80, 100))); // NOI18N
+=======
+        _filterPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "keyword Retrieval Filters ", javax.swing.border.TitledBorder.LEFT, javax.swing.border.TitledBorder.TOP, new java.awt.Font("Dialog", 1, 12), new java.awt.Color(80, 80, 100))); // NOI18N
+>>>>>>> origin/master
         _filterPanel.setForeground(new java.awt.Color(80, 80, 100));
         _filterPanel.setLayout(new java.awt.GridBagLayout());
 
@@ -526,6 +562,10 @@ public class MainWindow extends javax.swing.JFrame {
         _helpButton.setForeground(new java.awt.Color(80, 80, 100));
         _helpButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/gui/resources/images/icons/help.png"))); // NOI18N
         _helpButton.setToolTipText("Displays a help file with the filter usage");
+<<<<<<< HEAD
+=======
+        _helpButton.setBorderPainted(false);
+>>>>>>> origin/master
         _helpButton.setContentAreaFilled(false);
         _helpButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -556,8 +596,11 @@ public class MainWindow extends javax.swing.JFrame {
         gridBagConstraints.gridy = 0;
         _filterPanel.add(_applyFilterButton, gridBagConstraints);
 
+<<<<<<< HEAD
         jButton1.setBackground(new java.awt.Color(170, 185, 210));
         jButton1.setForeground(new java.awt.Color(80, 80, 100));
+=======
+>>>>>>> origin/master
         jButton1.setText("Rate Keywords");
         jButton1.setEnabled(false);
         jButton1.addActionListener(new java.awt.event.ActionListener() {
@@ -714,10 +757,16 @@ public class MainWindow extends javax.swing.JFrame {
     private void _helpMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event__helpMenuItemActionPerformed
 
         // Shows the help file of the application
+<<<<<<< HEAD
         try{
         Desktop.getDesktop().open(new File("src/gui/help/help.pdf"));
         }
         catch(Exception ex){
+=======
+        try {
+            Desktop.getDesktop().open(new File("src/gui/help/help.pdf"));
+        } catch (Exception ex) {
+>>>>>>> origin/master
             Logger.getLogger(MainWindow.class.getName()).log(Level.SEVERE, null, ex);
         }
     }//GEN-LAST:event__helpMenuItemActionPerformed
@@ -751,8 +800,12 @@ public class MainWindow extends javax.swing.JFrame {
 
             // Starts the filter
             _appyFilterProcess.start();
+<<<<<<< HEAD
         }
         else{
+=======
+        } else {
+>>>>>>> origin/master
             JOptionPane.showMessageDialog(this, "You must select at least one element in the selection list at the left side", "Error", JOptionPane.ERROR_MESSAGE);
         }
     }//GEN-LAST:event__applyFilterButtonActionPerformed
@@ -767,10 +820,16 @@ public class MainWindow extends javax.swing.JFrame {
     private void _helpButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event__helpButtonActionPerformed
 
         // Shows the help file of the application
+<<<<<<< HEAD
         try{
         Desktop.getDesktop().open(new File("src/gui/help/filterHelp.txt"));
         }
         catch(Exception ex){
+=======
+        try {
+            Desktop.getDesktop().open(new File("src/gui/help/filterHelp.txt"));
+        } catch (Exception ex) {
+>>>>>>> origin/master
             Logger.getLogger(MainWindow.class.getName()).log(Level.SEVERE, null, ex);
         }
     }//GEN-LAST:event__helpButtonActionPerformed
@@ -806,6 +865,7 @@ public class MainWindow extends javax.swing.JFrame {
      */
     private void _associationRulesMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event__associationRulesMenuItemActionPerformed
 
+<<<<<<< HEAD
         // Gets the first 20 keywords from each product list
 
         ArrayList<ArrayList<WordInfo>> _productBestKeywordsList = new ArrayList();
@@ -839,6 +899,49 @@ public class MainWindow extends javax.swing.JFrame {
 
         // Display the association rules window
         AssociationRulesWindow.getInstance().showAssociationRulesWindow(_productBestKeywordsList);
+=======
+        // Ask to the user for the number of keywords to compare
+        String numberOfKeywordsString = JOptionPane.showInputDialog(this, "Type the number of the first elements in the product lists: ", "Select the keywords afected in the association rules process", JOptionPane.QUESTION_MESSAGE);
+
+        if (numberOfKeywordsString != null) {
+            
+            int numberOfKeywords = Integer.parseInt(numberOfKeywordsString);
+
+            ArrayList<ArrayList<WordInfo>> _productBestKeywordsList = new ArrayList();
+
+            // Gets the first 20 keywords from each product list
+            for (int index = 0; index < _productPanelList.size(); index++) {
+
+                // Gets the product list
+                JList productList = _productPanelList.get(index).getProductList();
+
+                // Generates the 10 best words keywords
+                ArrayList<WordInfo> tenBestKeyWords = new ArrayList<WordInfo>();
+
+                // Gets the first elements from the list selected by the user
+                for (int j = 0; j < numberOfKeywords; j++) {
+                    tenBestKeyWords.add((WordInfo) productList.getModel().getElementAt(j));
+                }
+
+                // Adds it to the best keyword list
+                _productBestKeywordsList.add(tenBestKeyWords);
+            }
+
+            // DEBUG
+            System.out.println("-----\nThe " + numberOfKeywords + " best keywords per each product:");
+            for (int i = 0; i < _productBestKeywordsList.size(); i++) {
+
+                System.out.println("Product " + i);
+                for (int j = 0; j < _productBestKeywordsList.get(i).size(); j++) {
+                    System.out.println(_productBestKeywordsList.get(i).get(j));
+                }
+                System.out.println();
+            }
+
+            // Display the association rules window
+            AssociationRulesWindow.getInstance().showAssociationRulesWindow(_productBestKeywordsList);
+        }
+>>>>>>> origin/master
     }//GEN-LAST:event__associationRulesMenuItemActionPerformed
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed

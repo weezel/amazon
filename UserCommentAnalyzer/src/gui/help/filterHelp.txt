@@ -2,8 +2,7 @@ Expressions of the following shape are used to filter the keyword list:
 
 [_] ( [_] ... [_] )
 
-Where “[_]” denotes a keyword of a certain type, and ( [_] ... [_] ) denotes an
-optional arbitrary amount of additional keywords to be matched.
+Where [_] denotes a keyword of a certain type, and ( [_] ... [_] ) denotes an optional arbitrary amount of additional keywords to be matched.
 
 The following types of expressions are available:
 
