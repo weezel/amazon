@@ -1,0 +1,5 @@
+quality:+
+picture:+
+price:-
+sound:+
+music:+

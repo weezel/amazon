@@ -12,8 +12,10 @@ package spellChecker;
 
 import java.awt.Dimension;
 import java.awt.Toolkit;
-import java.util.HashMap;
-import java.util.TreeMap;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+
 
 /**
  * Spell checkers window.
@@ -268,16 +270,12 @@ public class SpellCheckersWindow extends javax.swing.JFrame {
         // Gets the dice coefficient from the text field
         int diceCoefficient = Integer.parseInt(_diceCoefficientTextField.getText());
 
-        HashMap<String, Double> hashMap = SpellCheckers.nearWords(_wordList, _selectedWord, levensteinBoundary, diceCoefficient);
+        ArrayList<String> missSpelled = SpellCheckers.nearWords(_wordList, _selectedWord, levensteinBoundary, diceCoefficient);
+        Collections.sort(missSpelled);
        
-        TreeMap<String, Double> sortedSpells = new TreeMap<String, Double>(hashMap);
-        hashMap = SpellCheckers.nearWords(_wordList, _selectedWord, levensteinBoundary, diceCoefficient);
-        sortedSpells.putAll(hashMap);
-
         // Updates the text in the spell checkers window
-        for (String key : sortedSpells.keySet()) {
-            SpellCheckersWindow.getInstance().setText(String.format("\t%s: %.2f\n", key, sortedSpells.get(key)));
-        }
+        //for (String s : missSpelled)
+            SpellCheckersWindow.getInstance().setText(missSpelled.toString());
     }//GEN-LAST:event__showMisspelledWordsButtonActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -302,11 +300,8 @@ public class SpellCheckersWindow extends javax.swing.JFrame {
 
         // Gets the selected word from the list
         _selectedWord = selectedWord;
-
-        // Creates the word list
-        _wordList = new String[wordList.length];
-        for(int i = 0; i < wordList.length; i++)
-            _wordList[i] = wordList[i];
+        wordList = new String[wordList.length];
+        System.arraycopy(wordList, 0, _wordList, 0, wordList.length);
 
         // Sets the window visible
         setVisible(true);

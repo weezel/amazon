@@ -16,6 +16,15 @@ import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
 import spellChecker.SpellCheckersWindow;
 import wordRetrieval.WordInfo;
+import javax.swing.JPopupMenu;
+import javax.swing.JMenuItem;
+
+import wordRetrieval.KeywordRetrieval;
+import java.util.ArrayList;
+import java.io.*;
+import java.awt.Component;
+
+
 
 /**
  * Panel which shows the list of keywords related to one product. Also has two
@@ -34,6 +43,7 @@ public class ProductPanel extends javax.swing.JPanel {
      * Product panel name in the main window.
      */
     private String _name;
+
 
     /** 
      * Creates new form ProductPanel.
@@ -88,6 +98,8 @@ public class ProductPanel extends javax.swing.JPanel {
         SwingUtilities.invokeLater(new Runnable() {
 
             public void run() {
+
+                _productList.setCellRenderer(new ColorListBox());
 
                 if (keywordList != null && keywordList.length > 0) {
                     _productList.setListData(keywordList);
@@ -146,11 +158,34 @@ public class ProductPanel extends javax.swing.JPanel {
     private void initComponents() {
         java.awt.GridBagConstraints gridBagConstraints;
 
+        jPopupMenu1 = new javax.swing.JPopupMenu();
+        jMenuItem1 = new javax.swing.JMenuItem();
+        jMenuItem2 = new javax.swing.JMenuItem();
         _productScrollPane = new javax.swing.JScrollPane();
         _productList = new javax.swing.JList();
         _buttonPanel = new javax.swing.JPanel();
         _showCommentButton = new javax.swing.JButton();
         _spellCheckButton = new javax.swing.JButton();
+
+        jPopupMenu1.setName("jPopupMenu1"); // NOI18N
+
+        jMenuItem1.setText("Positive");
+        jMenuItem1.setName("jMenuItem1"); // NOI18N
+        jMenuItem1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem1ActionPerformed(evt);
+            }
+        });
+        jPopupMenu1.add(jMenuItem1);
+
+        jMenuItem2.setText("Negative");
+        jMenuItem2.setName("jMenuItem2"); // NOI18N
+        jMenuItem2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem2ActionPerformed(evt);
+            }
+        });
+        jPopupMenu1.add(jMenuItem2);
 
         setBackground(new java.awt.Color(170, 185, 210));
         setForeground(new java.awt.Color(80, 80, 100));
@@ -165,6 +200,11 @@ public class ProductPanel extends javax.swing.JPanel {
         _productList.setName("_productList"); // NOI18N
         _productList.setSelectionBackground(new java.awt.Color(95, 115, 155));
         _productList.setVisibleRowCount(-1);
+        _productList.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                _productListMouseClicked(evt);
+            }
+        });
         _productList.addListSelectionListener(new javax.swing.event.ListSelectionListener() {
             public void valueChanged(javax.swing.event.ListSelectionEvent evt) {
                 _productListValueChanged(evt);
@@ -291,7 +331,6 @@ public class ProductPanel extends javax.swing.JPanel {
             // Parses the element list into String[]
             String[] wordList = new String[_productList.getModel().getSize()];
             for (int i = 0; i < _productList.getModel().getSize(); i++) {
-
                 WordInfo wordInfo = (WordInfo) _productList.getModel().getElementAt(i);
                 wordList[i] = wordInfo.getTheWord();
             }
@@ -302,16 +341,137 @@ public class ProductPanel extends javax.swing.JPanel {
             // Shows the spell checker window
             SpellCheckersWindow.getInstance().showWindow(wordList, selectedWord.getTheWord());
             
-        } else // Error message
-        {
+        } else {
             JOptionPane.showMessageDialog(this, "You have to select an element in the list", "Error", JOptionPane.ERROR_MESSAGE);
         }
     }//GEN-LAST:event__spellCheckButtonActionPerformed
+
+    private void _productListMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event__productListMouseClicked
+        // TODO add your handling code here:
+        if(evt.getButton() == evt.BUTTON3)
+        {
+
+            final int index = _productList.locationToIndex(evt.getPoint());
+            _productList.setSelectedIndex(index);
+
+
+            jPopupMenu1.show(_productList, evt.getX(), evt.getY());
+
+        }
+
+
+    }//GEN-LAST:event__productListMouseClicked
+
+    private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem1ActionPerformed
+        // TODO add your handling code here:
+        ArrayList theWords = new ArrayList();
+        try {
+        theWords = KeywordRetrieval.readWordList("src/wordRetrieval/resources/lotr.txt");
+        }
+        catch(IOException ex)
+        {
+        }
+
+        int loc = _productList.getSelectedIndex();
+
+        WordInfo selectedWord = (WordInfo) _productList.getSelectedValue();
+
+        String curWord = selectedWord.getTheWord();
+
+        int foundW = -1;
+        for (int z = 0; z < theWords.size(); z++)
+            if(theWords.get(z).toString().substring(0, theWords.get(z).toString().indexOf(":")).equals(curWord))
+                foundW = z;
+
+        try {
+
+            if (foundW < 0) {
+                FileWriter fstream = new FileWriter("src/wordRetrieval/resources/lotr.txt", true);
+                BufferedWriter out = new BufferedWriter(fstream);         // Create file
+                out.write(curWord + ":+\n");
+                //Close the output stream
+                out.close();
+            }
+            else
+            {
+                theWords.set(foundW, curWord + ":+");
+                File del = new File("src/wordRetrieval/resources/lotr.txt");
+                // Quick, now, delete it immediately:
+                del.delete();
+                FileWriter fstream = new FileWriter("src/wordRetrieval/resources/lotr.txt", true);
+                BufferedWriter out = new BufferedWriter(fstream);         // Create file
+
+                for (int z = 0; z < theWords.size(); z++)
+                    out.write(theWords.get(z) + "\n");
+
+                out.close();
+            }
+
+        } catch (Exception e) {//Catch exception if any
+            System.err.println("Error: " + e.getMessage());
+        }
+
+
+    }//GEN-LAST:event_jMenuItem1ActionPerformed
+
+    private void jMenuItem2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem2ActionPerformed
+        // TODO add your handling code here:
+        ArrayList theWords = new ArrayList();
+        try {
+        theWords = KeywordRetrieval.readWordList("src/wordRetrieval/resources/lotr.txt");
+        }
+        catch(IOException ex)
+        {
+        }
+
+        int loc = _productList.getSelectedIndex();
+
+        WordInfo selectedWord = (WordInfo) _productList.getSelectedValue();
+
+        String curWord = selectedWord.getTheWord();
+
+        int foundW = -1;
+        for (int z = 0; z < theWords.size(); z++)
+            if(theWords.get(z).toString().substring(0, theWords.get(z).toString().indexOf(":")).equals(curWord))
+                foundW = z;
+
+        try {
+
+            if (foundW < 0) {
+                FileWriter fstream = new FileWriter("src/wordRetrieval/resources/lotr.txt", true);
+                BufferedWriter out = new BufferedWriter(fstream);         // Create file
+                out.write(curWord + ":-\n");
+                //Close the output stream
+                out.close();
+            }
+            else
+            {
+                theWords.set(foundW, curWord + ":-");
+                File del = new File("src/wordRetrieval/resources/lotr.txt");
+                // Quick, now, delete it immediately:
+                del.delete();
+                FileWriter fstream = new FileWriter("src/wordRetrieval/resources/lotr.txt", true);
+                BufferedWriter out = new BufferedWriter(fstream);         // Create file
+
+                for (int z = 0; z < theWords.size(); z++)
+                    out.write(theWords.get(z) + "\n");
+
+                out.close();
+            }
+
+        } catch (Exception e) {//Catch exception if any
+            System.err.println("Error: " + e.getMessage());
+        }
+    }//GEN-LAST:event_jMenuItem2ActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel _buttonPanel;
     private javax.swing.JList _productList;
     private javax.swing.JScrollPane _productScrollPane;
     private javax.swing.JButton _showCommentButton;
     private javax.swing.JButton _spellCheckButton;
+    private javax.swing.JMenuItem jMenuItem1;
+    private javax.swing.JMenuItem jMenuItem2;
+    private javax.swing.JPopupMenu jPopupMenu1;
     // End of variables declaration//GEN-END:variables
 }

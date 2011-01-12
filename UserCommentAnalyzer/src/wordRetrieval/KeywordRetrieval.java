@@ -2,12 +2,15 @@ package wordRetrieval;
 
 import java.io.*;
 import java.util.*;
+import java.text.*;
 
 import ML.TfIdf;
 import spellChecker.SpellCheckers;
 
 public class KeywordRetrieval
 {
+    public static int[] posScoresArray;
+    public static int[] negScoresArray;
     /**
      * @param filter filter to apply to the keyword retrieval part.
      * @param index index for the comments file.
@@ -19,10 +22,12 @@ public class KeywordRetrieval
      * If it is false the it takes the info from the new file generated.
      */
     public WordInfo[] run(String filter, int index) throws IOException {
+
         ArrayList adjectives = new ArrayList();
         ArrayList connectionWords = new ArrayList();
         ArrayList revWords = new ArrayList();
         ArrayList stopWords = new ArrayList();
+        ArrayList everyWords = new ArrayList();
         Scanner s = null;
 
         //////////////////stopwords////////////////////////////////////
@@ -36,6 +41,23 @@ public class KeywordRetrieval
 
         //////////////////connection words////////////////////////////////////
         connectionWords = readWordList("src/wordRetrieval/resources/ConnectionWords.txt");
+
+        /////////////////keyword rating code////////////////////////////////
+        ArrayList negQual = new ArrayList();
+        ArrayList posQual = new ArrayList();
+        ArrayList decAug = new ArrayList();
+        ArrayList incAug = new ArrayList();
+        ArrayList productWords = new ArrayList();
+
+        negQual = readWordList("src/wordRetrieval/resources/neg-qual.txt");
+        posQual = readWordList("src/wordRetrieval/resources/pos-qual.txt");
+
+        decAug = readWordList("src/wordRetrieval/resources/dec-aug.txt");
+        incAug = readWordList("src/wordRetrieval/resources/inc-aug.txt");
+
+        productWords = readWordList("src/wordRetrieval/resources/lotr.txt");
+
+        ////////end keyword rating code///////////
 
 
         /////the custom regular expression///
@@ -98,11 +120,17 @@ public class KeywordRetrieval
                     curW = removeSpecialCharacters(curW.toLowerCase());
                     tokenArray[0] = curW;
 
+                     //////keyword rating code/////
+                    everyWords.add(curW + "|" + rNum + ":" + curRating);
+
                     //Store the remaining n-1 words in the token array
                     for (int i = 1; i < regExpressionLen; i++) {
                         curW = s.next();
                         curW = removeSpecialCharacters(curW.toLowerCase());
                         tokenArray[i] = curW;
+
+                        //////keyword rating code/////
+                        everyWords.add(curW + "|" + rNum + ":" + curRating);
                     }
 
                     //Walk through all words in the comment
@@ -118,19 +146,19 @@ public class KeywordRetrieval
                             switch (curToken) {
                                 case '+':
                                     int stopLoc = Collections.binarySearch(stopWords, tokenArray[i]);
-                                    if (stopLoc >= 0)
+                                    if (stopLoc >= 0 || tokenArray[i].equals(""))
                                         match = false;
                                     break;
                                 case '*':
                                     break;
                                 case 'a':
                                     int adjLoc = Collections.binarySearch(adjectives, tokenArray[i]);
-                                    if (adjLoc < 0)
+                                    if (adjLoc < 0 || tokenArray[i].equals(""))
                                         match = false;
                                     break;
                                 case 'c':
                                     int connLoc = Collections.binarySearch(connectionWords, tokenArray[i]);
-                                    if (connLoc < 0)
+                                    if (connLoc < 0 || tokenArray[i].equals(""))
                                         match = false;
                                     break;
                                 case ';':
@@ -175,12 +203,15 @@ public class KeywordRetrieval
                         curW = s.next();
                         curW = removeSpecialCharacters(curW.toLowerCase());
                         tokenArray[regExpressionLen - 1] = curW;
+ 
+                        //////keyword rating code/////
+                        everyWords.add(curW + "|" + rNum + ":" + curRating);
                     }
                     /////tifidf code/////
                     /* Sort comments */
                     //ArrayList<String> comment_arr = new ArrayList<String>(thisComment.length());
                     String[] splitted_comment = thisComment.split(";");
-                    Arrays.sort(splitted_comment);
+                    //Arrays.sort(splitted_comment);
                     //comment_arr.addAll(Arrays.asList(splitted_comment));
                     //Collections.sort(comment_arr);
                     
@@ -189,8 +220,6 @@ public class KeywordRetrieval
 
                         double tfVal = TfIdf.termFrequencyInComment(splitted_comment, iWord);
                         revWords.add(curCommentWords.get(i).toString() + ";" + tfVal);
-                        if (i == 15)
-                            tfVal = tfVal + 1;
                     } /////end tifidf code/////
                 }
             }
@@ -200,49 +229,57 @@ public class KeywordRetrieval
                 s.close();
         }
 
-
         int numWords = 0;
         /////tifidf code/////
-        String[] allWords;              // declares an array of integers
-        allWords = new String[revWords.size()];      // allocates memory for 10 integers
-        for (int i = 0; i < revWords.size(); i++)
-            allWords[i] = revWords.get(i).toString();
+        String[] allWords;              // XXX declares an array of integers
+        allWords = new String[revWords.size()];      //XXX allocates memory for 10 integers
+        for (int i = 0; i < revWords.size(); i++) //XXX
+            allWords[i] = revWords.get(i).toString(); //XXX
 
-        Arrays.sort(allWords);
-        for (int i = 0; i < revWords.size(); i++) {
-            String word = revWords.get(i).toString().substring(0, revWords.get(i).toString().indexOf("|"));
-            String[] termfreq = revWords.get(i).toString().split(";");
+        Arrays.sort(allWords); // XXX
+        Collections.sort(revWords);
+        int commIdx = 0, prevCommIdx = -1;
+        if (prevCommIdx == -1) // XXX
+            SpellCheckers.nearWords(allWords, "battery", 3, 50); // XXX
+        double invFreq = 0.0, tfscore = 0.0;
+        String prevWord = "";
+        for (int i=0; i < revWords.size(); i++) {
+            String idxStr = revWords.get(i).toString(); // ease the pain
+            String word = idxStr.substring(0, idxStr.indexOf("|"));
+            String[] termfreq = idxStr.split(";");
+            commIdx = Integer.parseInt(idxStr.substring(idxStr.indexOf("|") + 1,
+                    idxStr.indexOf(":")));
 
-            double invFreq = TfIdf.inverseDocumentFrequency(allWords, word);
-            double tfscore = TfIdf.tfidf_score(Double.parseDouble(termfreq[1]), invFreq);
-            revWords.set(i, termfreq[0] + ";" + tfscore);
-        }
+            // We only want to count tfidf for the same word in
+            // the same comment once
+            if (i == 0) {
+                invFreq = TfIdf.documentFrequency(revWords, word);
+                tfscore = TfIdf.tfidf_score(Double.parseDouble(termfreq[1]), invFreq);
+                prevCommIdx = commIdx;
+                prevWord = word;
+            } else {
+                // Words equal and are located in the same comment
+                // -> set same value for each comment
+                if (word.equals(prevWord) && commIdx == prevCommIdx)
+                    revWords.set(i, termfreq[0] + ";" + tfscore);
+                // Word or comment index differs, count a new tf-idf
+                else {
+                    invFreq = TfIdf.documentFrequency(revWords, word);
+                    tfscore = TfIdf.tfidf_score(Double.parseDouble(termfreq[1]), invFreq);
+                    revWords.set(i, termfreq[0] + ";" + tfscore);
+                }
+            }
+        } // for
         /////end tifidf code/////
-        // XXX TEST SPELLCHECK
-        HashMap testspell = new HashMap<String, Double>();
-        ValueComparator vc = new ValueComparator(testspell);
-        TreeMap<String, Double> sortedSpells = new TreeMap<String, Double>(testspell);
-        String searchThis;
-
-        searchThis = "button";
-        testspell = SpellCheckers.nearWords(allWords, searchThis, 2, 50);
-        sortedSpells.putAll(testspell);
-
-        System.out.println("<SPELLCHECK>");
-        for (String key : sortedSpells.keySet())
-            System.out.println(String.format("\t%s: %.2f", key, sortedSpells.get(key)));
-        System.out.println("</SPELLCHECK>");
-
-
         System.out.println("number of reviews:" + rNum);
 
-        Collections.sort(revWords);
+
         String curWord = "";
         WordInfo[] countedWords = new WordInfo[k];
         int j = -1;
         k = 0;
 
-        String prevWord = "";
+        prevWord = "";
         int prevNum = 0;
         int len;
         
@@ -257,7 +294,7 @@ public class KeywordRetrieval
             int num = Integer.parseInt(curWord.substring(loc + 1, ratingLoc));
 
             //store the rating of the current keyword
-            float rating = Float.parseFloat(curWord.substring(ratingLoc + 1, idfVal));
+            //float rating = Float.parseFloat(curWord.substring(ratingLoc + 1, idfVal));
 
             float tfScore = Float.parseFloat(curWord.substring(idfVal+1));
 
@@ -265,10 +302,10 @@ public class KeywordRetrieval
             if(!curWord.equals("")) {
                 if (!curWord.equals(prevWord)) {
                     j++;
-                    countedWords[j] = new WordInfo("", 0, 0, 0.0);
+                    countedWords[j] = new WordInfo("", 0, "", 0.0);
                     countedWords[j].setTheWord(curWord);
                     countedWords[j].setCount(1);
-                    countedWords[j].setRating(rating);
+                    countedWords[j].setRating("");
                     countedWords[j].setTFScore(tfScore);
                     prevWord = curWord;
                     prevNum = 1;
@@ -276,7 +313,7 @@ public class KeywordRetrieval
                 } else {
                     if (num > prevNum) {
                         countedWords[j].setCount(countedWords[j].getCount() + 1);
-                        countedWords[j].setRating(countedWords[j].getRating() + rating);
+                        countedWords[j].setRating("");
                         if(countedWords[j].getTFRating() < tfScore)
                             countedWords[j].setTFScore(tfScore);
                     }
@@ -289,20 +326,116 @@ public class KeywordRetrieval
 
         WordInfo[] result = new WordInfo[numWords];
         for (int i = 0; i < numWords; i++) {
-            result[i] = new WordInfo("", 0, 0, 0.0);
-            result[i].setCount(countedWords[i].getCount());
-            result[i].setRating(countedWords[i].getRating());
+
+            result[i] = new WordInfo("", 0, "0/0: ", 0.0);
+            if(countedWords[i].getTheWord().toString().equals("a"))
+                result[i].setCount(1);
+            else
+                result[i].setCount(countedWords[i].getCount());
             result[i].setTheWord(countedWords[i].getTheWord());
             result[i].setTFScore(countedWords[i].getTFRating());
         }
-
         Arrays.sort(result);
-        for (int i = 0; i < numWords; i++) {
-            System.out.println(result[i].getCount() + " " + result[i].getTheWord() + " " + result[i].getRating() / result[i].getCount() + " " + result[i].getTFRating());
-            //System.out.println(result[i].rating/result[i].count);
-            //System.out.println(result[i].count + ",'" + result[i].theWord + "'," + result[i].rating/result[i].count);
+        ///////////////keyword rating code/////////////////
+
+        ArrayList pWords = new ArrayList();
+
+        for (int i = 0; i < productWords.size(); i++)
+            pWords.add(productWords.get(i).toString().substring(0, productWords.get(i).toString().indexOf(":")));
+
+
+        posScoresArray = new int[numWords];
+        negScoresArray = new int[numWords];
+        if (regExpressionLen == 1) {
+            for (int i = 0; i < 50; i++) {
+                int posCount = 0;
+                int negCount = 0;
+                int[] posQualWordsArray;
+                posQualWordsArray = new int[posQual.size()];
+                int[] negQualWordsArray;
+                negQualWordsArray = new int[negQual.size()];
+                int[] incAugWordsArray;
+                incAugWordsArray = new int[incAug.size()];
+                int[] decAugWordsArray;
+                decAugWordsArray = new int[decAug.size()];
+
+
+                String curW = result[i].getTheWord();
+
+                int prodWordPos = Collections.binarySearch(pWords, curW);
+                int wordType = 0;
+
+                if (prodWordPos < 0)
+                    wordType = 0;
+                else {
+                    String typeW = productWords.get(prodWordPos).toString().substring(productWords.get(prodWordPos).toString().indexOf(":")+1);
+                    if (typeW.equals("+"))
+                        wordType = 1;
+                    else
+                        wordType = 2;
+                }
+
+
+                for (int z = 1; z < everyWords.size(); z++) {
+                    //if a word from the review is equal to the current word
+                    if(everyWords.get(z).toString().substring(0, everyWords.get(z).toString().indexOf("|")).equals(curW)) {
+                        //get the word before the current word (the adjective)
+                        String cmpW = everyWords.get(z - 1).toString();
+                        //get its review number
+                        int revN = Integer.parseInt(cmpW.substring(cmpW.indexOf("|")+1, cmpW.indexOf(":")));
+
+                        //test if the adjective is a positive qualifier
+                        int posLoc = Collections.binarySearch(posQual, cmpW.substring(0, cmpW.indexOf("|")));
+                        //if it is, and its the first one in this review
+                        if (posLoc >= 0 && posQualWordsArray[posLoc] < revN) {
+                            //good sound
+                            posCount++;
+                            posQualWordsArray[posLoc] = revN;
+                        }
+
+                        int negLoc = Collections.binarySearch(negQual, cmpW.substring(0, cmpW.indexOf("|")));
+                        if (negLoc >= 0  && negQualWordsArray[negLoc] < revN) {
+                            //bad sound
+                            negCount++;
+                            negQualWordsArray[negLoc] = revN;
+                        }
+
+                        posLoc = Collections.binarySearch(incAug, cmpW.substring(0, cmpW.indexOf("|")));
+                        if (posLoc >= 0 && incAugWordsArray[posLoc] < revN) {
+                            //much noise
+                            if (wordType == 1)
+                                posCount++;
+                            else if (wordType == 2)
+                                negCount++;
+                            incAugWordsArray[posLoc] = revN;
+                        }
+
+                        negLoc = Collections.binarySearch(decAug, cmpW.substring(0, cmpW.indexOf("|")));
+                        if (negLoc >= 0  && decAugWordsArray[negLoc] < revN) {
+                            //little noise
+                            if (wordType == 1)
+                                negCount++;
+                            else if (wordType == 2)
+                                posCount ++;
+                            incAugWordsArray[negLoc] = revN;
+                        }
+
+                    }
+                }
+
+                posScoresArray[i] = posCount;
+                negScoresArray[i] = negCount;
+                if (posScoresArray[i] > 0 || negScoresArray[i] > 0) {
+                    double res = ((double) posScoresArray[i] / ((double) posScoresArray[i] + (double) negScoresArray[i])) * 100;
+                    DecimalFormat df = new DecimalFormat("#.##");
+                    String ratingString = posScoresArray[i] + "/" + negScoresArray[i] + ": " + df.format(res);
+                    result[i].setRating(ratingString);
+                } else
+                    result[i].setRating(posScoresArray[i] + "/" + negScoresArray[i] + ": ");
+            }
 
         }
+        ///////////////END keyword rating code/////////////////
 
         return result;
     }
@@ -353,20 +486,5 @@ public class KeywordRetrieval
         return wordList;
     }
 
-    /* @Override Treemap comparator */
-    class ValueComparator implements Comparator
-    {
-        Map base;
 
-        public ValueComparator(Map b) { base = b; }
-
-        public int compare(Object a, Object b) {
-            if ((Double) base.get(a) < (Double) base.get(b))
-                return 1;
-            else if (Math.abs((Double)base.get(a) - (Double)base.get(b)) <= 1.0E-8)
-                return 0;
-            else
-                return -1;
-        }
-    }
 }
