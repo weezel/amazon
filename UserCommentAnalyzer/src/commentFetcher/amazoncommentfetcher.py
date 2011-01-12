@@ -204,12 +204,6 @@ def parseComments(data, cboundaries):
             line = data[i]
             comm.name = line[line.find("\"")+1:line.rfind("\"")].rstrip("\r\n")
 
-        ### Parse helpfulness
-        if re.match(pHelpfull, data[i]) != None and len(comm.helpful) < 1:
-            tmp = data[i]
-            tmp = re.sub("^\s+", "", tmp)
-            comm.helpful = stripHtmlTags(tmp).rstrip("\r\n").rstrip(":")
-
         ### Parse stars
         if "<span class=\"swSprite s_star_" in data[i] and len(comm.stars) < 1:
             tmp = stripHtmlTags(data[i]).rstrip(" \n").rstrip("\n")
