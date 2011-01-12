@@ -28,6 +28,11 @@ public class KeywordRetrieval
         ArrayList revWords = new ArrayList();
         ArrayList stopWords = new ArrayList();
         ArrayList everyWords = new ArrayList();
+        ArrayList negQual = new ArrayList();
+        ArrayList posQual = new ArrayList();
+        ArrayList decAug = new ArrayList();
+        ArrayList incAug = new ArrayList();
+        ArrayList productWords = new ArrayList();
         Scanner s = null;
 
         //////////////////stopwords////////////////////////////////////
@@ -35,20 +40,10 @@ public class KeywordRetrieval
         //stopwords are stored in the stopwords array list
 
         stopWords = readWordList("src/wordRetrieval/resources/StopWords.txt");
-
-        //////////////////adjectives////////////////////////////////////
         adjectives = readWordList("src/wordRetrieval/resources/Adjectives.txt");
-
-        //////////////////connection words////////////////////////////////////
         connectionWords = readWordList("src/wordRetrieval/resources/ConnectionWords.txt");
 
         /////////////////keyword rating code////////////////////////////////
-        ArrayList negQual = new ArrayList();
-        ArrayList posQual = new ArrayList();
-        ArrayList decAug = new ArrayList();
-        ArrayList incAug = new ArrayList();
-        ArrayList productWords = new ArrayList();
-
         negQual = readWordList("src/wordRetrieval/resources/neg-qual.txt");
         posQual = readWordList("src/wordRetrieval/resources/pos-qual.txt");
 
@@ -75,7 +70,6 @@ public class KeywordRetrieval
         //Any combination of two words
         //[*][*]
         String regExpression = filter;         //an adjective + "picture"
-
 
         int regExpressionLen = 0;
         int m = regExpression.indexOf("[", 0);
@@ -419,7 +413,6 @@ public class KeywordRetrieval
                                 posCount ++;
                             incAugWordsArray[negLoc] = revN;
                         }
-
                     }
                 }
 
@@ -433,7 +426,6 @@ public class KeywordRetrieval
                 } else
                     result[i].setRating(posScoresArray[i] + "/" + negScoresArray[i] + ": ");
             }
-
         }
         ///////////////END keyword rating code/////////////////
 

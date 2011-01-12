@@ -13,8 +13,8 @@ package spellChecker;
 import java.awt.Dimension;
 import java.awt.Toolkit;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
+import javax.swing.JList;
 
 
 /**
@@ -80,7 +80,7 @@ public class SpellCheckersWindow extends javax.swing.JFrame {
      * @param text new tezt to set.
      */
     public void setText(String text) {
-        _textArea.setText(text);
+         jList1 = new JList(_wordList);
     }
 
     /** This method is called from within the constructor to
@@ -94,9 +94,8 @@ public class SpellCheckersWindow extends javax.swing.JFrame {
         java.awt.GridBagConstraints gridBagConstraints;
 
         _mainPanel = new javax.swing.JPanel();
-        _messageLabel = new javax.swing.JLabel();
-        _scrollPane = new javax.swing.JScrollPane();
-        _textArea = new javax.swing.JTextArea();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        jList1 = new javax.swing.JList();
         _buttonPanel = new javax.swing.JPanel();
         _closeButton = new javax.swing.JButton();
         _commandPanel = new javax.swing.JPanel();
@@ -116,39 +115,19 @@ public class SpellCheckersWindow extends javax.swing.JFrame {
         _mainPanel.setName("_mainPanel"); // NOI18N
         _mainPanel.setLayout(new java.awt.GridBagLayout());
 
-        _messageLabel.setBackground(new java.awt.Color(170, 185, 210));
-        _messageLabel.setForeground(new java.awt.Color(80, 80, 100));
-        _messageLabel.setText("Probably misspelled words:");
-        _messageLabel.setName("_messageLabel"); // NOI18N
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 0;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
-        gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.insets = new java.awt.Insets(10, 10, 0, 10);
-        _mainPanel.add(_messageLabel, gridBagConstraints);
+        jScrollPane1.setMinimumSize(new java.awt.Dimension(120, 40));
+        jScrollPane1.setName("jScrollPane1"); // NOI18N
 
-        _scrollPane.setName("_scrollPane"); // NOI18N
+        jList1.setModel(new javax.swing.AbstractListModel() {
+            String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
+            public int getSize() { return strings.length; }
+            public Object getElementAt(int i) { return strings[i]; }
+        });
+        jList1.setLayoutOrientation(javax.swing.JList.HORIZONTAL_WRAP);
+        jScrollPane1.setViewportView(jList1);
+        jList1.getAccessibleContext().setAccessibleParent(jList1);
 
-        _textArea.setColumns(20);
-        _textArea.setEditable(false);
-        _textArea.setForeground(new java.awt.Color(80, 80, 100));
-        _textArea.setRows(5);
-        _textArea.setTabSize(2);
-        _textArea.setName("_textArea"); // NOI18N
-        _scrollPane.setViewportView(_textArea);
-
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 1;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-        gridBagConstraints.ipadx = 50;
-        gridBagConstraints.ipady = 100;
-        gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.weighty = 1.0;
-        gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
-        _mainPanel.add(_scrollPane, gridBagConstraints);
+        _mainPanel.add(jScrollPane1, new java.awt.GridBagConstraints());
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -184,7 +163,7 @@ public class SpellCheckersWindow extends javax.swing.JFrame {
         getContentPane().add(_buttonPanel, gridBagConstraints);
 
         _commandPanel.setBackground(new java.awt.Color(170, 185, 210));
-        _commandPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Configuration Settings", javax.swing.border.TitledBorder.LEFT, javax.swing.border.TitledBorder.TOP, new java.awt.Font("Lucida Grande", 0, 13), new java.awt.Color(80, 80, 100))); // NOI18N
+        _commandPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Configuration Settings", javax.swing.border.TitledBorder.LEFT, javax.swing.border.TitledBorder.TOP, new java.awt.Font("Dialog", 1, 12), new java.awt.Color(80, 80, 100))); // NOI18N
         _commandPanel.setForeground(new java.awt.Color(80, 80, 100));
         _commandPanel.setName("_commandPanel"); // NOI18N
         _commandPanel.setLayout(new java.awt.GridBagLayout());
@@ -275,7 +254,10 @@ public class SpellCheckersWindow extends javax.swing.JFrame {
        
         // Updates the text in the spell checkers window
         //for (String s : missSpelled)
-            SpellCheckersWindow.getInstance().setText(missSpelled.toString());
+            //_textArea = (missSpelled);
+        for (int i=0; i < missSpelled.size(); i++)
+            _wordList[i] = missSpelled.get(i);
+        SpellCheckersWindow.getInstance().jList1 = new JList(_wordList);
     }//GEN-LAST:event__showMisspelledWordsButtonActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -287,10 +269,9 @@ public class SpellCheckersWindow extends javax.swing.JFrame {
     private javax.swing.JLabel _levensteinBoundaryLabel;
     private javax.swing.JTextField _levensteinBoundaryTextField;
     private javax.swing.JPanel _mainPanel;
-    private javax.swing.JLabel _messageLabel;
-    private javax.swing.JScrollPane _scrollPane;
     private javax.swing.JButton _showMisspelledWordsButton;
-    private javax.swing.JTextArea _textArea;
+    private javax.swing.JList jList1;
+    private javax.swing.JScrollPane jScrollPane1;
     // End of variables declaration//GEN-END:variables
 
     /**
@@ -300,8 +281,7 @@ public class SpellCheckersWindow extends javax.swing.JFrame {
 
         // Gets the selected word from the list
         _selectedWord = selectedWord;
-        wordList = new String[wordList.length];
-        System.arraycopy(wordList, 0, _wordList, 0, wordList.length);
+        SpellCheckersWindow.getInstance().jList1 = new JList(wordList);
 
         // Sets the window visible
         setVisible(true);

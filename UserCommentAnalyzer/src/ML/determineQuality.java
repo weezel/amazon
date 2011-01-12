@@ -33,7 +33,7 @@ public class determineQuality
         Set tfidfSet   = new HashSet();
         Set intersect  = null;
 
-        for (int i=0; i< 10; i++) {
+        for (int i=0; i < 10; i++) {
             String word = comments.get(i).toString();
             int p = word.indexOf("|");
             int sc = word.indexOf(";");
