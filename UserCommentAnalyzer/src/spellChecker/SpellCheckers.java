@@ -174,16 +174,21 @@ public class SpellCheckers
         for (int i=0; i < doc.length; i++) {
             dice = SpellCheckers.diceCoefficient(doc[i], s);
             if (SpellCheckers.combinedSpellcheck(doc[i], s, levdiff, codiff) != 0.0) {
-                System.out.println(String.format("\t%s", doc[i]));
+                System.out.println(String.format("-.-%s", doc[i]));
                 tophits.add(doc[i]);
             }
         }
         // Remove duplicates
-        for (int i=0; i < tophits.size(); i++) {
-            while (tophits.get(i+1) != null &&
-                    tophits.get(i).equals(tophits.get(i+1)))
+        /*
+        for (int i=0; i < tophits.size();) {
+            if (i+1 < tophits.size() &&
+                    tophits.get(i).equals(tophits.get(i))) {
                 tophits.remove(i+1);
+                continue;
+            }
+            i++;
         }
+        */
 
         return tophits;
     }

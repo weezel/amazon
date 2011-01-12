@@ -33,13 +33,12 @@ public class determineQuality
         Set tfidfSet   = new HashSet();
         Set intersect  = null;
 
-        for (int i=0; i< 10; i++) {
+        for (int i=0; i < 10; i++) {
             double tfidf_score = KeywordRetrieval.result[i].getTFRating();
 
             double goodnesspercentage = 0.0;
-            if (KeywordRetrieval.posScoresArray[i] > 0 || KeywordRetrieval.negScoresArray[i] > 0) {
+            if (KeywordRetrieval.posScoresArray[i] > 0 || KeywordRetrieval.negScoresArray[i] > 0)
                 goodnesspercentage = ((double) KeywordRetrieval.posScoresArray[i] / ((double) KeywordRetrieval.posScoresArray[i] + (double) KeywordRetrieval.negScoresArray[i])) * 100;
-            } 
 
             if (Double.compare(tfidf_score, TFBOUNDARY) >= 0)
                 tfidfSet.add(i);

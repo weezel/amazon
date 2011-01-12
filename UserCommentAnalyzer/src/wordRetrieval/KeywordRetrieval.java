@@ -5,7 +5,7 @@ import java.util.*;
 import java.text.*;
 
 import ML.TfIdf;
-import spellChecker.SpellCheckers;
+
 
 public class KeywordRetrieval
 {
@@ -29,6 +29,11 @@ public class KeywordRetrieval
         ArrayList revWords = new ArrayList();
         ArrayList stopWords = new ArrayList();
         ArrayList everyWords = new ArrayList();
+        ArrayList negQual = new ArrayList();
+        ArrayList posQual = new ArrayList();
+        ArrayList decAug = new ArrayList();
+        ArrayList incAug = new ArrayList();
+        ArrayList productWords = new ArrayList();
         Scanner s = null;
 
         //////////////////stopwords////////////////////////////////////
@@ -36,20 +41,10 @@ public class KeywordRetrieval
         //stopwords are stored in the stopwords array list
 
         stopWords = readWordList("src/wordRetrieval/resources/StopWords.txt");
-
-        //////////////////adjectives////////////////////////////////////
         adjectives = readWordList("src/wordRetrieval/resources/Adjectives.txt");
-
-        //////////////////connection words////////////////////////////////////
         connectionWords = readWordList("src/wordRetrieval/resources/ConnectionWords.txt");
 
         /////////////////keyword rating code////////////////////////////////
-        ArrayList negQual = new ArrayList();
-        ArrayList posQual = new ArrayList();
-        ArrayList decAug = new ArrayList();
-        ArrayList incAug = new ArrayList();
-        ArrayList productWords = new ArrayList();
-
         negQual = readWordList("src/wordRetrieval/resources/neg-qual.txt");
         posQual = readWordList("src/wordRetrieval/resources/pos-qual.txt");
 
@@ -76,7 +71,6 @@ public class KeywordRetrieval
         //Any combination of two words
         //[*][*]
         String regExpression = filter;         //an adjective + "picture"
-
 
         int regExpressionLen = 0;
         int m = regExpression.indexOf("[", 0);
@@ -232,16 +226,9 @@ public class KeywordRetrieval
 
         int numWords = 0;
         /////tifidf code/////
-        String[] allWords;              // XXX declares an array of integers
-        allWords = new String[revWords.size()];      //XXX allocates memory for 10 integers
-        for (int i = 0; i < revWords.size(); i++) //XXX
-            allWords[i] = revWords.get(i).toString(); //XXX
-
-        Arrays.sort(allWords); // XXX
         Collections.sort(revWords);
         int commIdx = 0, prevCommIdx = -1;
-        if (prevCommIdx == -1) // XXX
-            SpellCheckers.nearWords(allWords, "battery", 3, 50); // XXX
+
         double invFreq = 0.0, tfscore = 0.0;
         String prevWord = "";
         for (int i=0; i < revWords.size(); i++) {
@@ -433,7 +420,6 @@ public class KeywordRetrieval
                                 posCount ++;
                             incAugWordsArray[negLoc] = revN;
                         }
-
                     }
                 }
 
@@ -447,7 +433,6 @@ public class KeywordRetrieval
                 } else
                     result[i].setRating(posScoresArray[i] + "/" + negScoresArray[i] + ": ");
             }
-
         }
         ///////////////END keyword rating code/////////////////
 

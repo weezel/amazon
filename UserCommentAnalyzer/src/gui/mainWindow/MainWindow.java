@@ -161,7 +161,7 @@ public class MainWindow extends javax.swing.JFrame {
 
             // Adds the product panel to the results panel
             GridBagConstraints constraints = new GridBagConstraints();
-            constraints.insets = new Insets(5,5,5,5);
+            constraints.insets = new Insets(5, 5, 5, 5);
             constraints.fill = GridBagConstraints.VERTICAL;
             constraints.anchor = GridBagConstraints.CENTER;
             constraints.ipadx = 225;
@@ -205,9 +205,10 @@ public class MainWindow extends javax.swing.JFrame {
             try {
 
                 // If the product is selected in the list
-                if (_selectionKeywordList.isSelectedIndex(index)) 
-                    // Rebuilds the keywordlist
-                    _productKeywordList.set(index, _wordRetrieval.run(_keywordRetrievalFilterTextField.getText(), index + 1)); 
+                if (_selectionKeywordList.isSelectedIndex(index)) // Rebuilds the keywordlist
+                {
+                    _productKeywordList.set(index, _wordRetrieval.run(_keywordRetrievalFilterTextField.getText(), index + 1));
+                }
 
             } catch (IOException ex) {
                 Logger.getLogger(MainWindow.class.getName()).log(Level.SEVERE, null, ex);
@@ -343,13 +344,13 @@ public class MainWindow extends javax.swing.JFrame {
         _applyFilterButton = new javax.swing.JButton();
         jButton1 = new javax.swing.JButton();
         _menuBar = new javax.swing.JMenuBar();
+        _fileMenu = new javax.swing.JMenu();
+        _exitMenuItem = new javax.swing.JMenuItem();
+        _machineLearningMenu = new javax.swing.JMenu();
+        _associationRulesMenuItem = new javax.swing.JMenuItem();
         _helpMenu = new javax.swing.JMenu();
         _aboutUsMenuItem = new javax.swing.JMenuItem();
         _helpMenuItem = new javax.swing.JMenuItem();
-        _machineLearningMenu = new javax.swing.JMenu();
-        _associationRulesMenuItem = new javax.swing.JMenuItem();
-        _fileMenu = new javax.swing.JMenu();
-        _exitMenuItem = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("User Comment Analyzer");
@@ -369,12 +370,12 @@ public class MainWindow extends javax.swing.JFrame {
         getContentPane().add(_logoPanel, gridBagConstraints);
 
         _searchPanel.setBackground(new java.awt.Color(170, 185, 210));
-        _searchPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Search Configuration", javax.swing.border.TitledBorder.CENTER, javax.swing.border.TitledBorder.TOP, new java.awt.Font("Segoe UI", 0, 11), new java.awt.Color(80, 80, 100))); // NOI18N
+        _searchPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Search Configuration", javax.swing.border.TitledBorder.CENTER, javax.swing.border.TitledBorder.TOP, new java.awt.Font("Dialog", 1, 12), new java.awt.Color(80, 80, 100))); // NOI18N
         _searchPanel.setForeground(new java.awt.Color(80, 80, 100));
         _searchPanel.setLayout(new java.awt.BorderLayout());
 
         _URLProductPanel.setBackground(new java.awt.Color(170, 185, 210));
-        _URLProductPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "URL Product Configuration", javax.swing.border.TitledBorder.LEFT, javax.swing.border.TitledBorder.TOP, new java.awt.Font("Segoe UI", 0, 11), new java.awt.Color(80, 80, 100))); // NOI18N
+        _URLProductPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "URL Product Configuration", javax.swing.border.TitledBorder.LEFT, javax.swing.border.TitledBorder.TOP, new java.awt.Font("Dialog", 1, 12), new java.awt.Color(80, 80, 100))); // NOI18N
         _URLProductPanel.setForeground(new java.awt.Color(80, 80, 100));
         _URLProductPanel.setLayout(new java.awt.GridBagLayout());
 
@@ -412,12 +413,12 @@ public class MainWindow extends javax.swing.JFrame {
         _buttonPanel.setForeground(new java.awt.Color(80, 80, 100));
         _buttonPanel.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.RIGHT));
 
-        _generateResultsButton.setBackground(new java.awt.Color(170, 185, 210));
-        _generateResultsButton.setForeground(new java.awt.Color(80, 80, 100));
+        _generateResultsButton.setBackground(new java.awt.Color(195, 210, 235));
+        _generateResultsButton.setForeground(new java.awt.Color(100, 100, 120));
         _generateResultsButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/gui/resources/images/icons/Script.png"))); // NOI18N
         _generateResultsButton.setText("Generate product results");
         _generateResultsButton.setToolTipText("Generates the product keyword list associated to the typed URL");
-        _generateResultsButton.setPreferredSize(new java.awt.Dimension(193, 30));
+        _generateResultsButton.setPreferredSize(new java.awt.Dimension(250, 30));
         _generateResultsButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 generateResultsButtonActionPerformed(evt);
@@ -434,13 +435,13 @@ public class MainWindow extends javax.swing.JFrame {
         getContentPane().add(_searchPanel, gridBagConstraints);
 
         _resultsPanel.setBackground(new java.awt.Color(170, 185, 210));
-        _resultsPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Results panel", javax.swing.border.TitledBorder.CENTER, javax.swing.border.TitledBorder.TOP, new java.awt.Font("Segoe UI", 0, 11), new java.awt.Color(80, 80, 100))); // NOI18N
+        _resultsPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Results panel", javax.swing.border.TitledBorder.CENTER, javax.swing.border.TitledBorder.TOP, new java.awt.Font("Dialog", 1, 12), new java.awt.Color(80, 80, 100))); // NOI18N
         _resultsPanel.setForeground(new java.awt.Color(80, 80, 100));
         _resultsPanel.setPreferredSize(new java.awt.Dimension(438, 207));
         _resultsPanel.setLayout(new java.awt.BorderLayout());
 
         _selectionPanel.setBackground(new java.awt.Color(170, 185, 210));
-        _selectionPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Selection Panel", javax.swing.border.TitledBorder.CENTER, javax.swing.border.TitledBorder.TOP, new java.awt.Font("Segoe UI", 0, 11), new java.awt.Color(80, 80, 100))); // NOI18N
+        _selectionPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Selection Panel", javax.swing.border.TitledBorder.CENTER, javax.swing.border.TitledBorder.TOP, new java.awt.Font("Dialog", 1, 12), new java.awt.Color(80, 80, 100))); // NOI18N
         _selectionPanel.setForeground(new java.awt.Color(80, 80, 100));
         _selectionPanel.setLayout(new java.awt.BorderLayout(0, 10));
 
@@ -496,7 +497,7 @@ public class MainWindow extends javax.swing.JFrame {
         _resultsPanel.add(_productsPanelScrollPane, java.awt.BorderLayout.CENTER);
 
         _filterPanel.setBackground(new java.awt.Color(170, 185, 210));
-        _filterPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "keyword Retrieval Filters ", javax.swing.border.TitledBorder.LEFT, javax.swing.border.TitledBorder.TOP, new java.awt.Font("Segoe UI", 0, 11), new java.awt.Color(80, 80, 100))); // NOI18N
+        _filterPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "keyword Retrieval Filters ", javax.swing.border.TitledBorder.LEFT, javax.swing.border.TitledBorder.TOP, new java.awt.Font("Dialog", 1, 12), new java.awt.Color(80, 80, 100))); // NOI18N
         _filterPanel.setForeground(new java.awt.Color(80, 80, 100));
         _filterPanel.setLayout(new java.awt.GridBagLayout());
 
@@ -526,6 +527,7 @@ public class MainWindow extends javax.swing.JFrame {
         _helpButton.setForeground(new java.awt.Color(80, 80, 100));
         _helpButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/gui/resources/images/icons/help.png"))); // NOI18N
         _helpButton.setToolTipText("Displays a help file with the filter usage");
+        _helpButton.setBorderPainted(false);
         _helpButton.setContentAreaFilled(false);
         _helpButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -580,6 +582,42 @@ public class MainWindow extends javax.swing.JFrame {
 
         _menuBar.setBackground(new java.awt.Color(170, 185, 210));
 
+        _fileMenu.setBackground(new java.awt.Color(142, 160, 193));
+        _fileMenu.setForeground(new java.awt.Color(80, 80, 100));
+        _fileMenu.setText("File");
+
+        _exitMenuItem.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_Q, java.awt.event.InputEvent.CTRL_MASK));
+        _exitMenuItem.setBackground(new java.awt.Color(170, 185, 210));
+        _exitMenuItem.setForeground(new java.awt.Color(80, 80, 100));
+        _exitMenuItem.setIcon(new javax.swing.ImageIcon(getClass().getResource("/gui/resources/images/icons/exit.png"))); // NOI18N
+        _exitMenuItem.setText("Exit");
+        _exitMenuItem.setToolTipText("Exits the program");
+        _exitMenuItem.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                exitMenuItemActionPerformed(evt);
+            }
+        });
+        _fileMenu.add(_exitMenuItem);
+
+        _menuBar.add(_fileMenu);
+
+        _machineLearningMenu.setBackground(new java.awt.Color(170, 185, 210));
+        _machineLearningMenu.setForeground(new java.awt.Color(80, 80, 100));
+        _machineLearningMenu.setText("Machine Learning Tools");
+
+        _associationRulesMenuItem.setBackground(new java.awt.Color(170, 185, 210));
+        _associationRulesMenuItem.setForeground(new java.awt.Color(80, 80, 100));
+        _associationRulesMenuItem.setIcon(new javax.swing.ImageIcon(getClass().getResource("/gui/resources/images/icons/rules.png"))); // NOI18N
+        _associationRulesMenuItem.setText("Association Rules Generator");
+        _associationRulesMenuItem.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                _associationRulesMenuItemActionPerformed(evt);
+            }
+        });
+        _machineLearningMenu.add(_associationRulesMenuItem);
+
+        _menuBar.add(_machineLearningMenu);
+
         _helpMenu.setBackground(new java.awt.Color(142, 160, 193));
         _helpMenu.setForeground(new java.awt.Color(80, 80, 100));
         _helpMenu.setText("Help");
@@ -611,42 +649,6 @@ public class MainWindow extends javax.swing.JFrame {
         _helpMenu.add(_helpMenuItem);
 
         _menuBar.add(_helpMenu);
-
-        _machineLearningMenu.setBackground(new java.awt.Color(170, 185, 210));
-        _machineLearningMenu.setForeground(new java.awt.Color(80, 80, 100));
-        _machineLearningMenu.setText("Machine Learning Tools");
-
-        _associationRulesMenuItem.setBackground(new java.awt.Color(170, 185, 210));
-        _associationRulesMenuItem.setForeground(new java.awt.Color(80, 80, 100));
-        _associationRulesMenuItem.setIcon(new javax.swing.ImageIcon(getClass().getResource("/gui/resources/images/icons/rules.png"))); // NOI18N
-        _associationRulesMenuItem.setText("Association Rules Generator");
-        _associationRulesMenuItem.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                _associationRulesMenuItemActionPerformed(evt);
-            }
-        });
-        _machineLearningMenu.add(_associationRulesMenuItem);
-
-        _menuBar.add(_machineLearningMenu);
-
-        _fileMenu.setBackground(new java.awt.Color(142, 160, 193));
-        _fileMenu.setForeground(new java.awt.Color(80, 80, 100));
-        _fileMenu.setText("File");
-
-        _exitMenuItem.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_Q, java.awt.event.InputEvent.CTRL_MASK));
-        _exitMenuItem.setBackground(new java.awt.Color(170, 185, 210));
-        _exitMenuItem.setForeground(new java.awt.Color(80, 80, 100));
-        _exitMenuItem.setIcon(new javax.swing.ImageIcon(getClass().getResource("/gui/resources/images/icons/exit.png"))); // NOI18N
-        _exitMenuItem.setText("Exit");
-        _exitMenuItem.setToolTipText("Exits the program");
-        _exitMenuItem.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                exitMenuItemActionPerformed(evt);
-            }
-        });
-        _fileMenu.add(_exitMenuItem);
-
-        _menuBar.add(_fileMenu);
 
         setJMenuBar(_menuBar);
 
@@ -712,10 +714,9 @@ public class MainWindow extends javax.swing.JFrame {
     private void _helpMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event__helpMenuItemActionPerformed
 
         // Shows the help file of the application
-        try{
-        Desktop.getDesktop().open(new File("src/gui/help/help.pdf"));
-        }
-        catch(Exception ex){
+        try {
+            Desktop.getDesktop().open(new File("src/gui/help/help.pdf"));
+        } catch (Exception ex) {
             Logger.getLogger(MainWindow.class.getName()).log(Level.SEVERE, null, ex);
         }
     }//GEN-LAST:event__helpMenuItemActionPerformed
@@ -749,8 +750,7 @@ public class MainWindow extends javax.swing.JFrame {
 
             // Starts the filter
             _appyFilterProcess.start();
-        }
-        else{
+        } else {
             JOptionPane.showMessageDialog(this, "You must select at least one element in the selection list at the left side", "Error", JOptionPane.ERROR_MESSAGE);
         }
     }//GEN-LAST:event__applyFilterButtonActionPerformed
@@ -765,10 +765,9 @@ public class MainWindow extends javax.swing.JFrame {
     private void _helpButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event__helpButtonActionPerformed
 
         // Shows the help file of the application
-        try{
-        Desktop.getDesktop().open(new File("src/gui/help/filterHelp.txt"));
-        }
-        catch(Exception ex){
+        try {
+            Desktop.getDesktop().open(new File("src/gui/help/filterHelp.txt"));
+        } catch (Exception ex) {
             Logger.getLogger(MainWindow.class.getName()).log(Level.SEVERE, null, ex);
         }
     }//GEN-LAST:event__helpButtonActionPerformed
@@ -804,39 +803,47 @@ public class MainWindow extends javax.swing.JFrame {
      */
     private void _associationRulesMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event__associationRulesMenuItemActionPerformed
 
-        // Gets the first 20 keywords from each product list
+        // Ask to the user for the number of keywords to compare
+        String numberOfKeywordsString = JOptionPane.showInputDialog(this, "Type the number of the first elements in the product lists: ", "Select the keywords afected in the association rules process", JOptionPane.QUESTION_MESSAGE);
 
-        ArrayList<ArrayList<WordInfo>> _productBestKeywordsList = new ArrayList();
+        if (numberOfKeywordsString != null) {
+            
+            int numberOfKeywords = Integer.parseInt(numberOfKeywordsString);
 
-        for(int index = 0; index < _productPanelList.size(); index++){
+            ArrayList<ArrayList<WordInfo>> _productBestKeywordsList = new ArrayList();
 
-            // Gets the product list
-            JList productList = _productPanelList.get(index).getProductList();
+            // Gets the first 20 keywords from each product list
+            for (int index = 0; index < _productPanelList.size(); index++) {
 
-            // Generates the 10 best words keywords
-            ArrayList<WordInfo> tenBestKeyWords = new ArrayList<WordInfo>();
+                // Gets the product list
+                JList productList = _productPanelList.get(index).getProductList();
 
-            // Gets the first 10 elements from the list
-            for(int j = 0; j < 10; j++)
-                tenBestKeyWords.add((WordInfo) productList.getModel().getElementAt(j));
+                // Generates the 10 best words keywords
+                ArrayList<WordInfo> tenBestKeyWords = new ArrayList<WordInfo>();
 
-            // Adds it to the best keyword list
-            _productBestKeywordsList.add(tenBestKeyWords);
-        }
+                // Gets the first elements from the list selected by the user
+                for (int j = 0; j < numberOfKeywords; j++) {
+                    tenBestKeyWords.add((WordInfo) productList.getModel().getElementAt(j));
+                }
 
-        System.out.print("-----\nThe 10 best keywords per each product");
-
-        for(int i = 0 ; i < _productBestKeywordsList.size(); i++){
-
-            System.out.println("Product " + i);
-            for(int j = 0 ; j < _productBestKeywordsList.get(i).size(); j++){
-                System.out.println(_productBestKeywordsList.get(i).get(j));
+                // Adds it to the best keyword list
+                _productBestKeywordsList.add(tenBestKeyWords);
             }
-            System.out.println();
-        }
 
-        // Display the association rules window
-        AssociationRulesWindow.getInstance().showAssociationRulesWindow(_productBestKeywordsList);
+            // DEBUG
+            System.out.println("-----\nThe " + numberOfKeywords + " best keywords per each product:");
+            for (int i = 0; i < _productBestKeywordsList.size(); i++) {
+
+                System.out.println("Product " + i);
+                for (int j = 0; j < _productBestKeywordsList.get(i).size(); j++) {
+                    System.out.println(_productBestKeywordsList.get(i).get(j));
+                }
+                System.out.println();
+            }
+
+            // Display the association rules window
+            AssociationRulesWindow.getInstance().showAssociationRulesWindow(_productBestKeywordsList);
+        }
     }//GEN-LAST:event__associationRulesMenuItemActionPerformed
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
