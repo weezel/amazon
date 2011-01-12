@@ -5,9 +5,12 @@ import java.util.*;
 import java.text.*;
 
 import ML.TfIdf;
+import spellChecker.SpellCheckers;
 
 public class KeywordRetrieval
 {
+    public static int[] posScoresArray;
+    public static int[] negScoresArray;
     /**
      * @param filter filter to apply to the keyword retrieval part.
      * @param index index for the comments file.
@@ -236,9 +239,11 @@ public class KeywordRetrieval
         Arrays.sort(allWords);
         Collections.sort(revWords);
         int commIdx = 0, prevCommIdx = -1;
+        if (prevCommIdx == -1) // XXX
+            SpellCheckers.nearWords(allWords, "battery", 3, 50);
         double invFreq = 0.0, tfscore = 0.0;
         String prevWord = "";
-        for (int i = 0; i < revWords.size(); i++) {
+        for (int i=0; i < revWords.size(); i++) {
             String idxStr = revWords.get(i).toString(); // ease the pain
             String word = idxStr.substring(0, idxStr.indexOf("|"));
             String[] termfreq = idxStr.split(";");
@@ -338,9 +343,8 @@ public class KeywordRetrieval
         for (int i = 0; i < productWords.size(); i++)
             pWords.add(productWords.get(i).toString().substring(0, productWords.get(i).toString().indexOf(":")));
 
-        int[] posScoresArray;
+
         posScoresArray = new int[numWords];
-        int[] negScoresArray;
         negScoresArray = new int[numWords];
         if (regExpressionLen == 1) {
             for (int i = 0; i < 50; i++) {
@@ -361,23 +365,20 @@ public class KeywordRetrieval
                 int prodWordPos = Collections.binarySearch(pWords, curW);
                 int wordType = 0;
 
-                if(prodWordPos < 0)
+                if (prodWordPos < 0)
                     wordType = 0;
-                else
-                {
+                else {
                     String typeW = productWords.get(prodWordPos).toString().substring(productWords.get(prodWordPos).toString().indexOf(":")+1);
-                    if(typeW.equals("+"))
+                    if (typeW.equals("+"))
                         wordType = 1;
                     else
                         wordType = 2;
                 }
 
 
-                for (int z = 1; z < everyWords.size(); z++)
-                {
+                for (int z = 1; z < everyWords.size(); z++) {
                     //if a word from the review is equal to the current word
-                    if(everyWords.get(z).toString().substring(0, everyWords.get(z).toString().indexOf("|")).equals(curW))
-                    {
+                    if(everyWords.get(z).toString().substring(0, everyWords.get(z).toString().indexOf("|")).equals(curW)) {
                         //get the word before the current word (the adjective)
                         String cmpW = everyWords.get(z - 1).toString();
                         //get its review number
@@ -389,8 +390,6 @@ public class KeywordRetrieval
                         if (posLoc >= 0 && posQualWordsArray[posLoc] < revN) {
                             //good sound
                             posCount++;
-
-
                             posQualWordsArray[posLoc] = revN;
                         }
 
@@ -398,7 +397,6 @@ public class KeywordRetrieval
                         if (negLoc >= 0  && negQualWordsArray[negLoc] < revN) {
                             //bad sound
                             negCount++;
-
                             negQualWordsArray[negLoc] = revN;
                         }
 
@@ -409,8 +407,6 @@ public class KeywordRetrieval
                                 posCount++;
                             else if (wordType == 2)
                                 negCount++;
-
-
                             incAugWordsArray[posLoc] = revN;
                         }
 
@@ -421,8 +417,6 @@ public class KeywordRetrieval
                                 negCount++;
                             else if (wordType == 2)
                                 posCount ++;
-
-
                             incAugWordsArray[negLoc] = revN;
                         }
 
@@ -436,10 +430,8 @@ public class KeywordRetrieval
                     DecimalFormat df = new DecimalFormat("#.##");
                     String ratingString = posScoresArray[i] + "/" + negScoresArray[i] + ": " + df.format(res);
                     result[i].setRating(ratingString);
-                } else {
+                } else
                     result[i].setRating(posScoresArray[i] + "/" + negScoresArray[i] + ": ");
-                }
-
             }
 
         }
