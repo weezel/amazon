@@ -121,6 +121,9 @@ public class Mining {
             }
             display("" + _TID[i] + "\n");
         }
+        display("\n");
+        display("-------------------------------------------------\n");
+        display("\n");
     }
 
     /**

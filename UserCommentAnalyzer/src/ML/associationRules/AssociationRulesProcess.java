@@ -18,23 +18,20 @@ public class AssociationRulesProcess extends Thread {
      * Creates a new association rules process.
      */
     public AssociationRulesProcess() {
+
     }
 
     @Override
     public void run() {
 
-        // Shows the waiting window
-        WaitingWindow.getInstance().showWaitingWindow();
-
         SwingUtilities.invokeLater(new Runnable(){
 
             @Override
             public void run() {
+
+                // Generate the association rules
                 AssociationRulesWindow.getInstance().generateAssociationRules();
             }
         });
-        
-        // Closes the waiting window
-        WaitingWindow.getInstance().closeWaitingWindow();
     }
 }

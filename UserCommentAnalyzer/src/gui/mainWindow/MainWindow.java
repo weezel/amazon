@@ -160,7 +160,7 @@ public class MainWindow extends javax.swing.JFrame {
 
             // Adds the product panel to the results panel
             GridBagConstraints constraints = new GridBagConstraints();
-            constraints.insets = new Insets(5,5,5,5);
+            constraints.insets = new Insets(5, 5, 5, 5);
             constraints.fill = GridBagConstraints.VERTICAL;
             constraints.anchor = GridBagConstraints.CENTER;
             constraints.ipadx = 225;
@@ -204,9 +204,10 @@ public class MainWindow extends javax.swing.JFrame {
             try {
 
                 // If the product is selected in the list
-                if (_selectionKeywordList.isSelectedIndex(index)) 
-                    // Rebuilds the keywordlist
-                    _productKeywordList.set(index, _wordRetrieval.run(_keywordRetrievalFilterTextField.getText(), index + 1)); 
+                if (_selectionKeywordList.isSelectedIndex(index)) // Rebuilds the keywordlist
+                {
+                    _productKeywordList.set(index, _wordRetrieval.run(_keywordRetrievalFilterTextField.getText(), index + 1));
+                }
 
             } catch (IOException ex) {
                 Logger.getLogger(MainWindow.class.getName()).log(Level.SEVERE, null, ex);
@@ -699,10 +700,9 @@ public class MainWindow extends javax.swing.JFrame {
     private void _helpMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event__helpMenuItemActionPerformed
 
         // Shows the help file of the application
-        try{
-        Desktop.getDesktop().open(new File("src/gui/help/help.pdf"));
-        }
-        catch(Exception ex){
+        try {
+            Desktop.getDesktop().open(new File("src/gui/help/help.pdf"));
+        } catch (Exception ex) {
             Logger.getLogger(MainWindow.class.getName()).log(Level.SEVERE, null, ex);
         }
     }//GEN-LAST:event__helpMenuItemActionPerformed
@@ -736,8 +736,7 @@ public class MainWindow extends javax.swing.JFrame {
 
             // Starts the filter
             _appyFilterProcess.start();
-        }
-        else{
+        } else {
             JOptionPane.showMessageDialog(this, "You must select at least one element in the selection list at the left side", "Error", JOptionPane.ERROR_MESSAGE);
         }
     }//GEN-LAST:event__applyFilterButtonActionPerformed
@@ -752,10 +751,9 @@ public class MainWindow extends javax.swing.JFrame {
     private void _helpButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event__helpButtonActionPerformed
 
         // Shows the help file of the application
-        try{
-        Desktop.getDesktop().open(new File("src/gui/help/filterHelp.txt"));
-        }
-        catch(Exception ex){
+        try {
+            Desktop.getDesktop().open(new File("src/gui/help/filterHelp.txt"));
+        } catch (Exception ex) {
             Logger.getLogger(MainWindow.class.getName()).log(Level.SEVERE, null, ex);
         }
     }//GEN-LAST:event__helpButtonActionPerformed
@@ -791,41 +789,48 @@ public class MainWindow extends javax.swing.JFrame {
      */
     private void _associationRulesMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event__associationRulesMenuItemActionPerformed
 
-        // Gets the first 20 keywords from each product list
+        // Ask to the user for the number of keywords to compare
+        String numberOfKeywordsString = JOptionPane.showInputDialog(this, "Type the number of the first elements in the product lists: ", "Select the keywords afected in the association rules process", JOptionPane.QUESTION_MESSAGE);
 
-        ArrayList<ArrayList<WordInfo>> _productBestKeywordsList = new ArrayList();
+        if (numberOfKeywordsString != null) {
+            
+            int numberOfKeywords = Integer.parseInt(numberOfKeywordsString);
 
-        for(int index = 0; index < _productPanelList.size(); index++){
+            ArrayList<ArrayList<WordInfo>> _productBestKeywordsList = new ArrayList();
 
-            // Gets the product list
-            JList productList = _productPanelList.get(index).getProductList();
+            // Gets the first 20 keywords from each product list
+            for (int index = 0; index < _productPanelList.size(); index++) {
 
-            // Generates the 10 best words keywords
-            ArrayList<WordInfo> tenBestKeyWords = new ArrayList<WordInfo>();
+                // Gets the product list
+                JList productList = _productPanelList.get(index).getProductList();
 
-            // Gets the first 10 elements from the list
-            for(int j = 0; j < 10; j++)
-                tenBestKeyWords.add((WordInfo) productList.getModel().getElementAt(j));
+                // Generates the 10 best words keywords
+                ArrayList<WordInfo> tenBestKeyWords = new ArrayList<WordInfo>();
 
-            // Adds it to the best keyword list
-            _productBestKeywordsList.add(tenBestKeyWords);
-        }
+                // Gets the first elements from the list selected by the user
+                for (int j = 0; j < numberOfKeywords; j++) {
+                    tenBestKeyWords.add((WordInfo) productList.getModel().getElementAt(j));
+                }
 
-        System.out.print("-----\nThe 10 best keywords per each product");
-
-        for(int i = 0 ; i < _productBestKeywordsList.size(); i++){
-
-            System.out.println("Product " + i);
-            for(int j = 0 ; j < _productBestKeywordsList.get(i).size(); j++){
-                System.out.println(_productBestKeywordsList.get(i).get(j));
+                // Adds it to the best keyword list
+                _productBestKeywordsList.add(tenBestKeyWords);
             }
-            System.out.println();
+
+            // DEBUG
+            System.out.println("-----\nThe " + numberOfKeywords + " best keywords per each product:");
+            for (int i = 0; i < _productBestKeywordsList.size(); i++) {
+
+                System.out.println("Product " + i);
+                for (int j = 0; j < _productBestKeywordsList.get(i).size(); j++) {
+                    System.out.println(_productBestKeywordsList.get(i).get(j));
+                }
+                System.out.println();
+            }
+
+            // Display the association rules window
+            AssociationRulesWindow.getInstance().showAssociationRulesWindow(_productBestKeywordsList);
         }
-
-        // Display the association rules window
-        AssociationRulesWindow.getInstance().showAssociationRulesWindow(_productBestKeywordsList);
     }//GEN-LAST:event__associationRulesMenuItemActionPerformed
-
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel _URLProduct;
     private javax.swing.JPanel _URLProductPanel;
