@@ -231,16 +231,16 @@ public class KeywordRetrieval
 
         int numWords = 0;
         /////tifidf code/////
-        String[] allWords;              // declares an array of integers
-        allWords = new String[revWords.size()];      // allocates memory for 10 integers
-        for (int i = 0; i < revWords.size(); i++)
-            allWords[i] = revWords.get(i).toString();
+        String[] allWords;              // XXX declares an array of integers
+        allWords = new String[revWords.size()];      //XXX allocates memory for 10 integers
+        for (int i = 0; i < revWords.size(); i++) //XXX
+            allWords[i] = revWords.get(i).toString(); //XXX
 
-        Arrays.sort(allWords);
+        Arrays.sort(allWords); // XXX
         Collections.sort(revWords);
         int commIdx = 0, prevCommIdx = -1;
         if (prevCommIdx == -1) // XXX
-            SpellCheckers.nearWords(allWords, "battery", 3, 50);
+            SpellCheckers.nearWords(allWords, "battery", 3, 50); // XXX
         double invFreq = 0.0, tfscore = 0.0;
         String prevWord = "";
         for (int i=0; i < revWords.size(); i++) {
@@ -253,7 +253,7 @@ public class KeywordRetrieval
             // We only want to count tfidf for the same word in
             // the same comment once
             if (i == 0) {
-                invFreq = TfIdf.documentFrequency(allWords, word);
+                invFreq = TfIdf.documentFrequency(revWords, word);
                 tfscore = TfIdf.tfidf_score(Double.parseDouble(termfreq[1]), invFreq);
                 prevCommIdx = commIdx;
                 prevWord = word;
@@ -264,7 +264,7 @@ public class KeywordRetrieval
                     revWords.set(i, termfreq[0] + ";" + tfscore);
                 // Word or comment index differs, count a new tf-idf
                 else {
-                    invFreq = TfIdf.documentFrequency(allWords, word);
+                    invFreq = TfIdf.documentFrequency(revWords, word);
                     tfscore = TfIdf.tfidf_score(Double.parseDouble(termfreq[1]), invFreq);
                     revWords.set(i, termfreq[0] + ";" + tfscore);
                 }

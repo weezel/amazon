@@ -1,5 +1,7 @@
 package ML;
 
+import java.util.ArrayList;
+
 /*
 Consider a document containing 100 words wherein the word cow appears 3
 times.  Following the previously defined formulas, the term frequency (TF)
@@ -43,13 +45,13 @@ public class TfIdf
      * @param doc all comments. Must be sorted!
      * @return inverse term frequency in document
      */
-    public static double documentFrequency(String[] doc, String s)
+    public static double documentFrequency(ArrayList<String> doc, String s)
     {
         /* Count how many comments this term occurs */
         int matchCount, spos, epos;
         int[] searchArea;
 
-        if (doc == null || doc.length < 1 || s == null || s.length() < 1)
+        if (doc == null || doc.size() < 1 || s == null || s.length() < 1)
             return (0.0);
 
         matchCount = 0;
@@ -64,7 +66,7 @@ public class TfIdf
         /* Count matches in all comments */
         int cmntNmbr = 0, prevIdx = -1;
         for (; spos <= epos; spos++) {
-            String tmp[] = doc[spos].split("\\|");
+            String tmp[] = doc.get(spos).split("\\|");
             if (tmp.length > 0) {
                 cmntNmbr = Integer.parseInt(tmp[1].substring(0, tmp[1].indexOf(":")));
                 assert (cmntNmbr != -1) : "cmntNmbr cannot be -1";
@@ -78,7 +80,7 @@ public class TfIdf
         if (matchCount <= 0)
             return 0.0;
 
-        return (double)matchCount / (double)doc.length;
+        return (double)matchCount / (double)doc.size();
     }
 
 
@@ -87,22 +89,22 @@ public class TfIdf
      * that equals "s". Cheaper than compare immediately against the word.
      * @return start and ending position for the same word
      */
-    public static int[] filterByInitials(String[] doc, String s)
+    public static int[] filterByInitials(ArrayList<String> doc, String s)
     {
         int spos, epos;
         int[] r = new int[2];
         char cmpr = s.charAt(0);
 
-        if (doc == null || doc.length < 1 || s == null || s.length() < 1)
+        if (doc == null || doc.size() < 1 || s == null || s.length() < 1)
             return null;
 
         spos = epos = -1;
 
-        for (int i = 0; i < doc.length; i++) {
+        for (int i = 0; i < doc.size(); i++) {
             /* Rewind to the correct inital position in the array */
-            if (doc[i].charAt(0) == cmpr) {
+            if (doc.get(i).charAt(0) == cmpr) {
                 spos = i;
-                while (i < doc.length - 1 && doc[++i].charAt(0) == cmpr);
+                while (i < doc.size() - 1 && doc.get(++i).charAt(0) == cmpr);
                 epos = i - 1;
                 if (epos < spos)
                     epos = spos;
@@ -116,9 +118,9 @@ public class TfIdf
 
         /* Only count in words that equals with the parameter 's' */
         for (int i = spos; i <= epos; i++) {
-            if (doc[i].equals(s)) {
+            if (doc.get(i).equals(s)) {
                 spos = i;
-                while (i < doc.length - 1 && doc[++i].equals(s));
+                while (i < doc.size() - 1 && doc.get(++i).equals(s));
                 epos = i - 1;
                 if (epos < spos)
                     epos = spos;
@@ -154,19 +156,18 @@ public class TfIdf
             "jee",
             "korn"
         };
-        String[] documents1 = {
-            "14sia|1:50",
-            "auto|1:50",
-            "amiraali|3:40",
-            "anjovis|3:10",
-            "boo|5:10",
-            "boo|5:60",
-            "boo|6:20",
-            "boredom|4:55",
-            "burzum|12:80",
-            "jee|18:30",
-            "klonkku|15:12"
-        };
+        ArrayList<String> documents1 = new ArrayList<String>();
+            documents1.add("14sia|1:50");
+            documents1.add("auto|1:50");
+            documents1.add("amiraali|3:40");
+            documents1.add("anjovis|3:10");
+            documents1.add("boo|5:10");
+            documents1.add("boo|5:60");
+            documents1.add("boo|6:20");
+            documents1.add("boredom|4:55");
+            documents1.add("burzum|12:80");
+            documents1.add("jee|18:30");
+            documents1.add("klonkku|15:12");
 
         termfreq = termFrequencyInComment(comment, "boo");
         assert (Math.abs(termfreq - 0.3333333333333333) < 1.0E-8) : "termfreq should be: 0.3333333333333333, current value: " + termfreq;
