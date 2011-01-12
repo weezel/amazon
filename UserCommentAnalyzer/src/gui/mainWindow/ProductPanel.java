@@ -331,7 +331,6 @@ public class ProductPanel extends javax.swing.JPanel {
             // Parses the element list into String[]
             String[] wordList = new String[_productList.getModel().getSize()];
             for (int i = 0; i < _productList.getModel().getSize(); i++) {
-
                 WordInfo wordInfo = (WordInfo) _productList.getModel().getElementAt(i);
                 wordList[i] = wordInfo.getTheWord();
             }
@@ -342,8 +341,7 @@ public class ProductPanel extends javax.swing.JPanel {
             // Shows the spell checker window
             SpellCheckersWindow.getInstance().showWindow(wordList, selectedWord.getTheWord());
             
-        } else // Error message
-        {
+        } else {
             JOptionPane.showMessageDialog(this, "You have to select an element in the list", "Error", JOptionPane.ERROR_MESSAGE);
         }
     }//GEN-LAST:event__spellCheckButtonActionPerformed

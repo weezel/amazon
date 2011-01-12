@@ -36,7 +36,6 @@ public class WordInfo implements Comparable {
      * @param rating keyword rating.
      */
     public WordInfo(String theWord, int count, String rating, double tfrating) {
-
         _count = count;
         _rating = rating;
         _theWord = theWord;
@@ -45,7 +44,6 @@ public class WordInfo implements Comparable {
 
     @Override
     public int compareTo(Object obj) {
-
         WordInfo wordInfo = (WordInfo) obj;
 
         if (this._count > wordInfo._count) {
@@ -61,8 +59,8 @@ public class WordInfo implements Comparable {
 
     @Override
     public String toString() {
-        return String.format("%d: %-15s %-4s [%3.1f%%]",
-                _count, _theWord, _rating, (_tfrating*100));
+        return String.format("%d: %-15s %-4s [%3.2f]",
+                _count, _theWord, _rating, _tfrating);
     }
 
 
