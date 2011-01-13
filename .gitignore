@@ -38,7 +38,7 @@ tags
 cscope*
 report*.txt
 build
-lotr.txt
+wordRetrieval/resources/lotr.txt
 
 *.html
 *.psd
