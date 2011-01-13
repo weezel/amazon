@@ -12,11 +12,16 @@ package ML.associationRules;
 
 import ML.associationRules.logic.Mining;
 import ML.associationRules.logic.Rule;
+import gui.mainWindow.MainWindow;
 import gui.waitingWindow.WaitingWindow;
+import java.awt.Desktop;
 import java.awt.Dimension;
 import java.awt.Toolkit;
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Vector;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 import wordRetrieval.WordInfo;
 
@@ -349,8 +354,13 @@ public class AssociationRulesWindow extends javax.swing.JFrame {
      */
     private void _showReportButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event__showReportButtonActionPerformed
 
-        // Shows the report window
-        ReportFileWindow.getInstance().showWindow();
+        // Shows the help file of the application
+        try{
+        Desktop.getDesktop().open(new File("src/ML/associationRules/report.txt"));
+        }
+        catch(Exception ex){
+            Logger.getLogger(MainWindow.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }//GEN-LAST:event__showReportButtonActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

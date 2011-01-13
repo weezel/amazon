@@ -38,6 +38,7 @@ tags
 cscope*
 report*.txt
 build
+lotr.txt
 
 *.html
 *.psd
