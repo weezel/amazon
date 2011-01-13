@@ -383,7 +383,7 @@ def main():
             cboundaries.append(tmpbndr[1])
             printable = "Comment: %s/%s   Page: %s/%s   [ETA: %d sec]\n" % (cmntCount, cmntTotal,\
                     pageCount, pagesTotal, estimatedTimeOfArrival(timePassed,\
-                            pageCount, pagesTotal))
+                            pageCount-1, pagesTotal))
             stderr.write(printable)
             # Prepare to move on the next page
             nextPage = getNextPageURL(data)
