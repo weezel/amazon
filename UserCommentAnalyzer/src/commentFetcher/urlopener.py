@@ -4,7 +4,8 @@ def urlopener(url):
         import urllib
 
         class MyOpener(urllib.FancyURLopener):
-            version = "Mozilla/5.0"
+            version = "Amazon Comment Crawler"
+            #version = "Mozilla/5.0"
         myopener = MyOpener()
         try:
             f = myopener.open(url)
