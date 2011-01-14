@@ -1,5 +1,10 @@
 This is groupwork for the course 2ID25.
 
+# How to run program?
+# Simply run:
+ant run
+# in the UserCommentAnalyzer directory, or open as a NetBeans project.
+
 # Lines Of Code
 find . -type f \( -iname \*.java -or -iname \*.py \) -exec wc -l '{}' \; |awk '{ s+=$1 } END { print s }'
 6600
