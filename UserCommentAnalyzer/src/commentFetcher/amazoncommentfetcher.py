@@ -1,89 +1,71 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-import re
+"""
+Copyright (c) 2013 Ville Valkonen <weezelding[at]gmail.com>
+
+Permission to use, copy, modify, and distribute this software for any
+purpose with or without fee is hereby granted, provided that the above
+copyright notice and this permission notice appear in all copies.
+
+THE SOFTWARE IS PROVIDED "AS IS" AND THE AUTHOR DISCLAIMS ALL WARRANTIES
+WITH REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED WARRANTIES OF
+MERCHANTABILITY AND FITNESS. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR
+ANY SPECIAL, DIRECT, INDIRECT, OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES
+WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR PROFITS, WHETHER IN AN
+ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF
+OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
+"""
+
 import os
+import re
+import threading
+import time
+from Queue import Queue
 from sys import argv, exit, stderr, stdout
-from time import time
 
 from Comment import Comment
 from strip_html import strip_ml_tags as stripHtmlTags
 from urlopener import urlopener
 
-
 comments = []
-cmntCount = 0
-fileName = "comments.txt"
-fileOut = 0
+linklist = []
+filename_out = "comments.txt"
+fetchqueue = Queue()
+MAX_THREADS = 30
+cnt = 0
 
+class Fetcher(threading.Thread):
+    def __init__(self, q):
+        threading.Thread.__init__(self)
 
-# FIXME -*- approach comment parsing from the different angle: use reverse, luke!
+        self.fetchqueue = q
 
-def getNextPageURL(data):
-    """
-    @return link as str, None in case of fail
+    def run(self):
+        global cnt
 
-    Page navigation looks like this:
-    ------------------------------------------------------
-    |  <Previous  |  1 ... 55 [56] 57 ... 152  |  Next>  |
-    ------------------------------------------------------
-    """
-    for line in reversed(data):
-        if "<span class=\"paging\">" in line:
-            e = line.rfind("|")
-            if e < 0:
-                return None
-            e += 1
-            #print "getNextPageURL = %s" % line[e:len(line)-1]
-            return parseLinkFromLine(line[e:len(line)-1])
-    return None
+        while True:
+            url = self.fetchqueue.get()
+            data = urlopener(url)
+            parseComments(data)
+            self.fetchqueue.task_done()
+            textout = "[%3d / %d] completed\n" % (cnt + 1, len(linklist))
+            stderr.write(textout)
+            cnt += 1
 
-
-def parseReviewsStartLine(data):
-    """
-    @return (linenumber, link) when succeed, None in case of fail
-    """
-    # Introduction to re.compile line. Will find lines:
-    #   "See all 14 customer reviews" or
-    #   "See all 1,114 customer reviews"
-    links = {} # Use dictionary to avoid duplicates
-    searchPat = re.compile(r"See all (\d|,)*\d* customer reviews")
-    totalcomments = 0
-
-    if data is None or len(data) < 1:
-        return None
-
-    for n, line in enumerate(data):
-        if re.search(searchPat, line) is not None:
-            tmp = parseLinkFromLine(line)
-            #print "tmp [%s]" % tmp
-            links[tmp] = (n, tmp) # (lineNro, URL)
-    if len(links) is 1:
-        return links.values()[0]
-    # In case we got several links, correct one will be
-    # the one that includes word "helpful"
-    if len(links) > 1:
-        for key, item in links.iteritems():
-            if "helpful" in item[1]:
-                return item
-    return None
-
-
-def parseCommentsTotalCount(line):
+def parseCommentsTotalCount(data):
     """
     return comment count, -1 when fail
     """
-    nmbrPat = re.compile(r"all (\d|,)*\d* customer")
+    p = re.compile(r"\d+ Reviews")
 
-    if line is None or len(line) < 1:
-        return -1
-
-    line = line.replace(",", "")
-    tmp = re.search(nmbrPat, line)
-    if tmp is not None:
-        return re.search(r"\d+", tmp.group(0)).group(0)
+    for line in data:
+        line = line.replace(",", "")
+        match = re.search(p, line)
+        if match != None:
+            getNmbr = match.group().split(" ")
+            return int(getNmbr[0])
     return -1
-
 
 def parsePagesTotal(data):
     """
@@ -91,11 +73,14 @@ def parsePagesTotal(data):
     ------------------------------------------------------
     |        <Previous  |  1  2  3  |  Next>             |
     ------------------------------------------------------
-    or                              ^
-             Match against this ---´
+    or
     ------------------------------------------------------
     |  <Previous  |  1 ... 55 [56] 57 ... 152  |  Next>  |
     ------------------------------------------------------
+                                               ^
+             Match against this --------------´
+
+    @return tuple (pagestotal, baselink with &pageNumber=)
     """
     p = re.compile(r"(\d|,)*\d*")
 
@@ -111,8 +96,7 @@ def parsePagesTotal(data):
                 if line[i] is '>':
                     j += 1
                     if j is 2:
-                        tmp = line[i+1:line.rfind("|")] # Format now: 3</a>
-                        # By using regexp we don't have to clean up the string
+                        tmp = line[i + 1 : line.rfind("|")] # Format now: 3</a>
                         tmp = re.search(p, tmp)
                         if tmp is not None:
                             tmp = tmp.group(0)
@@ -120,27 +104,14 @@ def parsePagesTotal(data):
                             tmp = 0
                         break
                 i -= 1
-            return tmp
+            link = line.split("\"")
+            link = link[len(link) - 2]
+            return (int(tmp), link)
     return -1
 
-
-def parseLinkFromLine(s):
-    i = 0
-    idx_start = 0
-
-    if s is None or len(s) < 1:
-        return None
-
-    idx_start = s.find("http")
-    if idx_start is -1:
-        return None
-    i = idx_start
-    while i < len(s):
-        if s[i] is '>' or s[i] is '"':
-            return s[idx_start:i]
-        i += 1
-    return s[idx_start:i]
-
+def generatePageNumberLink(link, pagenumber):
+    p = re.compile("pageNumber=\d+")
+    return re.sub(p, "pageNumber=%d" % pagenumber, link)
 
 def commentsStartStopLineNmbr(data):
     """
@@ -152,7 +123,7 @@ def commentsStartStopLineNmbr(data):
     i = 0
 
     if data is None or len(data) < 1:
-        return
+        return None
 
     while i < len(data):
         if "<table class=\"CMheadingBar\"" in data[i]:
@@ -162,250 +133,133 @@ def commentsStartStopLineNmbr(data):
                 end = i
                 break
         i += 1
-    return (begin, end)
+    return (int(begin), int(end))
 
-
-def commentsStartLines(data, beginEnd):
+def parseComments(data):
     """
-    return a vector which includes linenumbers where comments starts
+    Parse comments from site
     """
-    i = 0
-    linenumbers = []
-
-    if data is None or data < 1:
-        return
-
-    i = beginEnd[0]
-    while i < beginEnd[1]:
-        if "<!-- BOUNDARY -->" in data[i]:
-            linenumbers.append(i)
-        i += 1
-    return linenumbers
-
-
-def parseComments(data, cboundaries):
-    """
-    return True on success, False on failure
-    Parse comments and sets them to global vector 'comments'
-    """
-    cbidx = 1 # cbidx will be used to move inside the boundary values vector
     global comments
-    comm = Comment()
-    pHelpfull = r"(\d|,)*\d* of (\d|,)*\d* people found the following review helpful:"
+    reviewBegins = '<div style="margin-left:0.5em;">'
+    reviewEnds = '<div style="padding-top: 10px; clear: both; width: 100%;">'
+    stars_line = 'margin-right:5px;'
+    stars = re.compile('\d+.\d+ out of 5 stars')
+    header_line = '<span style="vertical-align:middle;"'
+    helpful_line ='people found the following review helpful'
+    helpful = re.compile('\d+ of \d+ people found the following review helpful')
+    reviewText = '<span class="h3color tiny">' # Actual review
 
-    if data is None or len(data) < 1 or \
-        cboundaries is None or len(cboundaries) < 1:
-            return False
-
-    i = cboundaries[0]
-    while i <= cboundaries[cbidx]:
-        ### Parse comment name/ID
-        if "<a name=" in data[i] and len(comm.name) < 1:
-            line = data[i]
-            comm.name = line[line.find("\"")+1:line.rfind("\"")].rstrip("\r\n")
-
-        ### Parse stars
-        if "<span class=\"swSprite s_star_" in data[i] and len(comm.stars) < 1:
-            tmp = stripHtmlTags(data[i]).rstrip(" \n").rstrip("\n")
-            tmp = re.sub("^\s+", "", tmp)
-            comm.stars = tmp
-
-        ### Header has bolding
-        if "<span style=\"vertical-align:middle;\"><b>" in data[i]:
-            tmp = stripHtmlTags(data[i])
-            comm.header = re.sub("^\s+", "", tmp).rstrip("\n")
-
-            ### Get comments
-            ii = i
-            endingCmp = ">Help other customers find the most helpful reviews</b>"
-            tmp = []
-
-            ### Rewind to the correct position
-            # FIXME -*- approach from the different angle: use reverse, luke!
-            #while ii < cboundaries[cbidx]-1:
-            #    if "<span class=\"cmtySprite s_BadgeRealName \">" in data[ii] or \
-            #       ">What's this?</a>)</span>" in data[ii] or \
-            #       ">See all my reviews</a></div>" in data[ii] or \
-            #       "This is review from" in data[ii] or \
-            #       "REAL NAME" in data[ii]:
-            #        i = ii + 1
-            #    ii += 1
-
-            ### Parse comment
-            while i+1 <= cboundaries[cbidx]:
-                # This means that we can stop parsing comment
-                if endingCmp in data[i]:
-                    break
-                try:
-                    k = stripHtmlTags(data[i])
-                    tmp.append(k)
-                except:
-                    pass
+    boundaries = commentsStartStopLineNmbr(data)
+    for i in range(boundaries[0], boundaries[1] + 1):
+        if reviewBegins in data[i]:
+            curcomment = Comment()
+            while reviewEnds not in data[i]:
+                # Parse stars
+                if stars_line in data[i]:
+                    stars_found = re.search(stars, data[i])
+                    if stars_found != None:
+                        curcomment.stars = stars_found.group()
+                # Parse header
+                elif header_line in data[i]:
+                    line = data[i]
+                    begin = line.find('<b>') + 3
+                    end = line.find('</b>')
+                    curcomment.header = line[begin : end]
+                # Parse helpfulness
+                elif helpful_line in data[i]:
+                    helpful_found = data[i].replace(",", "")
+                    helpful_found = re.search(helpful, helpful_found)
+                    if helpful_found != None:
+                        curcomment.helpful = helpful_found.group()
+                # Parse body text
+                elif reviewText in data[i]:
+                    i += 3
+                    if '<span class="small"' in data[i]: # Yep, dirty trick :(
+                        i += 3
+                    data[i] = stripHtmlTags(data[i])
+                    curcomment.comment = re.sub("\s+", " ", data[i])
                 i += 1
-            comm.comment = cleanUpComment(tmp)
-
-        # Comment boundary hit. New comment will start in the next line.
-        if i >= cboundaries[cbidx]:
-            comments.append(comm)
-            ### Append to file and flush buffers
-            writeToFile() # fileName and comments[] are global
-            comm = Comment()
-            ### end of flush
-            i = cboundaries[cbidx]
-            cbidx += 1
-            # No more comments remaining
-            if cbidx >= len(cboundaries):
-                return True
-        i += 1
-
-    return False
-
-
-def cleanUpComment(c):
-    """ return cleaned up comment, '' if fail. """
-    p = re.compile(r"\s+")
-    r = 0
-
-    if c is None or len(c) < 1:
-    	return ''
-
-    # Thanks Amazon for the nice mark up -> CLEAN IT UP!
-    while r < len(c):
-        # Multiple spaces to single space
-        if re.search(p, c[r]) != None:
-            c[r] = re.sub(p, " ", c[r])
-            if re.search(r"^\s", c[r]) != None or c[r] is '':
-                c.pop(r)
-                continue
-        if c[r] is "" or re.search(r"^\n", c[r]) != None:
-            c.pop(r)
-            continue
-        if "---" in c[r]:
-            c.pop(r)
-            continue
-        # FIXME -*- please use tag matcher instead of this glue
-        if re.search(r"^\(REAL NAME\)", c[r]) != None:
-            c[r] = re.sub(r"^\(REAL NAME\)", "", c[r])
-            continue
-        r += 1
-    return c
-
-
-def writeToFile():
-    if fileName is None or len(fileName) < 0:
-        print "Bogus filename '%s'" % fileName
-        exit(100)
-    if len(comments) < 1:
-        return
-
-    c  = comments[len(comments)-1]
-    fileOut.write(c.__repr__()) # Write name, helpfulness etc.
-    fileOut.writelines(c.comment)
-    fileOut.write("\n---")
-
+            #comments.append(curcomment.getonelinecomment())
+            comments.append(curcomment.__repr__())
 
 def estimatedTimeOfArrival(t, pagesProcessed, pageCount):
-    timePassed = time() - t
+    timePassed = time.time() - t
 
     if pagesProcessed is 0:
         return 0
     avg = timePassed/pagesProcessed
     return (int(pageCount) - int(pagesProcessed)) * avg
 
+def generatePageLinks(link, pagesTotal):
+    """
+    Generate a list of comment page links that can be feed for QueueWorker
+    """
+    return [generatePageNumberLink(link, cnt) for cnt in range(1, pagesTotal + 1)]
+
 
 # Main function that binds everything together
-def main():
-    cboundaries = [] # Comment boundaries
-    cmntTotal = pageTotal = revStarts = 0
-    global cmntCount, comments, fileName, fileOut
-    pageCount = 1
+def main(url):
+    global comments, linklist
 
-    if len(argv) == 1:
-        amazonurl = str(raw_input())
-    if len(argv) == 2:
-        amazonurl = argv[1]
-    elif len(argv) >= 3:
-        amazonurl = argv[1]
-        fileName = argv[2]
-
-    data = urlopener(amazonurl) # Read data
+    data = urlopener(url)
     if data is None:
         print "Zero data"
         exit(1)
 
-    ### Determine where the reviews starts
-    revStarts = parseReviewsStartLine(data) # Returns (lineNmbr, link)
-    if revStarts is None:
-    	print "\nAre you sure you gave the front page of the product?"
-    	exit(10)
-    ### Line number where the "See all %d comments" is
-    commentsLineNro = int(revStarts[0])
-    cmntTotal = int(parseCommentsTotalCount(data[commentsLineNro]))
+    commentcount = parseCommentsTotalCount(data)
+    if commentcount == -1:
+        print "No customer reviews available or not in the reviews page"
+        print "(or an ugly malfunction)"
+        exit(1)
+    elif commentcount <= 10:
+        commentarea = commentsStartStopLineNmbr(data) # returns (start, end) of comments area
+        # Only one page
+        if commentarea != None:
+            parseComments(data)
+            return
 
-    if cmntTotal < 0:
-        print "No reviews"
-        exit(0)
-    if revStarts is None:
-        print "Cannot determine where the comment area is"
-        exit(3)
+    totalcommPages, baseUrl = parsePagesTotal(data) # returns (pagecount, lastpageurl)
+    if totalcommPages == -1:
+        print "That link surely is a comment page?"
+        exit(1)
+    linklist = generatePageLinks(baseUrl, totalcommPages)
 
-    data = urlopener(revStarts[1])
-    timePassed = time()
-
-    # FILEOPEN
-    try:
-        if os.path.isfile(fileName):
-            os.remove(fileName)
-        fileOut = open(fileName, "a")
-    except:
-        print "Cannot write to file =  %s" % fileName
-
-    try:
-        # Will do the following:
-        #    o  cboundaries has linenumbers of where the comments starts
-        #    o  tmpbndr includes begin and end linenumbers of the comment area
-        nextPage = getNextPageURL(data)
-        while True:
-            if pageCount is 1:
-                pagesTotal = parsePagesTotal(data)
-                if nextPage is None:
-                    pagesTotal = 1
-            cboundaries = [] # Remember to flush
-            tmpbndr = commentsStartStopLineNmbr(data)
-            cboundaries.extend(commentsStartLines(data, tmpbndr))
-            cboundaries.append(tmpbndr[1])
-            # Parse comments
-            if parseComments(data, cboundaries) is False:
-                print "\nFAILURE! Cannot parse comments"
-                exit(20)
-            cmntCount = len(comments)
-            # Append end line number of a comment area to comment boundaries
-            cboundaries.append(tmpbndr[1])
-            printable = "Comment: %s/%s   Page: %s/%s   [ETA: %d sec]\n" % (cmntCount, cmntTotal,\
-                    pageCount, pagesTotal, estimatedTimeOfArrival(timePassed,\
-                            pageCount-1, pagesTotal))
-            stderr.write(printable)
-            # Prepare to move on the next page
-            nextPage = getNextPageURL(data)
-            if nextPage is None:
-                break
-            data = urlopener(nextPage)
-            pageCount += 1
-    except:
-        fileOut.close()
-    finally:
-        timePassed = time() - timePassed
-        stderr.write("Operation took %.2d:%.2d minute(s)" % (timePassed/60, timePassed%60))
-        fileOut.close()
-
-    # Check whether we have gone through all pages
-    if int(pageCount) != int(pagesTotal):
-        print "\nPAY ATTENTION!"
-        print "Fetched data not in consistent state. Pages fetched %s/%s" % (pageCount-1, pagesTotal)
-        exit(5)
+    # Feed links to our Fetcher daemon
+    for i in range(MAX_THREADS):
+        t = Fetcher(fetchqueue)
+        t.setDaemon(True)
+        t.start()
+    for url in linklist:
+        fetchqueue.put(url)
+    fetchqueue.join()
 
     return 0
 
+def write2File(comments):
+    with open(filename_out, 'w') as f:
+        for comment in comments:
+            f.write(comment)
+            f.write("---")
 
 if __name__ == "__main__":
-    main()
+    if len(argv) == 1:
+        amazonurl = str(raw_input('> '))
+    if len(argv) == 2:
+        amazonurl = argv[1]
+    elif len(argv) >= 3:
+        amazonurl = argv[1]
+
+    # Don't show that silly banner, we are not going to use it anyway
+    if "&showViewpoints=1" in amazonurl:
+        amazonurl = amazonurl.replace("&showViewpoints=1", "&showViewpoints=0")
+
+    starttime = time.time()
+    main(amazonurl)
+    time.sleep(0.5)
+    textout = "It took %.2f sec to fetch %d comments (%d pages)\n" % \
+            (time.time() - starttime, len(comments), len(linklist))
+    stderr.write(textout)
+
+    stderr.write("Writing comments to file %s\n" % (filename_out))
+    write2File(comments)
+
