@@ -6,7 +6,7 @@ class Comment:
         self.comment = ""
 
     def printAll(self):
-        print "\nName: none\nHelpful: %s\nStars: %s\nHeader: %s\nComment:\n" %\
+        print "Name: none\nHelpful: %s\nStars: %s\nHeader: %s\nComment:\n" %\
             (self.helpful, self.stars, self.header),
         for line in self.comment:
             print "%s" % line
@@ -15,7 +15,7 @@ class Comment:
         return "".join(self.comment)
 
     def __repr__(self):
-        return "\nName: none\nHelpful: %s\nStars: %s\nHeader: %s\nComment: %s\n" %\
+        return "Name: none\nHelpful: %s\nStars: %s\nHeader: %s\nComment:\n%s\n" %\
             (self.helpful, self.stars, self.header, self.getComment())
 
     def getonelinecomment(self):

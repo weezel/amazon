@@ -239,7 +239,7 @@ def write2File(comments):
     with open(filename_out, 'w') as f:
         for comment in comments:
             f.write(comment)
-            f.write("---")
+            f.write("---\n")
 
 if __name__ == "__main__":
     if len(argv) == 1:
